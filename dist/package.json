@@ -1,0 +1,18 @@
+{
+  "name": "WapUniverse",
+  "version": "0.1.0",
+  "description": "WapUniverse Editor",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bower-concat": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-ts": "^5.1.0"
+  },
+  "main": "index.html",
+  "window": {
+    "title": "WapUniverse",
+    "toolbar": true,
+    "width": 640,
+    "height": 480
+  }
+}

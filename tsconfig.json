@@ -1,0 +1,21 @@
+{
+    "buildOnSave": true,
+    "compileOnSave": true,
+    "compilerOptions": {
+        "outDir": "dist/",
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node"
+    },
+    "filesGlob": [
+        "**/*.ts",
+        "**/*.tsx",
+        "!node_modules/**"
+    ],
+    "files": [
+        "jquery.d.ts",
+        "pixi.js.d.ts",
+        "WapUniverse.ts"
+    ],
+    "exclude": []
+}
