@@ -1,0 +1,24 @@
+{
+  "name": "WapUniverse",
+  "description": "WapUniverse Editor",
+  "main": "index.html",
+  "authors": [
+    "cubuspl42 <cubuspl42@stgn.pl>"
+  ],
+  "license": "Apache",
+  "homepage": "https://github.com/cubuspl42/WapUniverse",
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "pixi.js": "pixi#~3.0.8"
+  }
+}

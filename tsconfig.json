@@ -5,7 +5,9 @@
         "outDir": "dist/",
         "target": "es5",
         "module": "commonjs",
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "newLine": "LF"
     },
     "filesGlob": [
         "**/*.ts",
