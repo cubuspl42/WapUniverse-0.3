@@ -1,0 +1,1 @@
+Copy CLAW.REZ file from C:\My Games\Claw\CLAW.REZ to this directory.

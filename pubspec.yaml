@@ -1,6 +1,6 @@
-name: 'WapUniverse'
+name: WapUniverse
 version: 0.0.1
-description: An absolute bare-bones web app.
+description: WapUniverse Map Editor
 author: cubuspl42
 
 environment:
@@ -12,4 +12,3 @@ dependencies:
   stagexl: '^0.12.0+1'
 
 transformers:
-- dart_to_js_script_rewriter

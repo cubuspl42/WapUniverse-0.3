@@ -1,0 +1,10 @@
+{
+  "name": "WapUniverse",
+  "version": "0.0.1",
+  "description": "WapUniverse Map Editor",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "spritesheet-js": "^1.1.3",
+    "walk": "^2.3.9"
+  }
+}

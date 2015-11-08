@@ -1,3 +1,5 @@
+node_modules/
+
 # Files and directories created by pub
 .buildlog
 .packages
