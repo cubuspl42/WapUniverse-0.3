@@ -1,5 +1,6 @@
 package io.github.wapuniverse.controller
 
+import io.github.wapuniverse.editor.loadImageSetDatabaseFromFile
 import io.github.wapuniverse.view.SceneView
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
@@ -21,6 +22,8 @@ class MainController : Initializable {
     private lateinit var sceneCanvas: Canvas
 
     private lateinit var sceneView: SceneView
+
+    private val imageSetDatabase = loadImageSetDatabaseFromFile("imageSetDatabase.yaml")
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         sceneCanvas.widthProperty().bind(root.widthProperty())
