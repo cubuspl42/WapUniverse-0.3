@@ -1,6 +1,7 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="io.github.wapuniverse.controller.MainController">
     <children>
         <Canvas fx:id="sceneCanvas" width="640" height="480"/>
     </children>
