@@ -1,6 +1,7 @@
 .idea/
 out/
 target/
+JavaSandbox.java
 
 # Compiled Object files
 *.slo
