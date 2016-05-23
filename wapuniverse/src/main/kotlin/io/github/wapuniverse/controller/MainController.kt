@@ -1,10 +1,12 @@
 package io.github.wapuniverse.controller
 
-import io.github.wapuniverse.editor.TileLayer
-import io.github.wapuniverse.editor.loadImageSetDatabaseFromFile
+import io.github.wapuniverse.editor.*
+import io.github.wapuniverse.lsd.level1.level1FormulaGroup
+import io.github.wapuniverse.utils.Vec2i
 import io.github.wapuniverse.utils.makeMatrix
 import io.github.wapuniverse.view.SceneView
 import io.github.wapuniverse.view.loadImageMapFromPath
+import io.github.wapuniverse.lsd.level1.Level1AlphaTile.*
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.canvas.Canvas
@@ -16,10 +18,13 @@ import java.util.*
 
 private val IMAGE_BASE_DIR_PATH = "/home/kuba/tmp/CLAW/"
 
-private val tileMatrix = makeMatrix(2, 2,
-        401, 402,
-        403, 404
-)
+private fun addAlphaTileMatrix(tileLayer: TileLayer, m: Int, n: Int, x: Int, y: Int, vararg tiles: AlphaTile) {
+    val mx = makeMatrix(m, n, tiles.asList())
+    val a = AlphaTileMatrix()
+    a.offset = Vec2i(x, y)
+    a.alphaTiles = mx
+    tileLayer.addMatrix(a)
+}
 
 class MainController : Initializable {
     @FXML
@@ -34,14 +39,33 @@ class MainController : Initializable {
 
     private val imageMap = loadImageMapFromPath(imageSetDatabase, IMAGE_BASE_DIR_PATH)
 
-    private val tileLayer = TileLayer(tileMatrix, "ACTION")
+    private val alphaTileMapper = AlphaTileMapper(level1FormulaGroup)
+
+    private val tileLayer = TileLayer(alphaTileMapper, "ACTION")
+
+    private fun initWorld() {
+        addAlphaTileMatrix(tileLayer, 3, 5, 0, 0,
+                BLOCK_TL,   BLOCK_T,    BLOCK_T,    BLOCK_TR_1,     BLOCK_TR_2,
+                BLOCK_L,    BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R,
+                BLOCK_BL,   BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R
+        )
+        addAlphaTileMatrix(tileLayer, 3, 5, 3, 1,
+                BLOCK_TL,   BLOCK_T,    BLOCK_T,    BLOCK_TR_1,     BLOCK_TR_2,
+                BLOCK_L,    BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R,
+                BLOCK_BL,   BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R
+        )
+        addAlphaTileMatrix(tileLayer, 3, 7, 6, 0,
+                BLOCK_TL,   BLOCK_T,    BLOCK_T,    BLOCK_T,    BLOCK_T,    BLOCK_TR_1,     BLOCK_TR_2,
+                BLOCK_L,    BLOCK_M,    BLOCK_M,    BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R,
+                BLOCK_BL,   BLOCK_M,    BLOCK_M,    BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R
+        )
+    }
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         sceneCanvas.widthProperty().bind(root.widthProperty())
         sceneCanvas.heightProperty().bind(root.heightProperty())
         sceneCanvas.isFocusTraversable = true
 
-        val image = imageMap.findObjectImage(1, "LEVEL_OFFICER", -1)!!
         sceneView = SceneView(sceneCanvas, imageMap, tileLayer)
         sceneView.render()
 
@@ -52,5 +76,7 @@ class MainController : Initializable {
         sceneCanvas.setOnMouseDragged {
             sceneView.render()
         }
+
+        initWorld()
     }
 }

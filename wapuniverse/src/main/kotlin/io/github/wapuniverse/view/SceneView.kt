@@ -6,8 +6,8 @@ import javafx.scene.canvas.Canvas
 
 private val levelIndex = 1
 
-private val width = 4
-private val height = 4
+private val width = 32
+private val height = 32
 private val tileWidth = 64.0
 
 class SceneView(
