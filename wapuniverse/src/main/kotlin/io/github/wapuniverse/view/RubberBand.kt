@@ -49,12 +49,20 @@ class RubberBand(var offset: Vec2d, var width: Double, var height: Double) : Sce
         val w = boundingBox.width
         val h = boundingBox.height
 
-        when {
-            p in Rectangle2D(w - pd, 0.0, pd, h) -> handleResize(1, 0)
-            p in Rectangle2D(0.0, h - pd, w, pd) -> handleResize(0, 1)
-            p in Rectangle2D(0.0, 0.0, pd, h) -> handleResize(-1, 0)
-            p in Rectangle2D(0.0, 0.0, w, pd) -> handleResize(0, -1)
-            else -> handleDrag(x, y)
+        val rx =
+                if (p in Rectangle2D(w - pd, 0.0, pd, h)) 1
+                else if (p in Rectangle2D(0.0, 0.0, pd, h)) -1
+                else 0
+
+        val ry =
+                if (p in Rectangle2D(0.0, h - pd, w, pd)) 1
+                else if (p in Rectangle2D(0.0, 0.0, w, pd)) -1
+                else 0
+
+        if (rx == 0 && ry == 0) {
+            handleDrag(x, y)
+        } else {
+            handleResize(rx, ry)
         }
 
         scene!!.addMouseReleasedHandler(this)
@@ -75,16 +83,13 @@ class RubberBand(var offset: Vec2d, var width: Double, var height: Double) : Sce
             dragged._emit(Rectangle2D(newOffset.x, newOffset.y, width, height))
         } else if (isResized) {
             val bb = boundingBox
-            val minX = if (resizeDir.x < 0) x else bb.minX
-            val minY = if (resizeDir.y < 0) y else bb.minY
-            val maxX = if (resizeDir.x > 0) x else bb.maxX
-            val maxY = if (resizeDir.y > 0) y else bb.maxY
+            val minX = if (resizeDir.x < 0) Math.min(x, bb.maxX) else bb.minX
+            val minY = if (resizeDir.y < 0) Math.min(y, bb.maxY) else bb.minY
+            val maxX = if (resizeDir.x > 0) Math.max(x, bb.minX) else bb.maxX
+            val maxY = if (resizeDir.y > 0) Math.max(y, bb.minY) else bb.maxY
             val w = maxX - minX
             val h = maxY - minY
-
-            if (w > 0 && h > 0) {
-                resized._emit(Rectangle2D(minX, minY, maxX - minX, maxY - minY))
-            }
+            resized._emit(Rectangle2D(minX, minY, maxX - minX, maxY - minY))
         }
     }
 
