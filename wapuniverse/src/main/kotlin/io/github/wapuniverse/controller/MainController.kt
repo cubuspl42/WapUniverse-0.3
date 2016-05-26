@@ -1,5 +1,6 @@
 package io.github.wapuniverse.controller
 
+import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.*
 import io.github.wapuniverse.lsd.level1.level1FormulaGroup
 import io.github.wapuniverse.utils.Vec2i
@@ -7,6 +8,7 @@ import io.github.wapuniverse.utils.makeMatrix
 import io.github.wapuniverse.view.SceneView
 import io.github.wapuniverse.view.loadImageMapFromPath
 import io.github.wapuniverse.lsd.level1.Level1AlphaTile.*
+import io.github.wapuniverse.view.RubberBand
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.canvas.Canvas
@@ -43,6 +45,8 @@ class MainController : Initializable {
 
     private val tileLayer = TileLayer(alphaTileMapper, "ACTION")
 
+    private lateinit var alphatileMatrixPresenter: AlphaTileMatrixPresenter
+
     private fun initWorld() {
         addAlphaTileMatrix(tileLayer, 3, 5, 0, 0,
                 BLOCK_TL,   BLOCK_T,    BLOCK_T,    BLOCK_TR_1,     BLOCK_TR_2,
@@ -73,9 +77,9 @@ class MainController : Initializable {
         gc.fill = Color.BLACK
         gc.fillRect(50.0, 50.0, 100.0, 100.0)
 
-        sceneCanvas.setOnMouseDragged {
-            sceneView.render()
-        }
+        AlphaTileMatrixPresenter(tileLayer, sceneView)
+
+//        sceneView.addItem(RubberBand(Vec2d(32.0, 32.0), 64.0, 32.0))
 
         initWorld()
     }

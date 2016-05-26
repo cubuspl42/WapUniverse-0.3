@@ -2,9 +2,12 @@ package io.github.wapuniverse.editor
 
 import io.github.wapuniverse.utils.Matrix
 import io.github.wapuniverse.utils.Rectangle2Di
+import io.github.wapuniverse.utils.Signal
 import io.github.wapuniverse.utils.Vec2i
 import java.util.*
 
+
+val tileWidth = 64.0
 
 class AlphaTileMatrix {
     var offset = Vec2i()
@@ -31,7 +34,10 @@ class TileLayer(
 
     fun addMatrix(matrix: AlphaTileMatrix) {
         matrices.add(matrix)
+        matrixAdded._emit(matrix)
     }
+
+    val matrixAdded = Signal<AlphaTileMatrix>()
 
     fun getTile(i: Int, j: Int): Int {
         val alphaTileSet = matrices

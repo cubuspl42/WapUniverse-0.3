@@ -1,7 +1,9 @@
 package io.github.wapuniverse.utils
 
+import javafx.geometry.Rectangle2D
 
-class Rectangle2Di(private val minX: Int, private val minY: Int, private val width: Int, private val  height: Int) {
+
+class Rectangle2Di(val minX: Int, val minY: Int, val width: Int, val height: Int) {
     val maxX: Int
         get() = minX + width
 
@@ -10,5 +12,9 @@ class Rectangle2Di(private val minX: Int, private val minY: Int, private val wid
 
     fun contains(x: Int, y: Int): Boolean {
         return x >= minX && y >= minY && x < maxX && y < maxY
+    }
+
+    fun toRectangle2D(): Rectangle2D {
+        return Rectangle2D(minX.toDouble(), minY.toDouble(), width.toDouble(), height.toDouble())
     }
 }
