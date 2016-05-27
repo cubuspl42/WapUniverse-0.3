@@ -81,6 +81,30 @@ val spikesScript = smartScript(4, 2, { w, h ->
     Matrix(t)
 })
 
+val columnScript = smartScript(1, 4, { w, h ->
+    val t = tiles(h, w, EMPTY)
+    for (i in 1..h) {
+        t[i - 1][0] = when (i) {
+            1 -> COLUMN_T
+            h -> COLUMN_B
+            else -> COLUMN_M
+        }
+    }
+    Matrix(t)
+})
+
+val platformScript = smartScript(4, 1, { w, h ->
+    val t = tiles(h, w, EMPTY)
+    for (j in 1..w) {
+        t[0][j - 1] = when (j) {
+            1 -> PLATFORM_L
+            w -> PLATFORM_R
+            else -> PLATFORM_T
+        }
+    }
+    Matrix(t)
+})
+
 class SmartObject(tileLayer: TileLayer, private val script: SmartScript) {
     private val matrix = AlphaTileMatrix()
 

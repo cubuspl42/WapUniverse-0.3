@@ -29,6 +29,12 @@ val level1FormulaGroup = formulaGroup("ACTION", listOf(
         formula(setOf(BLOCK_T, BLOCK_R, SPIKE_B), 322),
         formula(setOf(SPIKE_T, BLOCK_L), 321),
         formula(setOf(BLOCK_T, BLOCK_L, SPIKE_B), 925),
-        formula(setOf(BLOCK_TR_1, BLOCK_L, SPIKE_B), 925)
-
+        formula(setOf(BLOCK_T, BLOCK_BL, SPIKE_B), 925),
+        formula(setOf(BLOCK_TR_1, BLOCK_L, SPIKE_B), 925),
+        formula(COLUMN_T, 933),
+        formula(COLUMN_M, 934),
+        formula(COLUMN_B, 935),
+        formula(PLATFORM_L, 331),
+        formula(PLATFORM_T, 332),
+        formula(PLATFORM_R, 334)
 ))

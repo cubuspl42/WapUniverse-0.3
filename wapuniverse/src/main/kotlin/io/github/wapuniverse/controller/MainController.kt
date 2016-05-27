@@ -66,6 +66,8 @@ class MainController : Initializable {
                 "1" -> blockScript
                 "2" -> ladderScript
                 "3" -> spikesScript
+                "4" -> columnScript
+                "5" -> platformScript
                 else -> null
             }
             if (script != null) {

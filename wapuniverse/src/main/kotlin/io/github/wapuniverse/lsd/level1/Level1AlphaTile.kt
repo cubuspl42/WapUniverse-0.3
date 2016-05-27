@@ -29,7 +29,19 @@ enum class Level1AlphaTile : AlphaTile {
     },
     SPIKE_B {
         override val z = 1200
-    };
+    },
+    COLUMN_T {
+        override val z = 1500
+    },
+    COLUMN_M {
+        override val z = 1500
+    },
+    COLUMN_B {
+        override val z = 1500
+    },
+    PLATFORM_L,
+    PLATFORM_T,
+    PLATFORM_R;
 
     override val z = 0
 }
