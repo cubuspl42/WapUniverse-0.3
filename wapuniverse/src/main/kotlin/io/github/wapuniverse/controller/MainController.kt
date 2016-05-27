@@ -61,8 +61,16 @@ class MainController : Initializable {
 
         SmartObjectPresenter(smartObjectComponent, sceneView)
 
-        sceneCanvas.setOnKeyPressed {
-            smartObjectComponent.addSmartObject(SmartObject(tileLayer, 6, 6))
+        sceneCanvas.setOnKeyPressed { ev ->
+            val script = when (ev.text) {
+                "1" -> blockScript
+                "2" -> ladderScript
+                "3" -> spikesScript
+                else -> null
+            }
+            if (script != null) {
+                smartObjectComponent.addSmartObject(SmartObject(tileLayer, script))
+            }
         }
     }
 }

@@ -3,6 +3,8 @@ package io.github.wapuniverse.view
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.utils.Signal
 import io.github.wapuniverse.utils.minus
+import io.github.wapuniverse.utils.toPoint2D
+import io.github.wapuniverse.utils.toVec2d
 import io.github.wapuniverse.view.EventHandlingStatus.EVENT_HANDLED
 import javafx.geometry.Point2D
 import javafx.geometry.Rectangle2D
@@ -38,16 +40,25 @@ class RubberBand(var offset: Vec2d, var width: Double, var height: Double) : Sce
         resizeDir = Vec2d(dx.toDouble(), dy.toDouble())
     }
 
-    private fun handleDrag(x: Double, y: Double) {
+    private fun handleDrag(wv: Vec2d) {
         isDragged = true
-        dragOffset = Vec2d(x, y) - offset
+        dragOffset = wv - offset
+    }
+
+    private fun invTr(x: Double, y: Double): Vec2d {
+        return scene!!.invTransform.transform(x, y).toVec2d()
     }
 
     override fun onMousePressed(x: Double, y: Double): EventHandlingStatus {
-        val p = Point2D(x, y) - offset
+        val wv = invTr(x, y)
+        val wx = wv.x
+        val wy = wv.y
+        val p = (wv - offset).toPoint2D()
         val pd = resizePadding
         val w = boundingBox.width
         val h = boundingBox.height
+
+        logger.info(wv.toString() + offset.toString() + p.toString())
 
         val rx =
                 if (p in Rectangle2D(w - pd, 0.0, pd, h)) 1
@@ -60,7 +71,7 @@ class RubberBand(var offset: Vec2d, var width: Double, var height: Double) : Sce
                 else 0
 
         if (rx == 0 && ry == 0) {
-            handleDrag(x, y)
+            handleDrag(wv)
         } else {
             handleResize(rx, ry)
         }
@@ -78,15 +89,18 @@ class RubberBand(var offset: Vec2d, var width: Double, var height: Double) : Sce
     }
 
     override fun onMouseDragged(x: Double, y: Double) {
+        val wv = invTr(x, y)
+        val wx = wv.x
+        val wy = wv.y
         if (isDragged) {
-            val newOffset = Vec2d(x, y) - dragOffset
+            val newOffset = wv - dragOffset
             dragged._emit(Rectangle2D(newOffset.x, newOffset.y, width, height))
         } else if (isResized) {
             val bb = boundingBox
-            val minX = if (resizeDir.x < 0) Math.min(x, bb.maxX) else bb.minX
-            val minY = if (resizeDir.y < 0) Math.min(y, bb.maxY) else bb.minY
-            val maxX = if (resizeDir.x > 0) Math.max(x, bb.minX) else bb.maxX
-            val maxY = if (resizeDir.y > 0) Math.max(y, bb.minY) else bb.maxY
+            val minX = if (resizeDir.x < 0) Math.min(wx, bb.maxX) else bb.minX
+            val minY = if (resizeDir.y < 0) Math.min(wy, bb.maxY) else bb.minY
+            val maxX = if (resizeDir.x > 0) Math.max(wx, bb.minX) else bb.maxX
+            val maxY = if (resizeDir.y > 0) Math.max(wy, bb.minY) else bb.maxY
             val w = maxX - minX
             val h = maxY - minY
             resized._emit(Rectangle2D(minX, minY, maxX - minX, maxY - minY))

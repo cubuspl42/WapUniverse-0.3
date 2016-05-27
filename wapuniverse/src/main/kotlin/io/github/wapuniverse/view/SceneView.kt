@@ -1,14 +1,20 @@
 package io.github.wapuniverse.view
 
+import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.TileLayer
 import io.github.wapuniverse.editor.tileWidth
+import io.github.wapuniverse.utils.minus
+import io.github.wapuniverse.utils.times
+import io.github.wapuniverse.utils.toVec2d
 import io.github.wapuniverse.view.EventHandlingStatus.EVENT_HANDLED
 import javafx.event.EventType
 import javafx.geometry.Point2D
 import javafx.geometry.Rectangle2D
 import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
+import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
+import javafx.scene.transform.Affine
 import java.util.*
 
 
@@ -56,25 +62,68 @@ class SceneView(
 
     private val eventHandlers = HashMap<EventType<MouseEvent>, MutableList<SceneItem>>()
 
+    private var isDragged = false
+
+    private var dragAnchor = Vec2d(0.0, 0.0)
+
+    var transform = Affine()
+        private set
+
+    var invTransform = Affine()
+        private set
+
+    private fun recalculateTransform() {
+        transform = Affine()
+        transform.appendTranslation(-cameraOffset.x, -cameraOffset.y)
+        transform.appendScale(scale, scale)
+        invTransform = transform.createInverse()
+    }
+
+    var cameraOffset = Vec2d()
+        set(value) {
+            field = value
+            recalculateTransform()
+        }
+
+    var scale = 1.0
+        set(value) {
+            field = value
+            recalculateTransform()
+        }
+
     init {
         eventHandlers[MouseEvent.MOUSE_RELEASED] = mutableListOf()
         eventHandlers[MouseEvent.MOUSE_MOVED] = mutableListOf()
         eventHandlers[MouseEvent.MOUSE_DRAGGED] = mutableListOf()
 
         canvas.setOnMousePressed { ev ->
-            onMousePressed(ev.x, ev.y)
+            if (ev.button == MouseButton.PRIMARY) {
+                propagateMousePressed(ev.x, ev.y)
+            } else if (ev.button == MouseButton.SECONDARY) {
+                isDragged = true
+                dragAnchor = invTransform.transform(ev.x, ev.y).toVec2d()
+            }
         }
 
         canvas.setOnMouseReleased { ev ->
-            onMouseEvent(MouseEvent.MOUSE_RELEASED, ev.x, ev.y, SceneItem::onMouseReleased)
+            if (ev.button == MouseButton.PRIMARY) {
+                propagateMouseEvent(MouseEvent.MOUSE_RELEASED, ev.x, ev.y, SceneItem::onMouseReleased)
+            } else if (ev.button == MouseButton.SECONDARY) {
+                isDragged = false
+            }
         }
 
         canvas.setOnMouseMoved { ev ->
-            onMouseEvent(MouseEvent.MOUSE_MOVED, ev.x, ev.y, SceneItem::onMouseMoved)
+            propagateMouseEvent(MouseEvent.MOUSE_MOVED, ev.x, ev.y, SceneItem::onMouseMoved)
         }
 
         canvas.setOnMouseDragged { ev ->
-            onMouseEvent(MouseEvent.MOUSE_DRAGGED, ev.x, ev.y, SceneItem::onMouseDragged)
+            if (ev.isSecondaryButtonDown) {
+                val mv = Vec2d(ev.x, ev.y)
+                cameraOffset = dragAnchor - (mv * scale)
+            } else if (ev.isPrimaryButtonDown) {
+                propagateMouseEvent(MouseEvent.MOUSE_DRAGGED, ev.x, ev.y, SceneItem::onMouseDragged)
+            }
             render()
         }
     }
@@ -92,12 +141,13 @@ class SceneView(
     }
 
     private fun itemsAt(x: Double, y: Double): List<SceneItem> {
+        val wp = invTransform.transform(x, y)
         return items
-                .filter { Point2D(x, y) in it.boundingBox }
+                .filter { wp in it.boundingBox }
                 .sortedBy { -it.z }
     }
 
-    private fun onMousePressed(x: Double, y: Double) {
+    private fun propagateMousePressed(x: Double, y: Double) {
         for (item in itemsAt(x, y)) {
             if (item.onMousePressed(x, y) == EVENT_HANDLED) {
                 return
@@ -105,7 +155,7 @@ class SceneView(
         }
     }
 
-    private fun onMouseEvent(
+    private fun propagateMouseEvent(
             type: EventType<MouseEvent>, x: Double, y: Double, f: (SceneItem, Double, Double) -> Unit) {
         eventHandlers[type]!!.toList().forEach { f(it, x, y) }
     }
@@ -136,7 +186,11 @@ class SceneView(
 
     fun render() {
         val gc = canvas.graphicsContext2D
+        gc.transform = Affine()
+
         gc.clearRect(0.0, 0.0, canvas.width, canvas.height)
+
+        gc.transform = transform
 
         for (i in 0..height - 1) {
             for (j in 0..width - 1) {

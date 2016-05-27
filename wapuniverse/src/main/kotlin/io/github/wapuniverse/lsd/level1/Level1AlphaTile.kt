@@ -20,6 +20,15 @@ enum class Level1AlphaTile : AlphaTile {
     },
     BLOCK_M {
         override val z = 1000
+    },
+    LADDER_T,
+    LADDER_M,
+    LADDER_B,
+    SPIKE_T {
+        override val z = 1200
+    },
+    SPIKE_B {
+        override val z = 1200
     };
 
     override val z = 0

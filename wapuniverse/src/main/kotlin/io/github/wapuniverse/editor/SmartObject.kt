@@ -19,11 +19,73 @@ fun <T> tiles(m: Int, n: Int, def: T): MutableList<MutableList<T>> {
     return rows
 }
 
-class SmartObject(tileLayer: TileLayer, width: Int, height: Int) {
+interface SmartScript {
+    val defaultWidth: Int
+    val defaultHeight: Int
+    fun run(width: Int, height: Int): Matrix<AlphaTile>
+}
+
+fun smartScript(defaultWidth: Int, defaultHeight: Int, f: (w: Int, h: Int) -> Matrix<AlphaTile>): SmartScript {
+    return object : SmartScript {
+        override val defaultWidth = defaultWidth
+        override val defaultHeight = defaultHeight
+        override fun run(width: Int, height: Int): Matrix<AlphaTile> {
+            return f(width, height)
+        }
+    }
+}
+
+val blockScript = smartScript(4, 4, { w, h ->
+    val t = tiles(h, w, EMPTY)
+    for (i in 1..h) {
+        for (j in 1..w) {
+            t[i - 1][j - 1] = when {
+                i == 1 && j == 1 -> BLOCK_TL
+                i == 1 && j == w - 1 -> BLOCK_TR_1
+                i == 1 && j == w -> BLOCK_TR_2
+                i == h && j == 1 -> BLOCK_BL
+                i == 1 -> BLOCK_T
+                j == w -> BLOCK_R
+                i == h -> BLOCK_M
+                j == 1 -> BLOCK_L
+                else -> BLOCK_M
+            }
+        }
+    }
+    Matrix(t)
+})
+
+val ladderScript = smartScript(1, 3, { w, h ->
+    val t = tiles(h, w, EMPTY)
+    for (i in 1..h) {
+        t[i - 1][0] = when (i) {
+            1 -> LADDER_T
+            h -> LADDER_B
+            else -> LADDER_M
+        }
+    }
+    Matrix(t)
+})
+
+val spikesScript = smartScript(4, 2, { w, h ->
+    val t = tiles(h, w, EMPTY)
+    for (j in 1..w) {
+        for (i in 1..h) {
+            t[i - 1][j - 1] = when {
+                i == 1 -> SPIKE_T
+                i == 2 -> SPIKE_B
+                else -> EMPTY
+            }
+        }
+    }
+    Matrix(t)
+})
+
+class SmartObject(tileLayer: TileLayer, private val script: SmartScript) {
     private val matrix = AlphaTileMatrix()
 
     init {
-        resize(width, height)
+        resize(script.defaultWidth, script.defaultHeight)
         tileLayer.addMatrix(matrix)
     }
 
@@ -36,23 +98,7 @@ class SmartObject(tileLayer: TileLayer, width: Int, height: Int) {
     val rect = matrix.rect
 
     fun resize(w: Int, h: Int) {
-        val t = tiles(h, w, EMPTY)
-        for (i in 1..h) {
-            for (j in 1..w) {
-                t[i - 1][j - 1] = when {
-                    i == 1 && j == 1 -> BLOCK_TL
-                    i == 1 && j == w - 1 -> BLOCK_TR_1
-                    i == 1 && j == w -> BLOCK_TR_2
-                    i == h && j == 1 -> BLOCK_BL
-                    i == 1 -> BLOCK_T
-                    j == w -> BLOCK_R
-                    i == h -> BLOCK_M
-                    j == 1 -> BLOCK_L
-                    else -> BLOCK_M
-                }
-            }
-        }
-        matrix.alphaTiles = Matrix(t)
+        matrix.alphaTiles = script.run(w, h)
     }
 }
 
