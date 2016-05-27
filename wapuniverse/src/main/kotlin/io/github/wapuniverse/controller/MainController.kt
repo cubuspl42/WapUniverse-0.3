@@ -45,25 +45,7 @@ class MainController : Initializable {
 
     private val tileLayer = TileLayer(alphaTileMapper, "ACTION")
 
-    private lateinit var alphatileMatrixPresenter: AlphaTileMatrixPresenter
-
-    private fun initWorld() {
-        addAlphaTileMatrix(tileLayer, 3, 5, 0, 0,
-                BLOCK_TL,   BLOCK_T,    BLOCK_T,    BLOCK_TR_1,     BLOCK_TR_2,
-                BLOCK_L,    BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R,
-                BLOCK_BL,   BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R
-        )
-        addAlphaTileMatrix(tileLayer, 3, 5, 3, 1,
-                BLOCK_TL,   BLOCK_T,    BLOCK_T,    BLOCK_TR_1,     BLOCK_TR_2,
-                BLOCK_L,    BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R,
-                BLOCK_BL,   BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R
-        )
-        addAlphaTileMatrix(tileLayer, 3, 7, 6, 0,
-                BLOCK_TL,   BLOCK_T,    BLOCK_T,    BLOCK_T,    BLOCK_T,    BLOCK_TR_1,     BLOCK_TR_2,
-                BLOCK_L,    BLOCK_M,    BLOCK_M,    BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R,
-                BLOCK_BL,   BLOCK_M,    BLOCK_M,    BLOCK_M,    BLOCK_M,    BLOCK_M,        BLOCK_R
-        )
-    }
+    private val smartObjectComponent = SmartObjectComponent()
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         sceneCanvas.widthProperty().bind(root.widthProperty())
@@ -77,10 +59,10 @@ class MainController : Initializable {
         gc.fill = Color.BLACK
         gc.fillRect(50.0, 50.0, 100.0, 100.0)
 
-        AlphaTileMatrixPresenter(tileLayer, sceneView)
+        SmartObjectPresenter(smartObjectComponent, sceneView)
 
-//        sceneView.addItem(RubberBand(Vec2d(32.0, 32.0), 64.0, 32.0))
-
-        initWorld()
+        sceneCanvas.setOnKeyPressed {
+            smartObjectComponent.addSmartObject(SmartObject(tileLayer, 6, 6))
+        }
     }
 }

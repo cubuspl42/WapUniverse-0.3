@@ -3,7 +3,7 @@ package io.github.wapuniverse.utils
 import javafx.geometry.Rectangle2D
 
 
-class Rectangle2Di(val minX: Int, val minY: Int, val width: Int, val height: Int) {
+class Rectangle2Di(val minX: Int = 0, val minY: Int = 0, val width: Int = 0, val height: Int = 0) {
     val maxX: Int
         get() = minX + width
 
