@@ -16,7 +16,7 @@ val defaultHeight = 480.0
 
 class WapUniverseApplication : Application() {
     override fun start(stage: Stage) {
-        val root: Parent = loadFxml(javaClass, "MainView.fxml")
+        val root: Parent = loadFxml(javaClass, "MainWindow.fxml")
         val scene = Scene(root, defaultWidth, defaultHeight)
         stage.title = "WapUniverse Editor"
         stage.scene = scene
