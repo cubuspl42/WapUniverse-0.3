@@ -4,7 +4,9 @@ import io.github.wapuniverse.editor.AlphaTile
 
 
 enum class Level1AlphaTile : AlphaTile {
-    EMPTY,
+    EMPTY {
+        override val z = -100
+    },
     BLOCK_TL,
     BLOCK_T {
         override val z = 900
