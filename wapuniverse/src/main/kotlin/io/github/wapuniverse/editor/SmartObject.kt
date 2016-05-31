@@ -1,9 +1,8 @@
 package io.github.wapuniverse.editor
 
+import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.lsd.level1.Level1AlphaTile.*
-import io.github.wapuniverse.utils.Matrix
-import io.github.wapuniverse.utils.Signal
-import io.github.wapuniverse.utils.Vec2i
+import io.github.wapuniverse.utils.*
 import java.util.*
 
 
@@ -108,6 +107,8 @@ val platformScript = smartScript(4, 1, { w, h ->
 class SmartObject(tileLayer: TileLayer, private val script: SmartScript) {
     private val matrix = AlphaTileMatrix()
 
+    val changed = Signal<SmartObject>()
+
     init {
         resize(script.defaultWidth, script.defaultHeight)
         tileLayer.addMatrix(matrix)
@@ -117,13 +118,22 @@ class SmartObject(tileLayer: TileLayer, private val script: SmartScript) {
         get() = matrix.offset
         set(value) {
             matrix.offset = value
+            changed._emit(this)
         }
 
-    val rect = matrix.rect
+    val rect: Rectangle2Di
+        get() = matrix.rect
 
     fun resize(w: Int, h: Int) {
         matrix.alphaTiles = script.run(w, h)
+        changed._emit(this)
     }
+
+    var position: Vec2d
+        get() = Vec2d(offset.x * tileWidth, offset.y * tileWidth)
+        set(value) {
+            offset = (value / tileWidth).toVec2i()
+        }
 }
 
 class SmartObjectComponent {

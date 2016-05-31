@@ -1,12 +1,17 @@
 package io.github.wapuniverse.controller
 
+import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.*
 import io.github.wapuniverse.lsd.level1.level1FormulaGroup
-import io.github.wapuniverse.utils.Vec2i
-import io.github.wapuniverse.utils.makeMatrix
+import io.github.wapuniverse.utils.*
+import io.github.wapuniverse.view.EventHandlingStatus
+import io.github.wapuniverse.view.EventHandlingStatus.EVENT_HANDLED
+import io.github.wapuniverse.view.SceneItem
 import io.github.wapuniverse.view.SceneView
 import io.github.wapuniverse.view.loadImageMapFromPath
 import javafx.scene.canvas.Canvas
+import javafx.scene.input.MouseButton
+import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 
 
@@ -33,15 +38,50 @@ class MainController(private val sceneCanvas: Canvas) {
 
     private val smartObjectComponent = SmartObjectComponent()
 
+    private val editorObjectComponent = EditorObjectComponent()
+
+    private val selectionController = SelectionController(editorObjectComponent, sceneView)
+
+    private var isDragged = false
+
+    private var dragAnchor = Vec2d(0.0, 0.0)
+
+    fun c2w(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
+
     init {
+        SmartObjectPresenter(smartObjectComponent, editorObjectComponent, sceneView)
 
-        sceneView.render()
+        sceneCanvas.setOnMousePressed { ev ->
+            if (ev.button == MouseButton.PRIMARY) {
+                val ehs = sceneView.onMousePressed(ev.x, ev.y)
+                if (ehs != EVENT_HANDLED) {
+                    selectionController.onMousePressed(ev.x, ev.y)
+                }
+            } else if (ev.button == MouseButton.SECONDARY) {
+                isDragged = true
+                dragAnchor = c2w(ev.x, ev.y)
+            }
+        }
 
-        val gc = sceneCanvas.graphicsContext2D
-        gc.fill = Color.BLACK
-        gc.fillRect(50.0, 50.0, 100.0, 100.0)
+        sceneCanvas.setOnMouseReleased { ev ->
+            if (ev.button == MouseButton.PRIMARY) {
+                sceneView.onMouseReleased(ev.x, ev.y)
+                selectionController.onMouseReleased(ev)
+            } else if (ev.button == MouseButton.SECONDARY) {
+                isDragged = false
+            }
+        }
 
-        SmartObjectPresenter(smartObjectComponent, sceneView)
+        sceneCanvas.setOnMouseDragged { ev ->
+            if (ev.isSecondaryButtonDown) {
+                val mv = Vec2d(ev.x, ev.y)
+                sceneView.cameraOffset = dragAnchor - (mv * sceneView.scale)
+            } else if (ev.isPrimaryButtonDown) {
+                sceneView.onMouseDragged(ev.x, ev.y)
+                selectionController.onMouseDragged(ev)
+            }
+            sceneView.render()
+        }
 
         sceneCanvas.setOnKeyPressed { ev ->
             val script = when (ev.text) {
