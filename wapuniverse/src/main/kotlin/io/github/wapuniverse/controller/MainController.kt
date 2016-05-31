@@ -9,10 +9,13 @@ import io.github.wapuniverse.view.EventHandlingStatus.EVENT_HANDLED
 import io.github.wapuniverse.view.SceneItem
 import io.github.wapuniverse.view.SceneView
 import io.github.wapuniverse.view.loadImageMapFromPath
+import javafx.animation.AnimationTimer
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
+import java.util.*
+import kotlin.concurrent.schedule
 
 
 private val IMAGE_BASE_DIR_PATH = "/home/kuba/tmp/CLAW/"
@@ -80,7 +83,6 @@ class MainController(private val sceneCanvas: Canvas) {
                 sceneView.onMouseDragged(ev.x, ev.y)
                 selectionController.onMouseDragged(ev)
             }
-            sceneView.render()
         }
 
         sceneCanvas.setOnKeyPressed { ev ->
@@ -96,5 +98,12 @@ class MainController(private val sceneCanvas: Canvas) {
                 smartObjectComponent.addSmartObject(SmartObject(tileLayer, script))
             }
         }
+
+        val at = object: AnimationTimer() {
+            override fun handle(t: Long) {
+                sceneView.render()
+            }
+        }
+        at.start()
     }
 }
