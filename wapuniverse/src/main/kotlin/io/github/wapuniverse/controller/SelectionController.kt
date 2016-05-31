@@ -7,10 +7,13 @@ import io.github.wapuniverse.utils.minus
 import io.github.wapuniverse.utils.toVec2d
 import io.github.wapuniverse.utils.toVec2i
 import io.github.wapuniverse.view.SceneView
+import javafx.scene.Cursor
+import javafx.scene.Node
 import javafx.scene.input.MouseEvent
 
 
 class SelectionController(
+        private val root: Node,
         private val editorObjectComponent: EditorObjectComponent,
         private val sceneView: SceneView) {
 
@@ -44,6 +47,13 @@ class SelectionController(
         if (!ev.isPrimaryButtonDown) {
             val s = selectableObjectsAt(ev.x, ev.y)
             s.forEach { hoverObject(it) }
+        }
+
+        val wv = sceneView.invTransform.transform(ev.x, ev.y).toVec2d()
+        if (selectedObject?.boundingBox?.contains(wv.x, wv.y) == true) {
+            root.cursor = Cursor.MOVE
+        } else {
+            root.cursor = Cursor.DEFAULT
         }
     }
 

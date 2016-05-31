@@ -20,6 +20,6 @@ class MainWindowController : Initializable {
         sceneCanvas.heightProperty().bind(root.heightProperty())
         sceneCanvas.isFocusTraversable = true
 
-        MainController(sceneCanvas)
+        MainController(root, sceneCanvas)
     }
 }

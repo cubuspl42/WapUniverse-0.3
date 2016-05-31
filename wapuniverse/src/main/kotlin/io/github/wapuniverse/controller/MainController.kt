@@ -10,6 +10,8 @@ import io.github.wapuniverse.view.SceneItem
 import io.github.wapuniverse.view.SceneView
 import io.github.wapuniverse.view.loadImageMapFromPath
 import javafx.animation.AnimationTimer
+import javafx.scene.Node
+import javafx.scene.Scene
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
@@ -28,7 +30,7 @@ private fun addAlphaTileMatrix(tileLayer: TileLayer, m: Int, n: Int, x: Int, y: 
     tileLayer.addMatrix(a)
 }
 
-class MainController(private val sceneCanvas: Canvas) {
+class MainController(root: Node, private val sceneCanvas: Canvas) {
     private val imageSetDatabase = loadImageSetDatabaseFromFile("imageSetDatabase.yaml")
 
     private val imageMap = loadImageMapFromPath(imageSetDatabase, IMAGE_BASE_DIR_PATH)
@@ -43,7 +45,7 @@ class MainController(private val sceneCanvas: Canvas) {
 
     private val editorObjectComponent = EditorObjectComponent()
 
-    private val selectionController = SelectionController(editorObjectComponent, sceneView)
+    private val selectionController = SelectionController(root, editorObjectComponent, sceneView)
 
     private var isDragged = false
 
