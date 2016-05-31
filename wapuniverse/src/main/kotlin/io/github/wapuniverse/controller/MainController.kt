@@ -85,6 +85,10 @@ class MainController(private val sceneCanvas: Canvas) {
             }
         }
 
+        sceneCanvas.setOnMouseMoved { ev ->
+            selectionController.onMouseMoved(ev)
+        }
+
         sceneCanvas.setOnKeyPressed { ev ->
             val script = when (ev.text) {
                 "1" -> blockScript

@@ -6,7 +6,6 @@ import io.github.wapuniverse.editor.EditorObjectComponent
 import io.github.wapuniverse.utils.minus
 import io.github.wapuniverse.utils.toVec2d
 import io.github.wapuniverse.utils.toVec2i
-import io.github.wapuniverse.view.SceneItem
 import io.github.wapuniverse.view.SceneView
 import javafx.scene.input.MouseEvent
 
@@ -40,9 +39,16 @@ class SelectionController(
         }
     }
 
+    fun onMouseMoved(ev: MouseEvent) {
+        editorObjectComponent.objects.forEach { unhoverObject(it)}
+        if (!ev.isPrimaryButtonDown) {
+            val s = selectableObjectsAt(ev.x, ev.y)
+            s.forEach { hoverObject(it) }
+        }
+    }
+
     private fun selectNext(cx: Double, cy: Double) {
-        val wv = sceneView.invTransform.transform(cx, cy).toVec2i()
-        val s = editorObjectComponent.selectableObjectsAt(wv.x, wv.y)
+        val s = selectableObjectsAt(cx, cy)
         if (s.isNotEmpty()) {
             val i = s.indexOf(selectedObject)
             if (i > 0) {
@@ -53,9 +59,31 @@ class SelectionController(
         }
     }
 
+    private fun selectableObjectsAt(cx: Double, cy: Double): List<EditorObject> {
+        val wv = sceneView.invTransform.transform(cx, cy).toVec2i()
+        val s = editorObjectComponent.selectableObjectsAt(wv.x, wv.y)
+        return s
+    }
+
     private fun selectObject(obj: EditorObject) {
-        selectedObject?.onUnselected()
+        unselectObject(selectedObject)
         selectedObject = obj
+        obj._isSelected = true
         obj.onSelected()
+    }
+
+    private fun unselectObject(obj: EditorObject?) {
+        obj?._isSelected = false
+        obj?.onUnselected()
+    }
+
+    private fun hoverObject(obj: EditorObject) {
+        obj._isHovered = true
+        obj.onHover()
+    }
+
+    private fun unhoverObject(obj: EditorObject) {
+        obj._isHovered = false
+        obj.onUnhover()
     }
 }

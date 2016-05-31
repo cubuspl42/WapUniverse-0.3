@@ -14,26 +14,42 @@ abstract class EditorObject {
     val isSelected: Boolean
         get() = _isSelected
 
+    val isHovered: Boolean
+        get() = _isHovered
+
     open fun onSelected() {
     }
 
     open fun onUnselected() {
     }
 
+    open fun onHover() {
+    }
+
+    open fun onUnhover() {
+    }
+
     internal var _isSelected = false
+
+    internal var _isHovered = false
 }
 
 class EditorObjectComponent {
-    private val objects = HashSet<EditorObject>()
+    private val _objects = HashSet<EditorObject>()
+
+    val objects: Set<EditorObject>
+        get() = _objects
 
     fun addEditorObject(obj: EditorObject) {
-        objects.add(obj)
+        _objects.add(obj)
         objectAdded._emit(obj)
     }
 
     fun selectableObjectsAt(x: Int, y: Int): List<EditorObject> {
-        return objects.filter { it.boundingBox.contains(x, y) }
+        return _objects.filter { it.boundingBox.contains(x, y) }
     }
+
+
 
     val objectAdded = Signal<EditorObject>()
 }

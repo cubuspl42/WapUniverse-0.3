@@ -32,10 +32,18 @@ class SmartEditorObject(
 
     private val rubberBand: RubberBand
 
+    private fun updateColor() {
+        rubberBand.color = when {
+            isSelected -> Color.RED
+            isHovered -> Color.BLUE
+            else -> Color.LIGHTBLUE
+        }
+    }
+
     init {
         val r = scaleUp(smartObject.rect)
         rubberBand = RubberBand(r)
-        rubberBand.color = Color.LIGHTBLUE
+        updateColor()
 
         sceneView.addItem(rubberBand)
 
@@ -65,13 +73,22 @@ class SmartEditorObject(
 
     override fun onSelected() {
         rubberBand.z = 100000.0
-        rubberBand.color = Color.RED
+        updateColor()
         sceneView.activeItem = rubberBand
     }
 
     override fun onUnselected() {
         rubberBand.z = 0.0
-        rubberBand.color = Color.LIGHTBLUE
+        updateColor()
+        sceneView.activeItem = null
+    }
+
+    override fun onHover() {
+        updateColor()
+    }
+
+    override fun onUnhover() {
+        updateColor()
     }
 }
 
