@@ -3,6 +3,7 @@ package io.github.wapuniverse.controller
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.EditorObject
 import io.github.wapuniverse.editor.EditorObjectComponent
+import io.github.wapuniverse.utils.Vec2i
 import io.github.wapuniverse.utils.minus
 import io.github.wapuniverse.utils.toVec2d
 import io.github.wapuniverse.utils.toVec2i
@@ -12,6 +13,7 @@ import io.github.wapuniverse.view.SceneView
 import javafx.scene.Cursor
 import javafx.scene.Node
 import javafx.scene.input.MouseEvent
+import java.util.logging.Logger
 
 
 private val mainInputHandlerPriority = 0
@@ -20,6 +22,8 @@ class MainInputHandler(
         private val root: Node,
         private val editorObjectComponent: EditorObjectComponent,
         private val sceneView: SceneView) : InputHandler {
+
+    private val logger = Logger.getLogger(javaClass.simpleName)
 
     var dragOffset: Vec2d? = Vec2d()
 
@@ -63,7 +67,8 @@ class MainInputHandler(
     override fun onMouseDragged(ev: MouseEvent): EventHandlingStatus {
         if (selectedObject != null && dragOffset != null) {
             val wv = invTr(ev.x, ev.y)
-            selectedObject!!.position = (wv - dragOffset!!).toVec2i()
+            val p = wv - dragOffset!!
+            selectedObject!!.position = p.toVec2i()
         }
         return EVENT_HANDLED
     }

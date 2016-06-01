@@ -69,7 +69,9 @@ class SmartEditorObject(
     override var position: Vec2i
         get() = smartObject.offset * tileWidth
         set(value) {
-            smartObject.offset = value / tileWidth
+            val p = value.toVec2d() / tileWidth
+            val rp = Vec2i(Math.round(p.x).toInt(), Math.round(p.y).toInt())
+            smartObject.offset = rp
         }
 
     override val boundingBox: Rectangle2Di
