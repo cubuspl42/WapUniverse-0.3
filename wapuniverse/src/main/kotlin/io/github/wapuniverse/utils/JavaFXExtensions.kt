@@ -49,3 +49,7 @@ fun Rectangle2D.toRect2Di(): Rectangle2Di {
 fun Point2D.toVec2i(): Vec2i {
     return toVec2d().toVec2i()
 }
+
+fun Vec2d.toSize(): Size {
+    return Size(x, y)
+}

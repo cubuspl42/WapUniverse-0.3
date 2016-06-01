@@ -30,19 +30,6 @@ abstract class SceneItem() {
 
     var z = 0.0
 
-    open fun onMouseMoved(x: Double, y: Double) {
-    }
-
-    open fun onMousePressed(x: Double, y: Double): EventHandlingStatus {
-        return EventHandlingStatus.EVENT_NOT_HANDLED
-    }
-
-    open fun onMouseDragged(x: Double, y: Double) {
-    }
-
-    open fun onMouseReleased(x: Double, y: Double) {
-    }
-
     open fun render(gc: GraphicsContext) {
     }
 }
@@ -53,11 +40,6 @@ class SceneView(
         private val tileLayer: TileLayer
 ) {
     private val items = HashSet<SceneItem>()
-
-    private val eventHandlers = HashMap<EventType<MouseEvent>, MutableList<SceneItem>>()
-
-    var activeItem: SceneItem? = null
-
 
     var transform = Affine()
         private set
@@ -127,19 +109,5 @@ class SceneView(
         items
                 .sortedBy { it.z }
                 .forEach { it.render(gc) }
-    }
-
-    fun onMousePressed(x: Double, y: Double): EventHandlingStatus {
-        if (activeItem != null) {
-            return activeItem!!.onMousePressed(x, y)
-        } else return EVENT_NOT_HANDLED
-    }
-
-    fun onMouseReleased(x: Double, y: Double) {
-        activeItem?.onMouseReleased(x, y)
-    }
-
-    fun onMouseDragged(x: Double, y: Double) {
-        activeItem?.onMouseDragged(x, y)
     }
 }

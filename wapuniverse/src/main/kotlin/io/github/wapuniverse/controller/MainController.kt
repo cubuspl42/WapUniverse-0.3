@@ -45,33 +45,31 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
 
     private val editorObjectComponent = EditorObjectComponent()
 
-    private val selectionController = SelectionController(root, editorObjectComponent, sceneView)
+    private val sceneInputController = SceneInputController()
 
     private var isDragged = false
 
     private var dragAnchor = Vec2d(0.0, 0.0)
 
-    fun c2w(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
+    fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
 
     init {
-        SmartObjectPresenter(smartObjectComponent, editorObjectComponent, sceneView)
+        SmartObjectPresenter(smartObjectComponent, editorObjectComponent, sceneView, sceneInputController, root)
+
+        sceneInputController.addInputHandler(MainInputHandler(root, editorObjectComponent, sceneView))
 
         sceneCanvas.setOnMousePressed { ev ->
             if (ev.button == MouseButton.PRIMARY) {
-                val ehs = sceneView.onMousePressed(ev.x, ev.y)
-                if (ehs != EVENT_HANDLED) {
-                    selectionController.onMousePressed(ev.x, ev.y)
-                }
+                sceneInputController.onMousePressed(ev)
             } else if (ev.button == MouseButton.SECONDARY) {
                 isDragged = true
-                dragAnchor = c2w(ev.x, ev.y)
+                dragAnchor = invTr(ev.x, ev.y)
             }
         }
 
         sceneCanvas.setOnMouseReleased { ev ->
             if (ev.button == MouseButton.PRIMARY) {
-                sceneView.onMouseReleased(ev.x, ev.y)
-                selectionController.onMouseReleased(ev)
+                sceneInputController.onMouseReleased(ev)
             } else if (ev.button == MouseButton.SECONDARY) {
                 isDragged = false
             }
@@ -82,13 +80,12 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
                 val mv = Vec2d(ev.x, ev.y)
                 sceneView.cameraOffset = dragAnchor - (mv * sceneView.scale)
             } else if (ev.isPrimaryButtonDown) {
-                sceneView.onMouseDragged(ev.x, ev.y)
-                selectionController.onMouseDragged(ev)
+                sceneInputController.onMouseDragged(ev)
             }
         }
 
         sceneCanvas.setOnMouseMoved { ev ->
-            selectionController.onMouseMoved(ev)
+            sceneInputController.onMouseMoved(ev)
         }
 
         sceneCanvas.setOnKeyPressed { ev ->

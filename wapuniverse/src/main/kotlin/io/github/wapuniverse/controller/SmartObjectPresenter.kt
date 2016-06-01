@@ -6,6 +6,7 @@ import io.github.wapuniverse.utils.*
 import io.github.wapuniverse.view.RubberBand
 import io.github.wapuniverse.view.SceneView
 import javafx.geometry.Rectangle2D
+import javafx.scene.Node
 import javafx.scene.paint.Color
 import java.util.*
 
@@ -28,7 +29,9 @@ fun scaleUp(r: Rectangle2Di): Rectangle2D {
 
 class SmartEditorObject(
         private val sceneView: SceneView,
-        private val smartObject: SmartObject) : EditorObject() {
+        private val sceneInputController: SceneInputController,
+        private val smartObject: SmartObject,
+        private val root: Node) : EditorObject() {
 
     private val rubberBand: RubberBand
 
@@ -42,7 +45,7 @@ class SmartEditorObject(
 
     init {
         val r = scaleUp(smartObject.rect)
-        rubberBand = RubberBand(r)
+        rubberBand = RubberBand(r, root)
         updateColor()
 
         sceneView.addItem(rubberBand)
@@ -74,13 +77,13 @@ class SmartEditorObject(
     override fun onSelected() {
         rubberBand.z = 100000.0
         updateColor()
-        sceneView.activeItem = rubberBand
+        sceneInputController.addInputHandler(rubberBand)
     }
 
     override fun onUnselected() {
         rubberBand.z = 0.0
         updateColor()
-        sceneView.activeItem = null
+        sceneInputController.removeInputHandler(rubberBand)
     }
 
     override fun onHover() {
@@ -95,11 +98,13 @@ class SmartEditorObject(
 class SmartObjectPresenter(
         smartObjectComponent: SmartObjectComponent,
         editorObjectComponent: EditorObjectComponent,
-        sceneView: SceneView) {
+        sceneView: SceneView,
+        sceneInputController: SceneInputController,
+        root: Node) {
 
     init {
         smartObjectComponent.objectAdded.connect { obj ->
-            val e = SmartEditorObject(sceneView, obj)
+            val e = SmartEditorObject(sceneView, sceneInputController, obj, root)
             editorObjectComponent.addEditorObject(e)
         }
     }

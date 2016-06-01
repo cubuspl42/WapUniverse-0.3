@@ -6,59 +6,73 @@ import io.github.wapuniverse.editor.EditorObjectComponent
 import io.github.wapuniverse.utils.minus
 import io.github.wapuniverse.utils.toVec2d
 import io.github.wapuniverse.utils.toVec2i
+import io.github.wapuniverse.view.EventHandlingStatus
+import io.github.wapuniverse.view.EventHandlingStatus.EVENT_HANDLED
 import io.github.wapuniverse.view.SceneView
 import javafx.scene.Cursor
 import javafx.scene.Node
 import javafx.scene.input.MouseEvent
 
 
-class SelectionController(
+private val mainInputHandlerPriority = 0
+
+class MainInputHandler(
         private val root: Node,
         private val editorObjectComponent: EditorObjectComponent,
-        private val sceneView: SceneView) {
-
-    var selectedObject: EditorObject? = null
+        private val sceneView: SceneView) : InputHandler {
 
     var dragOffset: Vec2d? = Vec2d()
 
-    fun onMousePressed(x: Double, y: Double) {
-        val wv = sceneView.invTransform.transform(x, y).toVec2d()
+    var selectedObject: EditorObject? = null
+
+    private fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
+
+    override fun onMousePressed(ev: MouseEvent): EventHandlingStatus {
+        val wv = invTr(ev.x, ev.y)
         if (selectedObject != null && selectedObject!!.boundingBox.contains(wv.x, wv.y)) {
             dragOffset = wv - selectedObject!!.position.toVec2d()
         }
+        return EVENT_HANDLED
     }
 
-    fun onMouseReleased(ev: MouseEvent) {
+    override fun onMouseReleased(ev: MouseEvent): EventHandlingStatus {
         if (ev.isStillSincePress) {
-            selectNext(ev.x, ev.y)
+            selectNextObject(invTr(ev.x, ev.y))
         }
         dragOffset = null
+        return EVENT_HANDLED
     }
 
-    fun onMouseDragged(ev: MouseEvent) {
-        if (selectedObject != null && dragOffset != null) {
-            val wv = sceneView.invTransform.transform(ev.x, ev.y).toVec2d()
-            selectedObject!!.position = (wv - dragOffset!!).toVec2i()
-        }
-    }
-
-    fun onMouseMoved(ev: MouseEvent) {
-        editorObjectComponent.objects.forEach { unhoverObject(it)}
+    override fun onMouseMoved(ev: MouseEvent): EventHandlingStatus {
+        editorObjectComponent.objects.forEach { unhoverObject(it) }
         if (!ev.isPrimaryButtonDown) {
-            val s = selectableObjectsAt(ev.x, ev.y)
+            val s = selectableObjectsAt(invTr(ev.x, ev.y))
             s.forEach { hoverObject(it) }
         }
 
-        val wv = sceneView.invTransform.transform(ev.x, ev.y).toVec2d()
+        val wv = invTr(ev.x, ev.y)
         if (selectedObject?.boundingBox?.contains(wv.x, wv.y) == true) {
             root.cursor = Cursor.MOVE
         } else {
             root.cursor = Cursor.DEFAULT
         }
+
+        return EVENT_HANDLED
     }
 
-    private fun selectNext(cx: Double, cy: Double) {
-        val s = selectableObjectsAt(cx, cy)
+    override fun onMouseDragged(ev: MouseEvent): EventHandlingStatus {
+        if (selectedObject != null && dragOffset != null) {
+            val wv = invTr(ev.x, ev.y)
+            selectedObject!!.position = (wv - dragOffset!!).toVec2i()
+        }
+        return EVENT_HANDLED
+    }
+
+    override val priority: Int
+        get() = mainInputHandlerPriority
+
+    private fun selectNextObject(wv: Vec2d) {
+        val s = selectableObjectsAt(wv)
         if (s.isNotEmpty()) {
             val i = s.indexOf(selectedObject)
             if (i > 0) {
@@ -69,10 +83,8 @@ class SelectionController(
         }
     }
 
-    private fun selectableObjectsAt(cx: Double, cy: Double): List<EditorObject> {
-        val wv = sceneView.invTransform.transform(cx, cy).toVec2i()
-        val s = editorObjectComponent.selectableObjectsAt(wv.x, wv.y)
-        return s
+    private fun selectableObjectsAt(wv: Vec2d): List<EditorObject> {
+        return editorObjectComponent.selectableObjectsAt(wv.x.toInt(), wv.y.toInt())
     }
 
     private fun selectObject(obj: EditorObject) {
