@@ -53,6 +53,7 @@ class SmartEditorObject(
         rubberBand.resized.connect { r ->
             val sdr = scaleDown(r)
             if (sdr.width > 0 && sdr.height > 0) {
+                smartObject.offset = Vec2i(sdr.minX, sdr.minY)
                 smartObject.resize(sdr.width, sdr.height)
             }
         }
