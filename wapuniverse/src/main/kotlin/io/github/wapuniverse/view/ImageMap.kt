@@ -18,21 +18,13 @@ class ImageMap(
     }
 
     fun findObjectImage(levelIndex: Int, imageSetId: String, frameIndex: Int): Image? {
-        try {
-            val imageMd = imageSetDatabase.findObjectImageMetadata(levelIndex, imageSetId, frameIndex)
-            return findImage(imageMd.path)
-        } catch(e: ImageSetDatabase.ImageNotFound) {
-            return null
-        }
+        val imageMd = imageSetDatabase.findObjectImageMetadata(levelIndex, imageSetId, frameIndex) ?: return null
+        return findImage(imageMd.path)
     }
 
     fun findTileImage(levelIndex: Int, tileImageSetName: String, tileIndex: Int): Image? {
-        try {
-            val tileMd = imageSetDatabase.findTileMetadata(levelIndex, tileImageSetName, tileIndex)
-            return findImage(tileMd.path)
-        } catch(e: ImageSetDatabase.ImageNotFound) {
-            return null
-        }
+        val tileMd = imageSetDatabase.findTileMetadata(levelIndex, tileImageSetName, tileIndex) ?: return null
+        return findImage(tileMd.path)
     }
 }
 

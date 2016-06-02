@@ -53,21 +53,23 @@ class ImageSetDatabase(yamlDocumentStream: InputStream) {
         }
     }
 
-    private fun findImageMetadata(expandedImageSetId: String, frameIndex: Int): ImageMetadata {
-        try {
-            val imageSet = root.imageSets[expandedImageSetId]!!
+    private fun findImageMetadata(expandedImageSetId: String, frameIndex: Int): ImageMetadata? {
+
+        val imageSet = root.imageSets[expandedImageSetId]
+        if (imageSet != null) {
             val frameName = imageSet.frames[frameIndex]
-            val imageMetadata = imageSet.sprites[frameName]!!
-            val x = imageMetadata.offset[0].toDouble()
-            val y = imageMetadata.offset[1].toDouble()
-            val path = imageMetadata.path
-            return ImageMetadata(Vec2d(x, y), path)
-        } catch(e: KotlinNullPointerException) {
-            throw ImageNotFound(expandedImageSetId, frameIndex)
+            if (frameName != null) {
+                val imageMetadata = imageSet.sprites[frameName]!!
+                val x = imageMetadata.offset[0].toDouble()
+                val y = imageMetadata.offset[1].toDouble()
+                val path = imageMetadata.path
+                return ImageMetadata(Vec2d(x, y), path)
+            }
         }
+        return null
     }
 
-    fun findObjectImageMetadata(levelIndex: Int, imageSetId: String, frameIndex: Int): ImageMetadata {
+    fun findObjectImageMetadata(levelIndex: Int, imageSetId: String, frameIndex: Int): ImageMetadata? {
         when {
             imageSetId.startsWith("LEVEL_") -> {
                 val expandedImageSetId = imageSetId.replaceFirst("LEVEL_", "LEVEL${levelIndex}_IMAGES_")
@@ -81,7 +83,7 @@ class ImageSetDatabase(yamlDocumentStream: InputStream) {
         }
     }
 
-    fun findTileMetadata(levelIndex: Int, tileImageSetName: String, tileIndex: Int): ImageMetadata {
+    fun findTileMetadata(levelIndex: Int, tileImageSetName: String, tileIndex: Int): ImageMetadata? {
         val expandedImageSetId = "LEVEL${levelIndex}_TILES_" + tileImageSetName
         return findImageMetadata(expandedImageSetId, tileIndex)
     }
