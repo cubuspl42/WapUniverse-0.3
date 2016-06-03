@@ -125,8 +125,10 @@ class SmartObject(tileLayer: TileLayer, private val script: SmartScript) {
         get() = matrix.rect
 
     fun resize(w: Int, h: Int) {
-        matrix.alphaTiles = script.run(w, h)
-        changed._emit(this)
+        if (rect.width != w || rect.height != h) {
+            matrix.alphaTiles = script.run(w, h)
+            changed._emit(this)
+        }
     }
 
     var position: Vec2d

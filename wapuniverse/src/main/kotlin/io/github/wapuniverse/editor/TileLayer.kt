@@ -14,14 +14,16 @@ class AlphaTileMatrix {
 
     var offset = Vec2i()
         set(value) {
-            _tileLayer?._updateCache()
-            field = value
+            if (field != value) {
+                field = value
+                _tileLayer?._updateCache()
+            }
         }
 
     var alphaTiles = Matrix<AlphaTile>()
         set(value) {
-            _tileLayer?._updateCache()
             field = value
+            _tileLayer?._updateCache()
         }
 
     val rect: Rectangle2Di
