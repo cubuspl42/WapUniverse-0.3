@@ -20,7 +20,7 @@ import java.util.*
 import kotlin.concurrent.schedule
 
 
-private val IMAGE_BASE_DIR_PATH = "/home/kuba/tmp/CLAW/"
+private val IMAGE_BASE_DIR_PATH = "/Users/kuba/Temporary/CLAW/"
 
 private fun addAlphaTileMatrix(tileLayer: TileLayer, m: Int, n: Int, x: Int, y: Int, vararg tiles: AlphaTile) {
     val mx = makeMatrix(m, n, tiles.asList())
