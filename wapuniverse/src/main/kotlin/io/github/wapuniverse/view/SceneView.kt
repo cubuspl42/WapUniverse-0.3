@@ -1,6 +1,7 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
+import io.github.wapuniverse.editor.ImageSetDatabase
 import io.github.wapuniverse.editor.SmartObject
 import io.github.wapuniverse.editor.TileLayer
 import io.github.wapuniverse.editor.tileWidth
@@ -9,6 +10,7 @@ import javafx.event.EventType
 import javafx.geometry.Rectangle2D
 import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
+import javafx.scene.image.Image
 import javafx.scene.input.MouseEvent
 import javafx.scene.transform.Affine
 import java.util.*
@@ -34,12 +36,38 @@ abstract class SceneItem() {
     }
 }
 
+class TileImageCache(
+        levelIndex: Int, tileImageSetName: String, imageSetDatabase: ImageSetDatabase, imageMap: ImageMap) {
+
+    val cache: Array<Image?>
+
+    init {
+        val tileIndices = imageSetDatabase.listTiles(levelIndex, tileImageSetName)!!
+        val min = tileIndices.min()!!
+        val max = tileIndices.max()!!
+        assert(min == -1)
+
+        cache = Array(max + 2, { i ->
+            imageMap.findTileImage(levelIndex, tileImageSetName, i - 1)
+        })
+    }
+
+    fun getTileImage(tileIndex: Int): Image? {
+        if (tileIndex >= -1 && tileIndex < cache.size) {
+            return cache[tileIndex + 1]
+        } else return null
+    }
+}
+
 class SceneView(
         private val canvas: Canvas,
+        private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap,
         private val tileLayer: TileLayer
 ) {
     private val items = HashSet<SceneItem>()
+
+    private val tileImageCache = TileImageCache(levelIndex, tileLayer.imageSet, imageSetDatabase, imageMap)
 
     var transform = Affine()
         private set
@@ -99,7 +127,8 @@ class SceneView(
         for (i in -renderRadius..renderRadius) {
             for (j in -renderRadius..renderRadius) {
                 val t = tileLayer.getTile(i, j)
-                val img = imageMap.findTileImage(levelIndex, tileLayer.imageSet, t)
+                // val img = imageMap.findTileImage(levelIndex, tileLayer.imageSet, t)
+                val img = tileImageCache.getTileImage(t) ?: continue
                 val x = j * tileWidth
                 val y = i * tileWidth
                 gc.drawImage(img, x, y)

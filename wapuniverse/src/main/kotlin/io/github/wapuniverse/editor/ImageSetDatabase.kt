@@ -53,20 +53,26 @@ class ImageSetDatabase(yamlDocumentStream: InputStream) {
         }
     }
 
-    private fun findImageMetadata(expandedImageSetId: String, frameIndex: Int): ImageMetadata? {
-
+    private fun findImageSet(expandedImageSetId: String): YamlDb.ImageSet? {
         val imageSet = root.imageSets[expandedImageSetId]
-        if (imageSet != null) {
-            val frameName = imageSet.frames[frameIndex]
-            if (frameName != null) {
-                val imageMetadata = imageSet.sprites[frameName]!!
-                val x = imageMetadata.offset[0].toDouble()
-                val y = imageMetadata.offset[1].toDouble()
-                val path = imageMetadata.path
-                return ImageMetadata(Vec2d(x, y), path)
-            }
+        return imageSet
+    }
+
+    private fun findImageMetadata(imageSet: YamlDb.ImageSet, frameIndex: Int): ImageMetadata? {
+        val frameName = imageSet.frames[frameIndex]
+        if (frameName != null) {
+            val imageMetadata = imageSet.sprites[frameName]!!
+            val x = imageMetadata.offset[0].toDouble()
+            val y = imageMetadata.offset[1].toDouble()
+            val path = imageMetadata.path
+            return ImageMetadata(Vec2d(x, y), path)
         }
         return null
+    }
+
+    private fun findImageMetadata(expandedImageSetId: String, frameIndex: Int): ImageMetadata? {
+        val imageSet = findImageSet(expandedImageSetId) ?: return null
+        return findImageMetadata(imageSet, frameIndex)
     }
 
     fun findObjectImageMetadata(levelIndex: Int, imageSetId: String, frameIndex: Int): ImageMetadata? {
@@ -83,9 +89,20 @@ class ImageSetDatabase(yamlDocumentStream: InputStream) {
         }
     }
 
-    fun findTileMetadata(levelIndex: Int, tileImageSetName: String, tileIndex: Int): ImageMetadata? {
+    private fun findTileImageSet(levelIndex: Int, tileImageSetName: String): YamlDb.ImageSet? {
         val expandedImageSetId = "LEVEL${levelIndex}_TILES_" + tileImageSetName
-        return findImageMetadata(expandedImageSetId, tileIndex)
+        val imageSet = findImageSet(expandedImageSetId)
+        return imageSet
+    }
+
+    fun findTileMetadata(levelIndex: Int, tileImageSetName: String, tileIndex: Int): ImageMetadata? {
+        val imageSet = findTileImageSet(levelIndex, tileImageSetName) ?: return null
+        return findImageMetadata(imageSet, tileIndex)
+    }
+
+    fun listTiles(levelIndex: Int, tileImageSetName: String) : Set<Int>? {
+        val imageSet = findTileImageSet(levelIndex, tileImageSetName) ?: return null
+        return imageSet.frames.keys
     }
 }
 

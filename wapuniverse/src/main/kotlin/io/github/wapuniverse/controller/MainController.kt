@@ -39,7 +39,7 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
 
     private val tileLayer = TileLayer(alphaTileMapper, "ACTION")
 
-    private val sceneView = SceneView(sceneCanvas, imageMap, tileLayer)
+    private val sceneView = SceneView(sceneCanvas, imageSetDatabase, imageMap, tileLayer)
 
     private val smartObjectComponent = SmartObjectComponent()
 
