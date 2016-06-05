@@ -7,16 +7,24 @@ enum class Level1AlphaTile : AlphaTile {
     EMPTY {
         override val z = -100
     },
-    BLOCK_TL,
+    BLOCK_TL {
+        override val z = 800
+    },
     BLOCK_T {
         override val z = 900
     },
-    BLOCK_TR_1,
-    BLOCK_TR_2,
+    BLOCK_TR_1 {
+        override val z = 800
+    },
+    BLOCK_TR_2 {
+        override val z = 800
+    },
     BLOCK_R {
         override val z = 900
     },
-    BLOCK_BL,
+    BLOCK_BL {
+        override val z = 800
+    },
     BLOCK_L {
         override val z = 900
     },
