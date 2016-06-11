@@ -4,11 +4,8 @@ import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.*
 import io.github.wapuniverse.lsd.level1.level1FormulaGroup
 import io.github.wapuniverse.utils.*
-import io.github.wapuniverse.view.EventHandlingStatus
+import io.github.wapuniverse.view.*
 import io.github.wapuniverse.view.EventHandlingStatus.EVENT_HANDLED
-import io.github.wapuniverse.view.SceneItem
-import io.github.wapuniverse.view.SceneView
-import io.github.wapuniverse.view.loadImageMapFromPath
 import javafx.animation.AnimationTimer
 import javafx.scene.Node
 import javafx.scene.Scene
@@ -45,6 +42,8 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
 
     private val editorObjectComponent = EntityComponent()
 
+    private val sBoxComponent = SBoxComponent()
+
     private val sceneInputController = SceneInputController()
 
     private var isDragged = false
@@ -54,9 +53,9 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
     fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
 
     init {
-        SmartObjectPresenter(smartObjectComponent, editorObjectComponent, sceneView, sceneInputController, root)
+        SmartObjectPresenter(smartObjectComponent, sceneView, sceneInputController, sBoxComponent, root)
 
-        sceneInputController.addInputHandler(MainInputHandler(root, editorObjectComponent, sceneView))
+        sceneInputController.addInputHandler(MainInputHandler(root, sBoxComponent, editorObjectComponent, sceneView))
 
         sceneCanvas.setOnMousePressed { ev ->
             if (ev.button == MouseButton.PRIMARY) {

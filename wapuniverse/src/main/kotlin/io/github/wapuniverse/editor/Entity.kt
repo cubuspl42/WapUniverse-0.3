@@ -8,26 +8,6 @@ import java.util.*
 
 abstract class Entity {
     abstract var position: Vec2i
-
-    abstract val boundingBox: Rectangle2Di
-
-    val isSelected: Boolean
-        get() = _isSelected
-
-    val isHovered: Boolean
-        get() = _isHovered
-
-    open fun onSelected() = Unit
-
-    open fun onUnselected() = Unit
-
-    open fun onHover() = Unit
-
-    open fun onUnhover() = Unit
-
-    internal var _isSelected = false
-
-    internal var _isHovered = false
 }
 
 class EntityComponent {
@@ -40,11 +20,6 @@ class EntityComponent {
         _entities.add(ent)
         entityAdded._emit(ent)
     }
-
-    fun selectableEntitiesAt(x: Int, y: Int): List<Entity> {
-        return _entities.filter { it.boundingBox.contains(x, y) }
-    }
-
 
     val entityAdded = Signal<Entity>()
 }

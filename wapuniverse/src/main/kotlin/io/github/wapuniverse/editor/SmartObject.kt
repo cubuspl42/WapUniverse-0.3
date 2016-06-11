@@ -104,7 +104,7 @@ val platformScript = smartScript(4, 1, { w, h ->
     Matrix(t)
 })
 
-class SmartObject(tileLayer: TileLayer, private val script: SmartScript) {
+class SmartObject(tileLayer: TileLayer, private val script: SmartScript) : Entity() {
     private val matrix = AlphaTileMatrix()
 
     val changed = Signal<SmartObject>()
@@ -131,10 +131,10 @@ class SmartObject(tileLayer: TileLayer, private val script: SmartScript) {
         }
     }
 
-    var position: Vec2d
-        get() = Vec2d(offset.x * tileWidth, offset.y * tileWidth)
+    override var position: Vec2i
+        get() = Vec2d(offset.x * tileWidth, offset.y * tileWidth).toVec2i()
         set(value) {
-            offset = (value / tileWidth).toVec2i()
+            offset = value / tileWidth
         }
 }
 
