@@ -43,7 +43,7 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
 
     private val smartObjectComponent = SmartObjectComponent()
 
-    private val editorObjectComponent = EditorObjectComponent()
+    private val editorObjectComponent = EntityComponent()
 
     private val sceneInputController = SceneInputController()
 

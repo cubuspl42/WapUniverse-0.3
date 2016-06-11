@@ -31,7 +31,7 @@ class SmartEditorObject(
         private val sceneView: SceneView,
         private val sceneInputController: SceneInputController,
         private val smartObject: SmartObject,
-        private val root: Node) : EditorObject() {
+        private val root: Node) : Entity() {
 
     private val rubberBand: RubberBand
 
@@ -100,7 +100,7 @@ class SmartEditorObject(
 
 class SmartObjectPresenter(
         smartObjectComponent: SmartObjectComponent,
-        editorObjectComponent: EditorObjectComponent,
+        entityComponent: EntityComponent,
         sceneView: SceneView,
         sceneInputController: SceneInputController,
         root: Node) {
@@ -108,7 +108,7 @@ class SmartObjectPresenter(
     init {
         smartObjectComponent.objectAdded.connect { obj ->
             val e = SmartEditorObject(sceneView, sceneInputController, obj, root)
-            editorObjectComponent.addEditorObject(e)
+            entityComponent.addEntity(e)
         }
     }
 }

@@ -1,8 +1,8 @@
 package io.github.wapuniverse.controller
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.editor.EditorObject
-import io.github.wapuniverse.editor.EditorObjectComponent
+import io.github.wapuniverse.editor.Entity
+import io.github.wapuniverse.editor.EntityComponent
 import io.github.wapuniverse.utils.Vec2i
 import io.github.wapuniverse.utils.minus
 import io.github.wapuniverse.utils.toVec2d
@@ -20,14 +20,14 @@ private val mainInputHandlerPriority = 0
 
 class MainInputHandler(
         private val root: Node,
-        private val editorObjectComponent: EditorObjectComponent,
+        private val entityComponent: EntityComponent,
         private val sceneView: SceneView) : InputHandler {
 
     private val logger = Logger.getLogger(javaClass.simpleName)
 
     var dragOffset: Vec2d? = Vec2d()
 
-    var selectedObject: EditorObject? = null
+    var selectedObject: Entity? = null
 
     private fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
 
@@ -48,7 +48,7 @@ class MainInputHandler(
     }
 
     override fun onMouseMoved(ev: MouseEvent): EventHandlingStatus {
-        editorObjectComponent.objects.forEach { unhoverObject(it) }
+        entityComponent.entities.forEach { unhoverObject(it) }
         if (!ev.isPrimaryButtonDown) {
             val s = selectableObjectsAt(invTr(ev.x, ev.y))
             s.forEach { hoverObject(it) }
@@ -88,28 +88,28 @@ class MainInputHandler(
         }
     }
 
-    private fun selectableObjectsAt(wv: Vec2d): List<EditorObject> {
-        return editorObjectComponent.selectableObjectsAt(wv.x.toInt(), wv.y.toInt())
+    private fun selectableObjectsAt(wv: Vec2d): List<Entity> {
+        return entityComponent.selectableEntitiesAt(wv.x.toInt(), wv.y.toInt())
     }
 
-    private fun selectObject(obj: EditorObject) {
+    private fun selectObject(obj: Entity) {
         unselectObject(selectedObject)
         selectedObject = obj
         obj._isSelected = true
         obj.onSelected()
     }
 
-    private fun unselectObject(obj: EditorObject?) {
+    private fun unselectObject(obj: Entity?) {
         obj?._isSelected = false
         obj?.onUnselected()
     }
 
-    private fun hoverObject(obj: EditorObject) {
+    private fun hoverObject(obj: Entity) {
         obj._isHovered = true
         obj.onHover()
     }
 
-    private fun unhoverObject(obj: EditorObject) {
+    private fun unhoverObject(obj: Entity) {
         obj._isHovered = false
         obj.onUnhover()
     }
