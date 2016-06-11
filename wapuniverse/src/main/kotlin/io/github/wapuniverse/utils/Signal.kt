@@ -4,11 +4,12 @@ package io.github.wapuniverse.utils
 class Signal<T> {
     val listeners: MutableList<(T) -> Unit> = mutableListOf()
 
-    fun connect(f: (T) -> Unit) {
+    fun on(f: (T) -> Unit): (T) -> Unit {
         listeners.add(f)
+        return f
     }
 
-    fun disconnect(f: (T) -> Unit) {
+    fun off(f: (T) -> Unit) {
         listeners.remove(f)
     }
 

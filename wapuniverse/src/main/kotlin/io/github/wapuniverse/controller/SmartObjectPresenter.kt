@@ -50,7 +50,7 @@ class SmartEditorObject(
 
         sceneView.addItem(rubberBand)
 
-        rubberBand.resized.connect { r ->
+        rubberBand.resized.on { r ->
             val sdr = scaleDown(r)
             if (sdr.width > 0 && sdr.height > 0) {
                 smartObject.offset = Vec2i(sdr.minX, sdr.minY)
@@ -58,7 +58,7 @@ class SmartEditorObject(
             }
         }
 
-        smartObject.changed.connect {
+        smartObject.changed.on {
             val sur = scaleUp(smartObject.rect)
             rubberBand.offset = Vec2d(sur.minX, sur.minY)
             rubberBand.width = sur.width
@@ -106,7 +106,7 @@ class SmartObjectPresenter(
         root: Node) {
 
     init {
-        smartObjectComponent.objectAdded.connect { obj ->
+        smartObjectComponent.objectAdded.on { obj ->
             val e = SmartEditorObject(sceneView, sceneInputController, obj, root)
             entityComponent.addEntity(e)
         }
