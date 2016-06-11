@@ -55,7 +55,7 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
     init {
         SmartObjectPresenter(smartObjectComponent, sceneView, sceneInputController, sBoxComponent, root)
 
-        sceneInputController.addInputHandler(MainInputHandler(root, sBoxComponent, editorObjectComponent, sceneView))
+        sceneInputController.addInputHandler(MainInputHandler(root, sBoxComponent, sceneView))
 
         sceneCanvas.setOnMousePressed { ev ->
             if (ev.button == MouseButton.PRIMARY) {
@@ -88,6 +88,9 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
         }
 
         sceneCanvas.setOnKeyPressed { ev ->
+            if (ev.text == "a") {
+                sBoxComponent.selectAll()
+            }
             val script = when (ev.text) {
                 "1" -> blockScript
                 "2" -> ladderScript

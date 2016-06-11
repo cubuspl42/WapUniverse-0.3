@@ -5,14 +5,16 @@ import javafx.geometry.Rectangle2D
 
 
 class SBoxComponent {
-    private val sBoxes = hashSetOf<SBox>()
+    private val _sBoxes = hashSetOf<SBox>()
+
+    val sBoxes: Set<SBox> = _sBoxes
 
     fun addSBox(sBox: SBox) {
-        sBoxes.add(sBox)
+        _sBoxes.add(sBox)
     }
 
     fun removeSBox(sBox: SBox) {
-        sBoxes.remove(sBox)
+        _sBoxes.remove(sBox)
     }
 
     fun query(rect: Rectangle2D): List<SBox> {
@@ -30,6 +32,10 @@ class SBoxComponent {
 
     fun select(rect: Rectangle2D) {
         query(rect).forEach { it.isSelected = true }
+    }
+
+    fun selectAll() {
+        sBoxes.forEach { it.isSelected = true }
     }
 
     fun unselectAll() {
