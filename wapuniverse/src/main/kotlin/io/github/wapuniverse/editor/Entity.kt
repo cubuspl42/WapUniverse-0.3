@@ -8,6 +8,15 @@ import java.util.*
 
 abstract class Entity {
     abstract var position: Vec2i
+
+    fun dispose() {
+        onDispose()
+        disposed._emit(this)
+    }
+
+    protected open fun onDispose() = Unit
+
+    val disposed = Signal<Entity>()
 }
 
 class EntityComponent {
@@ -22,4 +31,12 @@ class EntityComponent {
     }
 
     val entityAdded = Signal<Entity>()
+
+    fun removeEntity(ent: Entity) {
+        ent.dispose()
+        _entities.remove(ent)
+        entityRemoved._emit(ent)
+    }
+
+    val entityRemoved = Signal<Entity>()
 }

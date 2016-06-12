@@ -10,6 +10,7 @@ import javafx.animation.AnimationTimer
 import javafx.scene.Node
 import javafx.scene.Scene
 import javafx.scene.canvas.Canvas
+import javafx.scene.input.KeyCode
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
@@ -38,9 +39,9 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
 
     private val sceneView = SceneView(sceneCanvas, imageSetDatabase, imageMap, tileLayer)
 
-    private val smartObjectComponent = SmartObjectComponent()
+    private val entityComponent = EntityComponent()
 
-    private val editorObjectComponent = EntityComponent()
+    private val entityService = EntityService(entityComponent)
 
     private val sBoxComponent = SBoxComponent()
 
@@ -53,7 +54,7 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
     fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
 
     init {
-        SmartObjectPresenter(smartObjectComponent, sceneView, sceneInputController, sBoxComponent, root)
+        SmartObjectPresenter(entityComponent, sceneView, sceneInputController, sBoxComponent, root)
 
         sceneInputController.addInputHandler(MainInputHandler(root, sBoxComponent, sceneView))
 
@@ -91,6 +92,10 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
             if (ev.text == "a") {
                 sBoxComponent.selectAll()
             }
+            if (ev.code == KeyCode.DELETE) {
+                val se = sBoxComponent.selectedEntities
+                entityService.destroyEntities(se)
+            }
             val script = when (ev.text) {
                 "1" -> blockScript
                 "2" -> ladderScript
@@ -100,7 +105,7 @@ class MainController(root: Node, private val sceneCanvas: Canvas) {
                 else -> null
             }
             if (script != null) {
-                smartObjectComponent.addSmartObject(SmartObject(tileLayer, script))
+                entityComponent.addEntity(SmartObject(tileLayer, script))
             }
         }
 

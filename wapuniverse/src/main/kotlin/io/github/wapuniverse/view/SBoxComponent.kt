@@ -1,6 +1,7 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
+import io.github.wapuniverse.editor.Entity
 import javafx.geometry.Rectangle2D
 
 
@@ -8,6 +9,12 @@ class SBoxComponent {
     private val _sBoxes = hashSetOf<SBox>()
 
     val sBoxes: Set<SBox> = _sBoxes
+
+    val selectedSBoxes: List<SBox>
+        get() = sBoxes.filter { it.isSelected }
+
+    val selectedEntities: List<Entity>
+        get() = selectedSBoxes.map { it.entity }
 
     fun addSBox(sBox: SBox) {
         _sBoxes.add(sBox)

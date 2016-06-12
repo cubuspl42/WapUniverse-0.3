@@ -56,6 +56,16 @@ class TileLayer(
 
     val matrixAdded = Signal<AlphaTileMatrix>()
 
+    fun removeMatrix(matrix: AlphaTileMatrix) {
+        assert(matrix._tileLayer == this)
+        matrix._tileLayer = null
+        matrices.remove(matrix)
+        matrixRemoved._emit(matrix)
+        _updateCache()
+    }
+
+    val matrixRemoved = Signal<AlphaTileMatrix>()
+
     fun getTile(i: Int, j: Int): Int {
         return tileCache[Vec2i(j, i)] ?: DEFAULT_TILE_INDEX
     }

@@ -38,6 +38,18 @@ class ResizeableVo(
 
     private val rubberBand = RubberBand(scaleUp(smartObject.rect), root)
 
+    init {
+        sBoxComponent.addSBox(sBox)
+        sceneView.addItem(rubberBand)
+        updateColor()
+
+        smartObject.disposed.on {
+            sBoxComponent.removeSBox(sBox)
+            sceneView.removeItem(rubberBand)
+            sceneInputController.removeInputHandler(rubberBand)
+        }
+    }
+
     private fun updateColor() {
         rubberBand.color = when {
             sBox.isSelected -> Color.RED
@@ -80,11 +92,5 @@ class ResizeableVo(
             smartObject.offset = Vec2i(sdr.minX, sdr.minY)
             smartObject.resize(sdr.width, sdr.height)
         }
-    }
-
-    init {
-        sBoxComponent.addSBox(sBox)
-        sceneView.addItem(rubberBand)
-        updateColor()
     }
 }

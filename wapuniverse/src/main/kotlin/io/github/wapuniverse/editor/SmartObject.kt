@@ -104,7 +104,7 @@ val platformScript = smartScript(4, 1, { w, h ->
     Matrix(t)
 })
 
-class SmartObject(tileLayer: TileLayer, private val script: SmartScript) : Entity() {
+class SmartObject(private val tileLayer: TileLayer, private val script: SmartScript) : Entity() {
     private val matrix = AlphaTileMatrix()
 
     val changed = Signal<SmartObject>()
@@ -139,15 +139,8 @@ class SmartObject(tileLayer: TileLayer, private val script: SmartScript) : Entit
             val y = Math.round(v.y).toInt()
             offset = Vec2i(x, y)
         }
-}
 
-class SmartObjectComponent {
-    private val objects = HashSet<SmartObject>()
-
-    fun addSmartObject(obj: SmartObject) {
-        objects.add(obj)
-        objectAdded._emit(obj)
+    override fun onDispose() {
+        tileLayer.removeMatrix(matrix)
     }
-
-    val objectAdded = Signal<SmartObject>()
 }
