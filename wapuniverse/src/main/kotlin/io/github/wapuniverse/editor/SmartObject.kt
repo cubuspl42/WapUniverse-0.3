@@ -134,7 +134,10 @@ class SmartObject(tileLayer: TileLayer, private val script: SmartScript) : Entit
     override var position: Vec2i
         get() = Vec2d(offset.x * tileWidth, offset.y * tileWidth).toVec2i()
         set(value) {
-            offset = value / tileWidth
+            val v = value.toVec2d() / tileWidth
+            val x = Math.round(v.x).toInt()
+            val y = Math.round(v.y).toInt()
+            offset = Vec2i(x, y)
         }
 }
 
