@@ -10,6 +10,8 @@ import java.util.*
 import java.util.logging.Logger
 
 
+private val wwdPath = "/home/kuba/Dropbox/temp/LEVEL.wwd"
+
 class MainWindowController : Initializable {
     private val logger = Logger.getLogger(javaClass.simpleName)
 
@@ -19,16 +21,18 @@ class MainWindowController : Initializable {
     @FXML
     private lateinit var sceneCanvas: Canvas
 
+    private lateinit var mainController: MainController
+
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         sceneCanvas.widthProperty().bind(root.widthProperty())
         sceneCanvas.heightProperty().bind(root.heightProperty())
         sceneCanvas.isFocusTraversable = true
 
-        MainController(root, sceneCanvas)
+        mainController = MainController(root, sceneCanvas)
     }
 
     @FXML
     private fun handleMenuOpen(ev: ActionEvent) {
-        logger.info("Menu:Open")
+        mainController.loadWorld(wwdPath)
     }
 }

@@ -84,6 +84,8 @@ private fun subStream(wwdBuffer: ByteArray, offset: Int): WwdStream {
 class Wwd {
     var header = WwdHeader()
     var planes = mutableListOf<WwdPlane>()
+    val mainPlane: WwdPlane?
+        get() = planes.firstOrNull { it.flags.mainPlane }
     var tileDescriptions = mutableListOf<WwdTileDescription>()
 }
 
