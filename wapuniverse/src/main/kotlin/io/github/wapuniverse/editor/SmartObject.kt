@@ -1,7 +1,6 @@
 package io.github.wapuniverse.editor
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.lsd.level1.Level1AlphaTile.*
 import io.github.wapuniverse.utils.*
 import java.util.*
 

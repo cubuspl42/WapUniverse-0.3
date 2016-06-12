@@ -1,4 +1,4 @@
-package io.github.wapuniverse.lsd
+package io.github.wapuniverse.editor
 
 import io.github.wapuniverse.editor.AlphaTile
 

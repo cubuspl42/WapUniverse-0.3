@@ -104,17 +104,17 @@ class WorldController(root: Node, private val sceneCanvas: Canvas, wwd: Wwd) {
                 val se = sBoxComponent.selectedEntities
                 entityService.destroyEntities(se)
             }
-            val script = when (ev.text) {
-                "1" -> blockScript
-                "2" -> ladderScript
-                "3" -> spikesScript
-                "4" -> columnScript
-                "5" -> platformScript
-                else -> null
-            }
-            if (script != null) {
-                entityComponent.addEntity(SmartObject(tileLayer, script))
-            }
+//            val script = when (ev.text) {
+//                "1" -> blockScript
+//                "2" -> ladderScript
+//                "3" -> spikesScript
+//                "4" -> columnScript
+//                "5" -> platformScript
+//                else -> null
+//            }
+//            if (script != null) {
+//                entityComponent.addEntity(SmartObject(tileLayer, script))
+//            }
         }
 
         val at = object: AnimationTimer() {

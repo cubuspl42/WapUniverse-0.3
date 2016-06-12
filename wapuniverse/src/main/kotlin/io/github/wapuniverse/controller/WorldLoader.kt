@@ -1,9 +1,9 @@
 package io.github.wapuniverse.controller
 
 import io.github.wapuniverse.editor.*
-import io.github.wapuniverse.lsd.level1.blockScript
-import io.github.wapuniverse.lsd.level1.ladderScript
+import io.github.wapuniverse.lsd.formulaGroupMap
 import io.github.wapuniverse.lsd.level1.level1FormulaGroup
+import io.github.wapuniverse.lsd.scriptMetaMap
 import io.github.wapuniverse.utils.Vec2i
 import io.github.wapuniverse.wap32.Wwd
 import io.github.wapuniverse.wap32.WwdObject
@@ -16,10 +16,8 @@ data class World(
 )
 
 private fun makeAlphaTileMapper(levelIndex: Int): AlphaTileMapper {
-    return AlphaTileMapper(when (levelIndex) {
-        1 -> level1FormulaGroup
-        else -> throw IllegalArgumentException()
-    })
+    val fomulaGroup = formulaGroupMap[levelIndex]!!
+    return AlphaTileMapper(fomulaGroup)
 }
 
 class WorldLoader() {
@@ -38,24 +36,22 @@ class WorldLoader() {
         val entityComponent = EntityComponent()
 
         mainPlane.objects.forEach {
-            loadObject(it, tileLayer, entityComponent)
+            loadObject(levelIndex, it, tileLayer, entityComponent)
         }
 
         return World(tileLayer, entityComponent)
     }
 
-    private fun loadObject(obj: WwdObject, tileLayer: TileLayer, entityComponent: EntityComponent) {
+    private fun loadObject(levelIndex: Int, obj: WwdObject, tileLayer: TileLayer, entityComponent: EntityComponent) {
         when (obj.logic) {
-            "_WU_SmartObject" -> loadSmartObject(obj, tileLayer, entityComponent)
+            "_WU_SmartObject" -> loadSmartObject(levelIndex, obj, tileLayer, entityComponent)
         }
     }
 
-    private fun loadSmartObject(obj: WwdObject, tileLayer: TileLayer, entityComponent: EntityComponent) {
-        val entity = SmartObject(tileLayer, when(obj.name) {
-            "Block" -> blockScript
-            "Ladder" -> ladderScript
-            else -> throw IllegalArgumentException()
-        })
+    private fun loadSmartObject(levelIndex: Int, obj: WwdObject, tileLayer: TileLayer, entityComponent: EntityComponent) {
+        val scriptMap = scriptMetaMap[levelIndex]!!
+        val script = scriptMap[obj.name]!!
+        val entity = SmartObject(tileLayer, script)
         entity.position = Vec2i(obj.x, obj.y)
         entityComponent.addEntity(entity)
     }
