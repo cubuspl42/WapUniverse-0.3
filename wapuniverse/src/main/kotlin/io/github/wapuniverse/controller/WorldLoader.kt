@@ -53,6 +53,7 @@ class WorldLoader() {
         val script = scriptMap[obj.name]!!
         val entity = SmartObject(tileLayer, script)
         entity.position = Vec2i(obj.x, obj.y)
+        entity.resize(obj.width, obj.height)
         entityComponent.addEntity(entity)
     }
 }
