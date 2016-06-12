@@ -1,8 +1,32 @@
-<?import javafx.scene.canvas.Canvas?>
+<?import io.github.wapuniverse.view.ResizableCanvas?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.github.wapuniverse.controller.MainWindowController">
-    <children>
-        <Canvas fx:id="sceneCanvas" width="640" height="480"/>
-    </children>
+    <top>
+        <MenuBar fx:id="menuBar">
+            <menus>
+                <Menu text="File">
+                    <items>
+                        <MenuItem text="New"/>
+                        <MenuItem text="Open" onAction="#handleMenuOpen"/>
+                        <MenuItem text="Save"/>
+                    </items>
+                </Menu>
+                <Menu text="Edit">
+                    <items>
+                        <MenuItem text="Copy"/>
+                        <MenuItem text="Cut"/>
+                        <MenuItem text="Paste"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <center>
+        <HBox fx:id="root">
+            <ResizableCanvas fx:id="sceneCanvas" width="640" height="480"/>
+        </HBox>
+    </center>
 </BorderPane>

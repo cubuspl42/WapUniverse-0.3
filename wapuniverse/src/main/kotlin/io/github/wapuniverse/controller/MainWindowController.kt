@@ -1,14 +1,18 @@
 package io.github.wapuniverse.controller
 
+import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.canvas.Canvas
 import javafx.scene.layout.Region
 import java.net.URL
 import java.util.*
+import java.util.logging.Logger
 
 
 class MainWindowController : Initializable {
+    private val logger = Logger.getLogger(javaClass.simpleName)
+
     @FXML
     private lateinit var root: Region
 
@@ -21,5 +25,10 @@ class MainWindowController : Initializable {
         sceneCanvas.isFocusTraversable = true
 
         MainController(root, sceneCanvas)
+    }
+
+    @FXML
+    private fun handleMenuOpen(ev: ActionEvent) {
+        logger.info("Menu:Open")
     }
 }
