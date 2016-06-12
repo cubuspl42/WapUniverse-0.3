@@ -22,7 +22,7 @@ class SBoxComponent {
     }
 
     fun query(p: Vec2d): List<SBox> {
-        return query(Rectangle2D(p.x, p.y, p.x, p.y))
+        return query(Rectangle2D(p.x, p.y, 0.1, 0.1))
     }
 
     fun hover(p: Vec2d) {

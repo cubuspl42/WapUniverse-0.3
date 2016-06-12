@@ -4,14 +4,14 @@ import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.Entity
 import io.github.wapuniverse.editor.EntityComponent
 import io.github.wapuniverse.utils.*
-import io.github.wapuniverse.view.EventHandlingStatus
+import io.github.wapuniverse.view.*
 import io.github.wapuniverse.view.EventHandlingStatus.EVENT_HANDLED
-import io.github.wapuniverse.view.SBox
-import io.github.wapuniverse.view.SBoxComponent
-import io.github.wapuniverse.view.SceneView
+import javafx.geometry.Rectangle2D
 import javafx.scene.Cursor
 import javafx.scene.Node
+import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseEvent
+import javafx.scene.paint.Color
 import java.util.logging.Logger
 
 
@@ -26,7 +26,27 @@ class MainInputHandler(
 
     var dragRays: List<Pair<Entity, Vec2d>>? = null
 
+    var selectionArea: Rectangle2D? = null
+
     private fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
+
+    init {
+        sceneView.addItem(object : SceneItem() {
+            init {
+                z = 100000.0
+            }
+
+            override val boundingBox: Rectangle2D
+                get() = selectionArea ?: Rectangle2D(0.0, 0.0, 0.0, 0.0)
+
+            override fun render(gc: GraphicsContext) {
+                val sa = selectionArea ?: return
+                val c = Color(0.6, 0.0, 0.6, 0.5)
+                gc.fill = c
+                gc.fillRect(sa.minX, sa.minY, sa.width, sa.height)
+            }
+        })
+    }
 
     override fun onMousePressed(ev: MouseEvent): EventHandlingStatus {
         val wv = invTr(ev.x, ev.y)
@@ -37,14 +57,20 @@ class MainInputHandler(
                     .map { it.entity }
             dragRays = selectedEntities
                     .map { Pair(it, wv - it.position.toVec2d()) }
+        } else {
+            sBoxComponent.unselectAll()
+            selectionArea = Rectangle2D(wv.x, wv.y, 1.0, 1.0)
         }
         return EVENT_HANDLED
     }
 
     override fun onMouseReleased(ev: MouseEvent): EventHandlingStatus {
-        if (ev.isStillSincePress) {
+        if (selectionArea != null) {
+            sBoxComponent.select(selectionArea!!)
+        } else if (ev.isStillSincePress) {
             selectNextObject(invTr(ev.x, ev.y))
         }
+        selectionArea = null
         dragRays = null
         return EVENT_HANDLED
     }
@@ -62,12 +88,17 @@ class MainInputHandler(
             root.cursor = Cursor.DEFAULT
         }
 
+
         return EVENT_HANDLED
     }
 
     override fun onMouseDragged(ev: MouseEvent): EventHandlingStatus {
-        if (dragRays != null) {
-            val wv = invTr(ev.x, ev.y)
+        val wv = invTr(ev.x, ev.y)
+        if (selectionArea != null) {
+            val minX = selectionArea!!.minX
+            val minY = selectionArea!!.minY
+            selectionArea = Rectangle2D(minX, minY, wv.x - minX, wv.y - minY)
+        } else if (dragRays != null) {
             dragRays!!.forEach {
                 val (e, r) = it
                 val p = wv - r

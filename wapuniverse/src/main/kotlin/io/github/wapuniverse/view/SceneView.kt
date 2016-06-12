@@ -1,6 +1,7 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
+import io.github.wapuniverse.controller.MainInputHandler
 import io.github.wapuniverse.editor.ImageSetDatabase
 import io.github.wapuniverse.editor.SmartObject
 import io.github.wapuniverse.editor.TileLayer
@@ -12,6 +13,7 @@ import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.Image
 import javafx.scene.input.MouseEvent
+import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
 import java.util.*
 
