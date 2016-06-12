@@ -97,7 +97,9 @@ class MainInputHandler(
         if (selectionArea != null) {
             val minX = selectionArea!!.minX
             val minY = selectionArea!!.minY
-            selectionArea = Rectangle2D(minX, minY, wv.x - minX, wv.y - minY)
+            val w = Math.max(wv.x - minX, 0.0)
+            val h = Math.max(wv.y - minY, 0.0)
+            selectionArea = Rectangle2D(minX, minY, w, h)
         } else if (dragRays != null) {
             dragRays!!.forEach {
                 val (e, r) = it
