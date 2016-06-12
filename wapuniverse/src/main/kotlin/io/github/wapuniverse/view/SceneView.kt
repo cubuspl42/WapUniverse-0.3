@@ -1,26 +1,20 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.controller.MainInputHandler
 import io.github.wapuniverse.editor.ImageSetDatabase
-import io.github.wapuniverse.editor.SmartObject
 import io.github.wapuniverse.editor.TileLayer
 import io.github.wapuniverse.editor.tileWidth
-import io.github.wapuniverse.view.EventHandlingStatus.EVENT_NOT_HANDLED
-import javafx.event.EventType
+import io.github.wapuniverse.utils.div
+import io.github.wapuniverse.utils.toVec2i
 import javafx.geometry.Rectangle2D
 import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.Image
-import javafx.scene.input.MouseEvent
-import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
 import java.util.*
 
 
 private val levelIndex = 1
-
-private val renderRadius = 24
 
 enum class EventHandlingStatus {
     EVENT_HANDLED,
@@ -124,10 +118,15 @@ class SceneView(
 
         gc.clearRect(0.0, 0.0, canvas.width, canvas.height)
 
+        val v0 = invTransform.transform(0.0, 0.0).toVec2i()
+        val v1 = invTransform.transform(canvas.width, canvas.height).toVec2i()
+        val t0 = v0 / tileWidth
+        val t1 = v1 / tileWidth
+
         gc.transform = transform
 
-        for (i in -renderRadius..renderRadius) {
-            for (j in -renderRadius..renderRadius) {
+        for (i in t0.y - 1..t1.y) {
+            for (j in t0.x - 1..t1.x) {
                 val t = tileLayer.getTile(i, j)
                 // val img = imageMap.findTileImage(levelIndex, tileLayer.imageSet, t)
                 val img = tileImageCache.getTileImage(t) ?: continue
