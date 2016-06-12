@@ -6,6 +6,7 @@ import io.github.wapuniverse.lsd.level1.*
 import io.github.wapuniverse.utils.minus
 import io.github.wapuniverse.utils.times
 import io.github.wapuniverse.utils.toVec2d
+import io.github.wapuniverse.view.ImageMap
 import io.github.wapuniverse.view.SBoxComponent
 import io.github.wapuniverse.view.SceneView
 import io.github.wapuniverse.view.loadImageMapFromPath
@@ -17,15 +18,11 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.MouseButton
 
 
-private val IMAGE_BASE_DIR_PATH = "/home/kuba/tmp/CLAW/"
-
-class WorldController(root: Node, private val sceneCanvas: Canvas, wwd: Wwd) {
-
-    // Global resources
-
-    private val imageSetDatabase = loadImageSetDatabaseFromFile("imageSetDatabase.yaml")
-
-    private val imageMap = loadImageMapFromPath(imageSetDatabase, IMAGE_BASE_DIR_PATH)
+class WorldController(
+        root: Node,
+        private val imageSetDatabase: ImageSetDatabase,
+        private val imageMap: ImageMap,
+        private val sceneCanvas: Canvas, wwd: Wwd) {
 
     // World loader
 
