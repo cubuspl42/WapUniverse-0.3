@@ -14,8 +14,6 @@ import javafx.scene.transform.Affine
 import java.util.*
 
 
-private val levelIndex = 1
-
 enum class EventHandlingStatus {
     EVENT_HANDLED,
     EVENT_NOT_HANDLED
@@ -56,6 +54,7 @@ class TileImageCache(
 }
 
 class SceneView(
+        levelIndex: Int,
         private val canvas: Canvas,
         private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap,

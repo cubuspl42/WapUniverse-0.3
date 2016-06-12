@@ -51,7 +51,7 @@ class WorldController(root: Node, private val sceneCanvas: Canvas, wwd: Wwd) {
 
     private val sBoxComponent = SBoxComponent()
 
-    private val sceneView = SceneView(sceneCanvas, imageSetDatabase, imageMap, tileLayer)
+    private val sceneView = SceneView(world.levelIndex, sceneCanvas, imageSetDatabase, imageMap, tileLayer)
 
     //
 

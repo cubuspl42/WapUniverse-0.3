@@ -7,6 +7,6 @@ import io.github.wapuniverse.lsd.level2.Level2AlphaTile.*
 
 val level2FormulaGroup = formulaGroup("ACTION", listOf(
         formula(LADDER_T, 16),
-        formula(LADDER_M, 22),
-        formula(LADDER_B, 27)
+        formula(LADDER_M, 27),
+        formula(LADDER_B, 22)
 ))

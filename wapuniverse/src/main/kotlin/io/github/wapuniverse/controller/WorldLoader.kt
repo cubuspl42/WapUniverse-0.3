@@ -11,6 +11,7 @@ import io.github.wapuniverse.wap32.WwdObject
 val maxLevelIndex = 14
 
 data class World(
+        val levelIndex: Int,
         val tileLayer: TileLayer,
         val entityComponent: EntityComponent
 )
@@ -39,7 +40,7 @@ class WorldLoader() {
             loadObject(levelIndex, it, tileLayer, entityComponent)
         }
 
-        return World(tileLayer, entityComponent)
+        return World(levelIndex, tileLayer, entityComponent)
     }
 
     private fun loadObject(levelIndex: Int, obj: WwdObject, tileLayer: TileLayer, entityComponent: EntityComponent) {

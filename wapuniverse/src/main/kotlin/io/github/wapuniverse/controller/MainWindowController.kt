@@ -10,7 +10,7 @@ import java.util.*
 import java.util.logging.Logger
 
 
-private val wwdPath = "/home/kuba/Dropbox/temp/LEVEL.wwd"
+private val wwdPath = "/home/kuba/Dropbox/temp/LEVEL.wwd" // HARDCODED: wwd path
 
 class MainWindowController : Initializable {
     private val logger = Logger.getLogger(javaClass.simpleName)
