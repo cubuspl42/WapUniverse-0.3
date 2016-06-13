@@ -21,6 +21,10 @@ private fun makeAlphaTileMapper(levelIndex: Int): AlphaTileMapper {
     return AlphaTileMapper(fomulaGroup)
 }
 
+fun makeEntityLoaders(tileLayer: TileLayer): List<EntityLoader> {
+    return listOf(SmartObject.Loader(tileLayer))
+}
+
 class WorldLoader() {
     private fun determineLevelIndex(wwd: Wwd): Int {
         return (1..maxLevelIndex).first { i ->
@@ -36,25 +40,21 @@ class WorldLoader() {
         val tileLayer = TileLayer(alphaTileMapper, mainPlane.imageSets.first())
         val entityComponent = EntityComponent()
 
+        val entityLoaders = makeEntityLoaders(tileLayer)
         mainPlane.objects.forEach {
-            loadObject(levelIndex, it, tileLayer, entityComponent)
+            loadObject(levelIndex, it, entityLoaders, entityComponent)
         }
 
         return World(levelIndex, tileLayer, entityComponent)
     }
 
-    private fun loadObject(levelIndex: Int, obj: WwdObject, tileLayer: TileLayer, entityComponent: EntityComponent) {
-        when (obj.logic) {
-            "_WU_SmartObject" -> loadSmartObject(levelIndex, obj, tileLayer, entityComponent)
+    private fun loadObject(
+            levelIndex: Int, obj: WwdObject, entityLoaders: List<EntityLoader>, entityComponent: EntityComponent) {
+        entityLoaders.firstOrNull { loader ->
+            obj.logic == loader.logicName
+        }?.let { loader ->
+            val entity = loader.load(levelIndex, obj)
+            entityComponent.addEntity(entity)
         }
-    }
-
-    private fun loadSmartObject(levelIndex: Int, obj: WwdObject, tileLayer: TileLayer, entityComponent: EntityComponent) {
-        val scriptMap = scriptMetaMap[levelIndex]!!
-        val script = scriptMap[obj.name]!!
-        val entity = SmartObject(tileLayer, script)
-        entity.position = Vec2i(obj.x, obj.y)
-        entity.resize(obj.width, obj.height)
-        entityComponent.addEntity(entity)
     }
 }

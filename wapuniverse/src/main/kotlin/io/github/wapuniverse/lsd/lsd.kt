@@ -1,6 +1,7 @@
 package io.github.wapuniverse.lsd
 
 import io.github.wapuniverse.editor.FormulaGroup
+import io.github.wapuniverse.editor.SmartObject
 import io.github.wapuniverse.editor.SmartScript
 import io.github.wapuniverse.lsd.level1.level1FormulaGroup
 import io.github.wapuniverse.lsd.level1.level1ScriptMap

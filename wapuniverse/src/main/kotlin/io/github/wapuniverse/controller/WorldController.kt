@@ -2,14 +2,12 @@ package io.github.wapuniverse.controller
 
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.*
-import io.github.wapuniverse.lsd.level1.*
 import io.github.wapuniverse.utils.minus
 import io.github.wapuniverse.utils.times
 import io.github.wapuniverse.utils.toVec2d
 import io.github.wapuniverse.view.ImageMap
 import io.github.wapuniverse.view.SBoxComponent
 import io.github.wapuniverse.view.SceneView
-import io.github.wapuniverse.view.loadImageMapFromPath
 import io.github.wapuniverse.wap32.Wwd
 import javafx.animation.AnimationTimer
 import javafx.scene.Node

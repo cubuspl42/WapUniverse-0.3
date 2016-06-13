@@ -1,7 +1,9 @@
 package io.github.wapuniverse.editor
 
 import com.sun.javafx.geom.Vec2d
+import io.github.wapuniverse.lsd.scriptMetaMap
 import io.github.wapuniverse.utils.*
+import io.github.wapuniverse.wap32.WwdObject
 import java.util.*
 
 
@@ -23,8 +25,20 @@ interface SmartScript {
     fun run(width: Int, height: Int): Matrix<AlphaTile>
 }
 
-
 class SmartObject(private val tileLayer: TileLayer, private val script: SmartScript) : Entity() {
+    class Loader(private val tileLayer: TileLayer) : EntityLoader {
+        override val logicName = "_WU_SmartObject"
+
+        override fun load(levelIndex: Int, wwdObject: WwdObject): SmartObject {
+            val scriptMap = scriptMetaMap[levelIndex]!!
+            val script = scriptMap[wwdObject.name]!!
+            val entity = SmartObject(tileLayer, script)
+            entity.position = Vec2i(wwdObject.x, wwdObject.y)
+            entity.resize(wwdObject.width, wwdObject.height)
+            return entity
+        }
+    }
+
     private val matrix = AlphaTileMatrix()
 
     val changed = Signal<SmartObject>()
