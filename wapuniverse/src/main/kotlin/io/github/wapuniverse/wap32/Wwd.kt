@@ -1,23 +1,19 @@
 package io.github.wapuniverse.wap32
 
-import com.google.common.io.ByteStreams
-import com.google.common.io.LittleEndianDataOutputStream
-import com.google.common.primitives.Bytes
-import io.github.wapuniverse.utils.FlagProperty
-import io.github.wapuniverse.utils.decompress
 import io.github.wapuniverse.utils.flagProperty
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
-import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.nio.charset.StandardCharsets
 import java.nio.charset.StandardCharsets.US_ASCII
-import java.util.*
-import java.util.zip.Inflater
-import kotlin.reflect.KMutableProperty
-import kotlin.reflect.KProperty
+
+
+/**
+ * TODO:
+ * Checksums
+ * Tile loading / dumping (mutable matrix?)
+ */
 
 val WAP_WWD_HEADER_SIZE = 1524
 val WAP_WWD_PLANE_DESCRIPTION_SIZE = 160
