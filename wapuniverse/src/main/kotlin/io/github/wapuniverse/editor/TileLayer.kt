@@ -37,7 +37,7 @@ class AlphaTileMatrix {
     }
 }
 
-private val DEFAULT_TILE_INDEX = -2
+val INVISIBLE_TILE_ID = -1
 
 class TileLayer(
         private val alphaTileMapper: AlphaTileMapper,
@@ -67,7 +67,16 @@ class TileLayer(
     val matrixRemoved = Signal<AlphaTileMatrix>()
 
     fun getTile(i: Int, j: Int): Int {
-        return tileCache[Vec2i(j, i)] ?: DEFAULT_TILE_INDEX
+        return tileCache[Vec2i(j, i)] ?: INVISIBLE_TILE_ID
+    }
+
+    fun calculateBounds(): Rectangle2Di {
+        val tilePositions = tileCache.map { it.key }
+        val minX = tilePositions.map { it.x }.min() ?: 0
+        val minY = tilePositions.map { it.y }.min() ?: 0
+        val maxX = tilePositions.map { it.x }.max() ?: 0
+        val maxY = tilePositions.map { it.y }.max() ?: 0
+        return Rectangle2Di(minX, minY, maxX - minX + 1, maxY - minY + 1)
     }
 
     private fun cacheTile(p: Vec2i) {

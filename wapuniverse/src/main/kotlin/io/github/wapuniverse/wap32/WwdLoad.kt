@@ -110,7 +110,8 @@ fun loadPlaneHeader(stream: WwdInputStream): WwdPlane {
 fun loadTiles(stream: WwdInputStream, plane: WwdPlane) {
     for (i in 0..plane.tilesHigh - 1) {
         for (j in 0..plane.tilesWide - 1) {
-            stream.readInt() // TODO: Tile loading
+            val t = stream.readInt()
+            plane.tiles.add(t)
         }
     }
 }

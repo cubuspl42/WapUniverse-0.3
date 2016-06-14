@@ -1,6 +1,7 @@
 package io.github.wapuniverse.controller
 
 import io.github.wapuniverse.editor.loadImageSetDatabaseFromFile
+import io.github.wapuniverse.utils.getResourceAsStream
 import io.github.wapuniverse.view.loadImageMapFromPath
 import io.github.wapuniverse.wap32.Wwd
 import io.github.wapuniverse.wap32.WwdPlane
@@ -31,12 +32,11 @@ class MainController(private val rootNode: Node, private val sceneCanvas: Canvas
     }
 
     fun createNewWorld(levelIndex: Int) {
-        val wwd = Wwd()
-        wwd.header.levelName = "Claw - Level $levelIndex"
-        val plane = WwdPlane()
-        plane.flags.mainPlane = true
-        plane.imageSets.add("ACTION")
-        wwd.planes.add(plane)
-        worldController = makeWorldController(wwd)
+        val retailWwd = "RETAIL%02d.WWD".format(levelIndex)
+        getResourceAsStream(retailWwd).use {
+            val wwd = loadWwd(it)
+            wwd.mainPlane!!.objects.clear()
+            worldController = makeWorldController(wwd)
+        }
     }
 }

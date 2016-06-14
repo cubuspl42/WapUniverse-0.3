@@ -187,9 +187,11 @@ fun dumpPlaneHeader(stream: WwdOutputStream, plane: WwdPlane) {
 }
 
 fun dumpTiles(stream: WwdOutputStream, plane: WwdPlane) {
+    var k = 0
     for (i in 0..plane.tilesHigh - 1) {
         for (j in 0..plane.tilesWide - 1) {
-            stream.writeInt(7) // TODO: Tile dumping
+            val t = plane.tiles[k++]
+            stream.writeInt(t)
         }
     }
 }

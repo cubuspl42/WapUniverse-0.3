@@ -22,6 +22,18 @@ class WorldDumper() {
             mainPlane.objects.add(wwdObject)
         }
 
+        val bounds = world.tileLayer.calculateBounds()
+        mainPlane.tilesWide = bounds.maxX + 1
+        mainPlane.tilesHigh = bounds.maxY + 1
+        mainPlane.tiles.clear()
+
+        for (i in 0..bounds.maxY) {
+            for (j in 0..bounds.maxX) {
+                val t = world.tileLayer.getTile(i, j)
+                mainPlane.tiles.add(t)
+            }
+        }
+
         return wwd
     }
 }

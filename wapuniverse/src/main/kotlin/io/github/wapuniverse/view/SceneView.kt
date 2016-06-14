@@ -1,6 +1,7 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
+import io.github.wapuniverse.editor.INVISIBLE_TILE_ID
 import io.github.wapuniverse.editor.ImageSetDatabase
 import io.github.wapuniverse.editor.TileLayer
 import io.github.wapuniverse.editor.tileWidth
@@ -37,18 +38,17 @@ class TileImageCache(
 
     init {
         val tileIndices = imageSetDatabase.listTiles(levelIndex, tileImageSetName)!!
-        val min = tileIndices.min()!!
+        val min = 0
         val max = tileIndices.max()!!
-        assert(min == -1)
 
-        cache = Array(max + 2, { i ->
-            imageMap.findTileImage(levelIndex, tileImageSetName, i - 1)
+        cache = Array(max + 1, { i ->
+            imageMap.findTileImage(levelIndex, tileImageSetName, i)
         })
     }
 
     fun getTileImage(tileIndex: Int): Image? {
-        if (tileIndex >= -1 && tileIndex < cache.size) {
-            return cache[tileIndex + 1]
+        if (tileIndex >= 0 && tileIndex < cache.size) {
+            return cache[tileIndex]
         } else return null
     }
 }
@@ -127,11 +127,13 @@ class SceneView(
         for (i in t0.y - 1..t1.y) {
             for (j in t0.x - 1..t1.x) {
                 val t = tileLayer.getTile(i, j)
-                // val img = imageMap.findTileImage(levelIndex, tileLayer.imageSet, t)
-                val img = tileImageCache.getTileImage(t) ?: continue
-                val x = j * tileWidth
-                val y = i * tileWidth
-                gc.drawImage(img, x, y)
+                if (t != INVISIBLE_TILE_ID) {
+                    // val img = imageMap.findTileImage(levelIndex, tileLayer.imageSet, t)
+                    val img = tileImageCache.getTileImage(t) ?: continue
+                    val x = j * tileWidth
+                    val y = i * tileWidth
+                    gc.drawImage(img, x, y)
+                }
             }
         }
 
