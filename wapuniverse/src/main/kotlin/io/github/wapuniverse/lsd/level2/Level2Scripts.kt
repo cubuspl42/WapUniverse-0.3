@@ -1,6 +1,7 @@
 package io.github.wapuniverse.lsd.level2
 
 import io.github.wapuniverse.editor.SmartScript
+import io.github.wapuniverse.editor.makeSmartScriptMap
 import io.github.wapuniverse.editor.smartScript
 import io.github.wapuniverse.editor.tiles
 import io.github.wapuniverse.lsd.level2.Level2AlphaTile.*
@@ -8,8 +9,8 @@ import io.github.wapuniverse.utils.Matrix
 
 
 // TODO: No C&P
-val level2ScriptMap = mapOf<String, SmartScript>(
-        "Ladder" to smartScript(1, 3, {
+val level2ScriptMap = makeSmartScriptMap(
+        smartScript("Ladder", 1, 3, {
             w, h ->
             val t = tiles(h, w, EMPTY)
             for (i in 1..h) {

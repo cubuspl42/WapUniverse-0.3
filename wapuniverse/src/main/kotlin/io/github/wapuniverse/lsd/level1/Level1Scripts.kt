@@ -1,14 +1,15 @@
 package io.github.wapuniverse.lsd.level1
 
 import io.github.wapuniverse.editor.SmartScript
+import io.github.wapuniverse.editor.makeSmartScriptMap
 import io.github.wapuniverse.editor.smartScript
 import io.github.wapuniverse.editor.tiles
 import io.github.wapuniverse.lsd.level1.Level1AlphaTile.*
 import io.github.wapuniverse.utils.Matrix
 
 
-val level1ScriptMap = mapOf<String, SmartScript>(
-        "Block" to smartScript(4, 4, { w, h ->
+val level1ScriptMap = makeSmartScriptMap(
+        smartScript("Block", 4, 4, { w, h ->
             val t = tiles(h, w, EMPTY)
             for (i in 1..h) {
                 for (j in 1..w) {
@@ -28,7 +29,7 @@ val level1ScriptMap = mapOf<String, SmartScript>(
             Matrix(t)
         }),
 
-        "Ladder" to smartScript(1, 3, {
+        smartScript("Ladder", 1, 3, {
             w, h ->
             val t = tiles(h, w, EMPTY)
             for (i in 1..h) {
@@ -41,7 +42,7 @@ val level1ScriptMap = mapOf<String, SmartScript>(
             Matrix(t)
         }),
 
-        "Spikes" to smartScript(4, 2, { w, h ->
+        smartScript("Spikes", 4, 2, { w, h ->
             val t = tiles(h, w, EMPTY)
             for (j in 1..w) {
                 for (i in 1..h) {
@@ -55,7 +56,7 @@ val level1ScriptMap = mapOf<String, SmartScript>(
             Matrix(t)
         }),
 
-        "Column" to smartScript(1, 4, { w, h ->
+        smartScript("Column", 1, 4, { w, h ->
             val t = tiles(h, w, EMPTY)
             for (i in 1..h) {
                 t[i - 1][0] = when (i) {
@@ -67,7 +68,7 @@ val level1ScriptMap = mapOf<String, SmartScript>(
             Matrix(t)
         }),
 
-        "Platform" to smartScript(4, 1, { w, h ->
+        smartScript("Platform", 4, 1, { w, h ->
             val t = tiles(h, w, EMPTY)
             for (j in 1..w) {
                 t[0][j - 1] = when (j) {

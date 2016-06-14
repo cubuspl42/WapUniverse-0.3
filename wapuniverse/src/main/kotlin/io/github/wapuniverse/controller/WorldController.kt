@@ -1,5 +1,6 @@
 package io.github.wapuniverse.controller
 
+import com.google.common.io.Files
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.*
 import io.github.wapuniverse.utils.minus
@@ -9,24 +10,30 @@ import io.github.wapuniverse.view.ImageMap
 import io.github.wapuniverse.view.SBoxComponent
 import io.github.wapuniverse.view.SceneView
 import io.github.wapuniverse.wap32.Wwd
+import io.github.wapuniverse.wap32.dumpWwd
 import javafx.animation.AnimationTimer
 import javafx.scene.Node
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.MouseButton
+import java.io.FileOutputStream
 
+private val worldDumpPath = "/home/kuba/Dropbox/temp/LEVEL.wwd"
 
 class WorldController(
         root: Node,
         private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap,
-        private val sceneCanvas: Canvas, wwd: Wwd) {
-
+        private val sceneCanvas: Canvas,
+        wwd: Wwd
+) {
     // World loader
 
     private val worldLoader = WorldLoader()
 
     private val world = worldLoader.loadWorld(wwd)
+
+    private val worldDumper = WorldDumper()
 
     // World
 
@@ -92,8 +99,9 @@ class WorldController(
         }
 
         sceneCanvas.setOnKeyPressed { ev ->
-            if (ev.text == "a") {
-                sBoxComponent.selectAll()
+            when (ev.text) {
+                "a" -> sBoxComponent.selectAll()
+                "s" -> dumpWorld()
             }
             if (ev.code == KeyCode.DELETE) {
                 val se = sBoxComponent.selectedEntities
@@ -118,5 +126,12 @@ class WorldController(
             }
         }
         at.start()
+    }
+
+    fun dumpWorld() {
+        val wwd = worldDumper.dumpWorld(world)
+        FileOutputStream(worldDumpPath).use {
+            dumpWwd(it, wwd)
+        }
     }
 }

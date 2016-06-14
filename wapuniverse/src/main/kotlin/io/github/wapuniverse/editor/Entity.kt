@@ -2,6 +2,7 @@ package io.github.wapuniverse.editor
 
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.utils.*
+import io.github.wapuniverse.wap32.WwdObject
 import java.util.*
 
 
@@ -16,6 +17,8 @@ abstract class Entity {
     protected open fun onDispose() = Unit
 
     val disposed = Signal<Entity>()
+
+    abstract fun dump(): WwdObject
 }
 
 class EntityComponent {

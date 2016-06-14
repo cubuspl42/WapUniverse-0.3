@@ -20,14 +20,17 @@ fun <T> tiles(m: Int, n: Int, def: T): MutableList<MutableList<T>> {
 }
 
 interface SmartScript {
+    val name: String
     val defaultWidth: Int
     val defaultHeight: Int
     fun run(width: Int, height: Int): Matrix<AlphaTile>
 }
 
+val smartObjectLogicName = "_WU_SmartObject"
+
 class SmartObject(private val tileLayer: TileLayer, private val script: SmartScript) : Entity() {
     class Loader(private val tileLayer: TileLayer) : EntityLoader {
-        override val logicName = "_WU_SmartObject"
+        override val logicName = smartObjectLogicName
 
         override fun load(levelIndex: Int, wwdObject: WwdObject): SmartObject {
             val scriptMap = scriptMetaMap[levelIndex]!!
@@ -37,6 +40,19 @@ class SmartObject(private val tileLayer: TileLayer, private val script: SmartScr
             entity.resize(wwdObject.width, wwdObject.height)
             return entity
         }
+    }
+
+    override fun dump(): WwdObject {
+        val wwdObject = WwdObject()
+        with (wwdObject) {
+            logic = smartObjectLogicName
+            name = script.name
+            x = position.x + tileWidth.toInt() / 2 - 1
+            y = position.y + tileWidth.toInt() / 2 - 1
+            width = rect.width
+            height = rect.height
+        }
+        return wwdObject
     }
 
     private val matrix = AlphaTileMatrix()

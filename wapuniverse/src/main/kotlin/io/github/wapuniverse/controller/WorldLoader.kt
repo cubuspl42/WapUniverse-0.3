@@ -12,6 +12,7 @@ val maxLevelIndex = 14
 
 data class World(
         val levelIndex: Int,
+        val wwd: Wwd,
         val tileLayer: TileLayer,
         val entityComponent: EntityComponent
 )
@@ -45,7 +46,7 @@ class WorldLoader() {
             loadObject(levelIndex, it, entityLoaders, entityComponent)
         }
 
-        return World(levelIndex, tileLayer, entityComponent)
+        return World(levelIndex, wwd, tileLayer, entityComponent)
     }
 
     private fun loadObject(
