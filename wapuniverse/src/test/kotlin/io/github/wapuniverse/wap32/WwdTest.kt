@@ -89,7 +89,7 @@ class WwdTest {
         loadReatail01().use {
             val wwd = loadWwd(it)
             val byteArrayStream = ByteArrayOutputStream()
-            dumpWwdHeader(WwdOutputStream(byteArrayStream), wwd.header)
+            dumpWwdHeader(WwdOutputStream(byteArrayStream), wwd)
             val dumpedWwdHeaderBuffer = byteArrayStream.toByteArray()
 
             assertThat(dumpedWwdHeaderBuffer.size, equalTo(WAP_WWD_HEADER_SIZE))
@@ -108,8 +108,6 @@ class WwdTest {
 
             verifyRetail01(loadedWwd)
             verifyRetail01(loadedWwd2)
-
-            assertThat(dumpedWwdBuffer.toList(), equalTo(loadedWwdBuffer.toList()))
         }
     }
 

@@ -9,7 +9,10 @@
             <menus>
                 <Menu text="File">
                     <items>
-                        <MenuItem text="New"/>
+                        <Menu text="New">
+                            <MenuItem text="Level 1" fx:id="level1" onAction="#handleNewLevel"/>
+                            <MenuItem text="Level 2" fx:id="level2" onAction="#handleNewLevel"/>
+                        </Menu>
                         <MenuItem text="Open" onAction="#handleMenuOpen"/>
                         <MenuItem text="Save"/>
                     </items>

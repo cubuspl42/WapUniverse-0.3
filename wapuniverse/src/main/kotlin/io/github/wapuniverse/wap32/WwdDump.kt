@@ -100,7 +100,7 @@ fun dumpWwd(outputStream: OutputStream, wwd: Wwd) {
     val header = wwd.header
 
     calculateOffsets(wwd)
-    dumpWwdHeader(wwdOutputStream, header)
+    dumpWwdHeader(wwdOutputStream, wwd)
 
     if (header.flags.compress) {
         val mainBlockStream = ByteArrayOutputStream()
@@ -113,7 +113,9 @@ fun dumpWwd(outputStream: OutputStream, wwd: Wwd) {
     }
 }
 
-fun dumpWwdHeader(stream: WwdOutputStream, header: WwdHeader) {
+fun dumpWwdHeader(stream: WwdOutputStream, wwd: Wwd) {
+    val header = wwd.header
+
     stream.writeInt(WAP_WWD_HEADER_SIZE)
     stream.writeInt(0)
     stream.writeInt(header.flags.dword)
@@ -127,7 +129,7 @@ fun dumpWwdHeader(stream: WwdOutputStream, header: WwdHeader) {
     stream.writeInt(header.startX)
     stream.writeInt(header.startY)
     stream.writeInt(0)
-    stream.writeInt(header.planeCount)
+    stream.writeInt(wwd.planes.size)
     stream.writeInt(WAP_WWD_HEADER_SIZE)
     stream.writeInt(header.tileDescriptionsOffset)
     stream.writeInt(header.decompressedMainBlockSize)

@@ -3,6 +3,7 @@ package io.github.wapuniverse.controller
 import com.google.common.io.Files
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.*
+import io.github.wapuniverse.lsd.scriptMetaMap
 import io.github.wapuniverse.utils.minus
 import io.github.wapuniverse.utils.times
 import io.github.wapuniverse.utils.toVec2d
@@ -107,17 +108,18 @@ class WorldController(
                 val se = sBoxComponent.selectedEntities
                 entityService.destroyEntities(se)
             }
-//            val script = when (ev.text) {
-//                "1" -> blockScript
-//                "2" -> ladderScript
-//                "3" -> spikesScript
-//                "4" -> columnScript
-//                "5" -> platformScript
-//                else -> null
-//            }
-//            if (script != null) {
-//                entityComponent.addEntity(SmartObject(tileLayer, script))
-//            }
+            val scriptMap = scriptMetaMap[world.levelIndex]!!
+            val script = when (ev.text) {
+                "1" -> scriptMap["Block"]
+                "2" -> scriptMap["Ladder"]
+                "3" -> scriptMap["Spikes"]
+                "4" -> scriptMap["Column"]
+                "5" -> scriptMap["Platform"]
+                else -> null
+            }
+            if (script != null) {
+                entityComponent.addEntity(SmartObject(tileLayer, script))
+            }
         }
 
         val at = object: AnimationTimer() {

@@ -4,6 +4,7 @@ import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.canvas.Canvas
+import javafx.scene.control.MenuItem
 import javafx.scene.layout.Region
 import java.net.URL
 import java.util.*
@@ -34,5 +35,14 @@ class MainWindowController : Initializable {
     @FXML
     private fun handleMenuOpen(ev: ActionEvent) {
         mainController.loadWorld(wwdPath)
+    }
+
+    @FXML
+    private fun handleNewLevel(ev: ActionEvent) {
+        val menuItem = ev.source as MenuItem
+        val levelIndex = (1..maxLevelIndex).first {
+            menuItem.id == "level$it"
+        }
+        mainController.createNewWorld(levelIndex)
     }
 }
