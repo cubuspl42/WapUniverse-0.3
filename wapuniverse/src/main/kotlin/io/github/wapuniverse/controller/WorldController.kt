@@ -134,7 +134,7 @@ class WorldController(
         at.start()
     }
 
-    private fun save() {
+    fun save() {
         if (wwdPath != null) {
             dumpWorld(wwdPath!!)
         } else {

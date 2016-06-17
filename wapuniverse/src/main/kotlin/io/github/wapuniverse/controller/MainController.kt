@@ -65,4 +65,8 @@ class MainController(private val rootNode: Node, private val sceneCanvas: Canvas
             worldController = makeWorldController(wwd, null)
         }
     }
+
+    fun saveWorld() {
+        worldController?.save()
+    }
 }

@@ -13,17 +13,17 @@
                             <MenuItem text="Level 1" fx:id="level1" onAction="#handleNewLevel"/>
                             <MenuItem text="Level 2" fx:id="level2" onAction="#handleNewLevel"/>
                         </Menu>
-                        <MenuItem text="Open" onAction="#handleMenuOpen"/>
-                        <MenuItem text="Save"/>
+                        <!--<MenuItem text="Open" onAction="#handleMenuOpen"/>-->
+                        <MenuItem text="Save" onAction="#handleMenuSave"/>
                     </items>
                 </Menu>
-                <Menu text="Edit">
-                    <items>
-                        <MenuItem text="Copy"/>
-                        <MenuItem text="Cut"/>
-                        <MenuItem text="Paste"/>
-                    </items>
-                </Menu>
+                <!--<Menu text="Edit">-->
+                    <!--<items>-->
+                        <!--<MenuItem text="Copy"/>-->
+                        <!--<MenuItem text="Cut"/>-->
+                        <!--<MenuItem text="Paste"/>-->
+                    <!--</items>-->
+                <!--</Menu>-->
             </menus>
         </MenuBar>
     </top>

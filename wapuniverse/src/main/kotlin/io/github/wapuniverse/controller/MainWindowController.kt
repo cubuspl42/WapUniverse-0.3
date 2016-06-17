@@ -38,6 +38,11 @@ class MainWindowController : Initializable {
     }
 
     @FXML
+    private fun handleMenuSave(ev: ActionEvent) {
+        mainController.saveWorld()
+    }
+
+    @FXML
     private fun handleNewLevel(ev: ActionEvent) {
         val menuItem = ev.source as MenuItem
         val levelIndex = (1..maxLevelIndex).first {
