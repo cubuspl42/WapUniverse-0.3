@@ -9,10 +9,13 @@ import io.github.wapuniverse.wap32.WwdPlane
 import io.github.wapuniverse.wap32.loadWwd
 import javafx.scene.Node
 import javafx.scene.canvas.Canvas
+import javafx.scene.input.TransferMode
 import java.io.FileInputStream
 
 
 private val IMAGE_BASE_DIR_PATH = "/home/kuba/tmp/CLAW/"
+
+private val wwdExt = "wwd"
 
 class MainController(private val rootNode: Node, private val sceneCanvas: Canvas) {
 
@@ -24,6 +27,28 @@ class MainController(private val rootNode: Node, private val sceneCanvas: Canvas
 
     private fun makeWorldController(wwd: Wwd) =
             WorldController(rootNode, imageSetDatabase, imageMap, sceneCanvas, wwd)
+
+    init {
+        sceneCanvas.setOnDragOver {
+            val db = it.dragboard
+            if (db.hasFiles()) {
+                val file = db.files[0]
+                if (file.extension.toLowerCase() == wwdExt) {
+                    it.acceptTransferModes(TransferMode.COPY);
+                }
+            } else {
+                it.consume()
+            }
+        }
+
+        sceneCanvas.setOnDragDropped {
+            val db = it.dragboard
+            if (db.hasFiles()) {
+                val file = db.files[0]
+                loadWorld(file.absolutePath)
+            }
+        }
+    }
 
     fun loadWorld(wwdPath: String) {
         FileInputStream(wwdPath).use {
