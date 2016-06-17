@@ -2,6 +2,7 @@
 out/
 target/
 JavaSandbox.java
+*.iml
 
 # Compiled Object files
 *.slo

@@ -1,7 +1,9 @@
 package io.github.wapuniverse.view
 
 import io.github.wapuniverse.editor.ImageSetDatabase
+import io.github.wapuniverse.utils.getResourceAsStream
 import javafx.scene.image.Image
+import java.util.*
 
 
 private val pidExt = "PID"
@@ -31,4 +33,17 @@ class ImageMap(
 fun loadImageMapFromPath(imageSetDatabase: ImageSetDatabase, baseDirPath: String): ImageMap {
     val rawImageMap = loadAllImagesRecursively(baseDirPath, "png")
     return ImageMap(imageSetDatabase, rawImageMap)
+}
+
+fun loadImageMapFromResources(imageSetDatabase: ImageSetDatabase, prefix: String): ImageMap {
+    val imageMetadataList = imageSetDatabase.readAllImageMetadata()
+    val imagesDict = hashMapOf<String, Image>()
+    imageMetadataList.map {
+        val pngImagePath = it.path.replace(pidExt, pngExt)
+        val resImagePath = prefix + pngImagePath
+        getResourceAsStream(resImagePath).use {
+            imagesDict.put(pngImagePath, Image(it))
+        }
+    }
+    return ImageMap(imageSetDatabase, imagesDict)
 }

@@ -89,6 +89,18 @@ class ImageSetDatabase(yamlDocumentStream: InputStream) {
         }
     }
 
+    fun readAllImageMetadata(): List<ImageMetadata> {
+        val imageMetadataList = mutableListOf<ImageMetadata>()
+        root.imageSets.values.forEach { imst ->
+            imst.frames.keys.forEach { i ->
+                findImageMetadata(imst, i)?.let {
+                    imageMetadataList.add(it)
+                }
+            }
+        }
+        return imageMetadataList
+    }
+
     private fun findTileImageSet(levelIndex: Int, tileImageSetName: String): YamlDb.ImageSet? {
         val expandedImageSetId = "LEVEL${levelIndex}_TILES_" + tileImageSetName
         val imageSet = findImageSet(expandedImageSetId)

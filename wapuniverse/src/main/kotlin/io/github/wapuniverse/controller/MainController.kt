@@ -3,6 +3,7 @@ package io.github.wapuniverse.controller
 import io.github.wapuniverse.editor.loadImageSetDatabaseFromFile
 import io.github.wapuniverse.utils.getResourceAsStream
 import io.github.wapuniverse.view.loadImageMapFromPath
+import io.github.wapuniverse.view.loadImageMapFromResources
 import io.github.wapuniverse.wap32.Wwd
 import io.github.wapuniverse.wap32.WwdPlane
 import io.github.wapuniverse.wap32.loadWwd
@@ -17,7 +18,7 @@ class MainController(private val rootNode: Node, private val sceneCanvas: Canvas
 
     private val imageSetDatabase = loadImageSetDatabaseFromFile("imageSetDatabase.yaml")
 
-    private val imageMap = loadImageMapFromPath(imageSetDatabase, IMAGE_BASE_DIR_PATH)
+    private val imageMap = loadImageMapFromResources(imageSetDatabase, "CLAW/")
 
     private var worldController: WorldController? = null
 
