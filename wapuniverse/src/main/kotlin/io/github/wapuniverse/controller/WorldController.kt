@@ -17,12 +17,15 @@ import javafx.scene.Node
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.MouseButton
+import javafx.stage.FileChooser
+import javafx.stage.FileChooser.ExtensionFilter
 import java.io.FileOutputStream
 
 private val worldDumpPath = "/home/kuba/Dropbox/temp/LEVEL.wwd"
 
 class WorldController(
-        root: Node,
+        private val root: Node,
+        private var wwdPath: String?,
         private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap,
         private val sceneCanvas: Canvas,
@@ -102,7 +105,8 @@ class WorldController(
         sceneCanvas.setOnKeyPressed { ev ->
             when (ev.text) {
                 "a" -> sBoxComponent.selectAll()
-                "s" -> dumpWorld()
+//                "s" -> dumpWorld()
+                "s" -> save()
             }
             if (ev.code == KeyCode.DELETE) {
                 val se = sBoxComponent.selectedEntities
@@ -130,9 +134,24 @@ class WorldController(
         at.start()
     }
 
-    fun dumpWorld() {
+    private fun save() {
+        if (wwdPath != null) {
+            dumpWorld(wwdPath!!)
+        } else {
+            val fileChooser = FileChooser()
+            fileChooser.title = "Open WWD File"
+            fileChooser.extensionFilters.add(ExtensionFilter("Text Files", "*.wwd", "*.WWD"))
+            val selectedFile = fileChooser.showSaveDialog(root.scene.window)
+            if (selectedFile != null) {
+                wwdPath = selectedFile.absolutePath
+                dumpWorld(selectedFile.absolutePath)
+            }
+        }
+    }
+
+    fun dumpWorld(wwdPath: String) {
         val wwd = worldDumper.dumpWorld(world)
-        FileOutputStream(worldDumpPath).use {
+        FileOutputStream(wwdPath).use {
             dumpWwd(it, wwd)
         }
     }

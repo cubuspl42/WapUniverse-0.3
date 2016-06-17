@@ -25,8 +25,8 @@ class MainController(private val rootNode: Node, private val sceneCanvas: Canvas
 
     private var worldController: WorldController? = null
 
-    private fun makeWorldController(wwd: Wwd) =
-            WorldController(rootNode, imageSetDatabase, imageMap, sceneCanvas, wwd)
+    private fun makeWorldController(wwd: Wwd, wwdPath: String?) =
+            WorldController(rootNode, wwdPath, imageSetDatabase, imageMap, sceneCanvas, wwd)
 
     init {
         sceneCanvas.setOnDragOver {
@@ -53,7 +53,7 @@ class MainController(private val rootNode: Node, private val sceneCanvas: Canvas
     fun loadWorld(wwdPath: String) {
         FileInputStream(wwdPath).use {
             val wwd = loadWwd(it)
-            worldController = makeWorldController(wwd)
+            worldController = makeWorldController(wwd, wwdPath)
         }
     }
 
@@ -62,7 +62,7 @@ class MainController(private val rootNode: Node, private val sceneCanvas: Canvas
         getResourceAsStream(retailWwd).use {
             val wwd = loadWwd(it)
             wwd.mainPlane!!.objects.clear()
-            worldController = makeWorldController(wwd)
+            worldController = makeWorldController(wwd, null)
         }
     }
 }
