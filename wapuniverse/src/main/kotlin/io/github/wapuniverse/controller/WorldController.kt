@@ -4,9 +4,7 @@ import com.google.common.io.Files
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.editor.*
 import io.github.wapuniverse.lsd.scriptMetaMap
-import io.github.wapuniverse.utils.minus
-import io.github.wapuniverse.utils.times
-import io.github.wapuniverse.utils.toVec2d
+import io.github.wapuniverse.utils.*
 import io.github.wapuniverse.view.ImageMap
 import io.github.wapuniverse.view.SBoxComponent
 import io.github.wapuniverse.view.SceneView
@@ -123,7 +121,10 @@ class WorldController(
                 else -> null
             }
             if (script != null) {
-                entityComponent.addEntity(SmartObject(tileLayer, script))
+                val spawnOffset = Vec2i(128, 128)
+                val entity = SmartObject(tileLayer, script)
+                entity.position = sceneView.cameraOffset.toVec2i() + spawnOffset
+                entityComponent.addEntity(entity)
             }
         }
 
