@@ -48,6 +48,8 @@ class MainController(private val rootNode: Node, private val sceneCanvas: Canvas
                 loadWorld(file.absolutePath)
             }
         }
+
+        createNewWorld(1) // TEMPORARY
     }
 
     fun loadWorld(wwdPath: String) {
