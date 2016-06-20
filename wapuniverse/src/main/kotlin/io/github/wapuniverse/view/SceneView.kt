@@ -11,6 +11,7 @@ import javafx.geometry.Rectangle2D
 import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.Image
+import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
 import java.util.*
 
@@ -52,6 +53,25 @@ class TileImageCache(
         } else return null
     }
 }
+
+private val helpMessage = """
+WapUniverse Alpha 0.3 (PREVIEW)
+
+Press & drag Right Mouse Button to transform view
+Click Left Mouse Button to select object
+Drag & resize objects with Left Mouse Button
+Press & drag Left Mouse Button to select multiple objects
+
+Press `1` to spawn Block
+Press `2` to spawn Ladder
+Press `3` to spawn Spikes
+Press `4` to spawn Column
+Press `5` to spawn Platform
+Press `Del` to delete selected objects
+
+Choose File > Save to save world as .wwd
+Drag .wwd file from File Explorer to load world
+"""
 
 class SceneView(
         levelIndex: Int,
@@ -140,5 +160,9 @@ class SceneView(
         items
                 .sortedBy { it.z }
                 .forEach { it.render(gc) }
+
+        gc.transform = Affine()
+        gc.fill = Color.BLACK
+        gc.fillText(helpMessage, 16.0, 16.0)
     }
 }
