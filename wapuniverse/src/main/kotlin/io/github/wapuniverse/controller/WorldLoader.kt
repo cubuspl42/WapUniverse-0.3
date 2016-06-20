@@ -51,11 +51,16 @@ class WorldLoader() {
 
     private fun loadObject(
             levelIndex: Int, obj: WwdObject, entityLoaders: List<EntityLoader>, entityComponent: EntityComponent) {
-        entityLoaders.firstOrNull { loader ->
+        val loader = entityLoaders.firstOrNull { loader ->
             obj.logic == loader.logicName
-        }?.let { loader ->
-            val entity = loader.load(levelIndex, obj)
-            entityComponent.addEntity(entity)
         }
+
+        val entity = if (loader != null) {
+            loader.load(levelIndex, obj)
+        } else {
+            WapObject(obj)
+        }
+
+        entityComponent.addEntity(entity)
     }
 }

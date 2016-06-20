@@ -69,6 +69,7 @@ class WorldController(
 
     init {
         SmartObjectPresenter(entityComponent, sceneView, sceneInputController, sBoxComponent, root)
+        WapObjectPresenter(entityComponent, sceneView, imageSetDatabase, imageMap, world.levelIndex)
 
         sceneInputController.addInputHandler(MainInputHandler(root, sBoxComponent, sceneView))
 
