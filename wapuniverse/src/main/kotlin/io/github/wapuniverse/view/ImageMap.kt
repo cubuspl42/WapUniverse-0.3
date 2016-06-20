@@ -1,6 +1,7 @@
 package io.github.wapuniverse.view
 
 import io.github.wapuniverse.editor.ImageSetDatabase
+import io.github.wapuniverse.utils.ResourceNotFound
 import io.github.wapuniverse.utils.getResourceAsStream
 import javafx.scene.image.Image
 import java.util.*
@@ -41,8 +42,12 @@ fun loadImageMapFromResources(imageSetDatabase: ImageSetDatabase, prefix: String
     imageMetadataList.map {
         val pngImagePath = it.path.replace(pidExt, pngExt)
         val resImagePath = prefix + pngImagePath
-        getResourceAsStream(resImagePath).use {
-            imagesDict.put(pngImagePath, Image(it))
+        try {
+            getResourceAsStream(resImagePath).use {
+                imagesDict.put(pngImagePath, Image(it))
+            }
+        } catch(e: ResourceNotFound) {
+            System.err.println(e.message)
         }
     }
     return ImageMap(imageSetDatabase, imagesDict)
