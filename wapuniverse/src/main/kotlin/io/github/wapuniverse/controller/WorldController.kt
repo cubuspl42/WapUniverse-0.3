@@ -142,7 +142,7 @@ class WorldController(
         } else {
             val fileChooser = FileChooser()
             fileChooser.title = "Open WWD File"
-            fileChooser.extensionFilters.add(ExtensionFilter("Text Files", "*.wwd", "*.WWD"))
+            fileChooser.extensionFilters.add(ExtensionFilter("WapWorld files", "*.wwd"))
             val selectedFile = fileChooser.showSaveDialog(root.scene.window)
             if (selectedFile != null) {
                 wwdPath = selectedFile.absolutePath
