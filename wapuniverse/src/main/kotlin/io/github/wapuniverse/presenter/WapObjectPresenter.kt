@@ -1,4 +1,4 @@
-package io.github.wapuniverse.controller
+package io.github.wapuniverse.presenter
 
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.core.*

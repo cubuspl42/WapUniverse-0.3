@@ -1,5 +1,6 @@
-package io.github.wapuniverse.controller
+package io.github.wapuniverse.presenter
 
+import io.github.wapuniverse.controller.SceneInputController
 import io.github.wapuniverse.core.Entity
 import io.github.wapuniverse.core.EntityComponent
 import io.github.wapuniverse.core.SmartObject
