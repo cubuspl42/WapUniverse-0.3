@@ -1,4 +1,4 @@
-package io.github.wapuniverse.editor
+package io.github.wapuniverse.core
 
 
 class EntityService(private val entityComponent: EntityComponent) {

@@ -1,6 +1,6 @@
 package io.github.wapuniverse.controller
 
-import io.github.wapuniverse.editor.loadImageSetDatabaseFromFile
+import io.github.wapuniverse.core.loadImageSetDatabaseFromFile
 import io.github.wapuniverse.utils.getResourceAsStream
 import io.github.wapuniverse.view.loadImageMapFromPath
 import io.github.wapuniverse.view.loadImageMapFromResources

@@ -1,4 +1,4 @@
-package io.github.wapuniverse.editor
+package io.github.wapuniverse.core
 
 import io.github.wapuniverse.utils.Signal
 import io.github.wapuniverse.utils.Vec2i

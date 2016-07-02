@@ -1,6 +1,6 @@
-package io.github.wapuniverse.editor
+package io.github.wapuniverse.core
 
-import io.github.wapuniverse.editor.FormulaGroup
+import io.github.wapuniverse.core.FormulaGroup
 import java.util.*
 
 

@@ -1,10 +1,10 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.editor.INVISIBLE_TILE_ID
-import io.github.wapuniverse.editor.ImageSetDatabase
-import io.github.wapuniverse.editor.TileLayer
-import io.github.wapuniverse.editor.tileWidth
+import io.github.wapuniverse.core.INVISIBLE_TILE_ID
+import io.github.wapuniverse.core.ImageSetDatabase
+import io.github.wapuniverse.core.TileLayer
+import io.github.wapuniverse.core.tileWidth
 import io.github.wapuniverse.utils.div
 import io.github.wapuniverse.utils.toVec2i
 import javafx.geometry.Rectangle2D

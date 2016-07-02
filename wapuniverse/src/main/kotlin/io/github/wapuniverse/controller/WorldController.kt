@@ -2,7 +2,7 @@ package io.github.wapuniverse.controller
 
 import com.google.common.io.Files
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.editor.*
+import io.github.wapuniverse.core.*
 import io.github.wapuniverse.lsd.scriptMetaMap
 import io.github.wapuniverse.utils.*
 import io.github.wapuniverse.view.ImageMap

@@ -1,6 +1,6 @@
 package io.github.wapuniverse.lsd.level1
 
-import io.github.wapuniverse.editor.AlphaTile
+import io.github.wapuniverse.core.AlphaTile
 
 
 enum class Level1AlphaTile : AlphaTile {

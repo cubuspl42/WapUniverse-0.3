@@ -3,7 +3,7 @@ package io.github.wapuniverse.wap32
 import com.google.common.io.ByteStreams
 import com.google.common.io.LittleEndianDataOutputStream
 import com.google.common.primitives.Bytes
-import io.github.wapuniverse.editor.tileWidth
+import io.github.wapuniverse.core.tileWidth
 import io.github.wapuniverse.main
 import io.github.wapuniverse.utils.compress
 import io.github.wapuniverse.utils.decompress

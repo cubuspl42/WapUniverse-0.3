@@ -1,7 +1,7 @@
 package io.github.wapuniverse.controller
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.editor.*
+import io.github.wapuniverse.core.*
 import io.github.wapuniverse.utils.Vec2i
 import io.github.wapuniverse.utils.div
 import io.github.wapuniverse.utils.minus

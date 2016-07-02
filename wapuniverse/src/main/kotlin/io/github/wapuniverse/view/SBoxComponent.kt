@@ -1,7 +1,7 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.editor.Entity
+import io.github.wapuniverse.core.Entity
 import javafx.geometry.Rectangle2D
 
 

@@ -1,8 +1,8 @@
 package io.github.wapuniverse.controller
 
-import io.github.wapuniverse.editor.Entity
-import io.github.wapuniverse.editor.EntityComponent
-import io.github.wapuniverse.editor.SmartObject
+import io.github.wapuniverse.core.Entity
+import io.github.wapuniverse.core.EntityComponent
+import io.github.wapuniverse.core.SmartObject
 import io.github.wapuniverse.view.ResizeableVo
 import io.github.wapuniverse.view.SBoxComponent
 import io.github.wapuniverse.view.SceneView

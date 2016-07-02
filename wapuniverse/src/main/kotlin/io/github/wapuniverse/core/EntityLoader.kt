@@ -1,4 +1,4 @@
-package io.github.wapuniverse.editor
+package io.github.wapuniverse.core
 
 import io.github.wapuniverse.wap32.WwdObject
 

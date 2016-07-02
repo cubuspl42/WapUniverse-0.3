@@ -1,9 +1,9 @@
 package io.github.wapuniverse.lsd.level1
 
-import io.github.wapuniverse.editor.SmartScript
-import io.github.wapuniverse.editor.makeSmartScriptMap
-import io.github.wapuniverse.editor.smartScript
-import io.github.wapuniverse.editor.tiles
+import io.github.wapuniverse.core.SmartScript
+import io.github.wapuniverse.core.makeSmartScriptMap
+import io.github.wapuniverse.core.smartScript
+import io.github.wapuniverse.core.tiles
 import io.github.wapuniverse.lsd.level1.Level1AlphaTile.*
 import io.github.wapuniverse.utils.Matrix
 

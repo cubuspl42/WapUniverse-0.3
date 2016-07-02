@@ -1,4 +1,4 @@
-package io.github.wapuniverse.editor
+package io.github.wapuniverse.core
 
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.lsd.scriptMetaMap

@@ -1,4 +1,4 @@
-package io.github.wapuniverse.editor
+package io.github.wapuniverse.core
 
 import io.github.wapuniverse.utils.Matrix
 import io.github.wapuniverse.utils.Rectangle2Di

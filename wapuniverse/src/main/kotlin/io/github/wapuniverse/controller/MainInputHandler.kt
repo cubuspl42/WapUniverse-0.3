@@ -1,8 +1,8 @@
 package io.github.wapuniverse.controller
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.editor.Entity
-import io.github.wapuniverse.editor.EntityComponent
+import io.github.wapuniverse.core.Entity
+import io.github.wapuniverse.core.EntityComponent
 import io.github.wapuniverse.utils.*
 import io.github.wapuniverse.view.*
 import io.github.wapuniverse.view.EventHandlingStatus.EVENT_HANDLED

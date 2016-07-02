@@ -1,7 +1,7 @@
 package io.github.wapuniverse.lsd.level2
 
-import io.github.wapuniverse.editor.formula
-import io.github.wapuniverse.editor.formulaGroup
+import io.github.wapuniverse.core.formula
+import io.github.wapuniverse.core.formulaGroup
 import io.github.wapuniverse.lsd.level2.Level2AlphaTile.*
 
 

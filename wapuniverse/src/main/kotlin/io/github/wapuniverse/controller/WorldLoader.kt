@@ -1,6 +1,6 @@
 package io.github.wapuniverse.controller
 
-import io.github.wapuniverse.editor.*
+import io.github.wapuniverse.core.*
 import io.github.wapuniverse.lsd.formulaGroupMap
 import io.github.wapuniverse.lsd.level1.level1FormulaGroup
 import io.github.wapuniverse.lsd.scriptMetaMap

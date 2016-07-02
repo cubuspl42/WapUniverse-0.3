@@ -1,6 +1,6 @@
 package io.github.wapuniverse.view
 
-import io.github.wapuniverse.editor.Entity
+import io.github.wapuniverse.core.Entity
 import io.github.wapuniverse.utils.Signal
 import javafx.geometry.Rectangle2D
 import kotlin.properties.Delegates.observable

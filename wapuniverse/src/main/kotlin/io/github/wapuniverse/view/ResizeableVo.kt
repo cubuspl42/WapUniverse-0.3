@@ -2,8 +2,8 @@ package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.controller.SceneInputController
-import io.github.wapuniverse.editor.SmartObject
-import io.github.wapuniverse.editor.tileWidth
+import io.github.wapuniverse.core.SmartObject
+import io.github.wapuniverse.core.tileWidth
 import io.github.wapuniverse.utils.Rectangle2Di
 import io.github.wapuniverse.utils.Vec2i
 import javafx.geometry.Rectangle2D

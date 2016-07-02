@@ -1,6 +1,6 @@
-package io.github.wapuniverse.editor
+package io.github.wapuniverse.core
 
-import io.github.wapuniverse.editor.AlphaTile
+import io.github.wapuniverse.core.AlphaTile
 
 
 data class Formula(
