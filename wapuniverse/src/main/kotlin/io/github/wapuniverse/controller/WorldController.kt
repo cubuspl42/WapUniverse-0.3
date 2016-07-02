@@ -124,7 +124,7 @@ class WorldController(
             }
             if (script != null) {
                 val spawnOffset = Vec2i(128, 128)
-                val entity = SmartObject(tileLayer, script)
+                val entity = AdaptiveEntity(tileLayer, script)
                 entity.position = sceneView.cameraOffset.toVec2i() + spawnOffset
                 entityComponent.addEntity(entity)
             }

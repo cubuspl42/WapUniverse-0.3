@@ -3,7 +3,7 @@ package io.github.wapuniverse.view
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.controller.InputHandler
 import io.github.wapuniverse.controller.InputHandlerImpl
-import io.github.wapuniverse.core.SmartObject
+import io.github.wapuniverse.core.AdaptiveEntity
 import io.github.wapuniverse.utils.*
 import io.github.wapuniverse.view.EventHandlingStatus.EVENT_HANDLED
 import io.github.wapuniverse.view.EventHandlingStatus.EVENT_NOT_HANDLED

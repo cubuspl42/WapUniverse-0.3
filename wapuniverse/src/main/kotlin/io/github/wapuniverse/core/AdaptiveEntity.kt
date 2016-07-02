@@ -26,16 +26,16 @@ interface SmartScript {
     fun run(width: Int, height: Int): Matrix<AlphaTile>
 }
 
-val smartObjectLogicName = "_WU_SmartObject"
+val adaptiveEntityLogicName = "_WU_SmartObject"
 
-class SmartObject(private val tileLayer: TileLayer, private val script: SmartScript) : Entity() {
+class AdaptiveEntity(private val tileLayer: TileLayer, private val script: SmartScript) : Entity() {
     class Loader(private val tileLayer: TileLayer) : EntityLoader {
-        override val logicName = smartObjectLogicName
+        override val logicName = adaptiveEntityLogicName
 
-        override fun load(levelIndex: Int, wwdObject: WwdObject): SmartObject {
+        override fun load(levelIndex: Int, wwdObject: WwdObject): AdaptiveEntity {
             val scriptMap = scriptMetaMap[levelIndex]!!
             val script = scriptMap[wwdObject.name]!!
-            val entity = SmartObject(tileLayer, script)
+            val entity = AdaptiveEntity(tileLayer, script)
             entity.position = Vec2i(wwdObject.x, wwdObject.y)
             entity.resize(wwdObject.width, wwdObject.height)
             return entity
@@ -45,7 +45,7 @@ class SmartObject(private val tileLayer: TileLayer, private val script: SmartScr
     override fun dump(): WwdObject {
         val wwdObject = WwdObject()
         with (wwdObject) {
-            logic = smartObjectLogicName
+            logic = adaptiveEntityLogicName
             name = script.name
             x = position.x + tileWidth.toInt() / 2 - 1
             y = position.y + tileWidth.toInt() / 2 - 1
@@ -57,7 +57,7 @@ class SmartObject(private val tileLayer: TileLayer, private val script: SmartScr
 
     private val matrix = AlphaTileMatrix()
 
-    val changed = Signal<SmartObject>()
+    val changed = Signal<AdaptiveEntity>()
 
     init {
         resize(script.defaultWidth, script.defaultHeight)

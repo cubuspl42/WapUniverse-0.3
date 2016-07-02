@@ -3,7 +3,7 @@ package io.github.wapuniverse.presenter
 import io.github.wapuniverse.controller.SceneInputController
 import io.github.wapuniverse.core.Entity
 import io.github.wapuniverse.core.EntityComponent
-import io.github.wapuniverse.core.SmartObject
+import io.github.wapuniverse.core.AdaptiveEntity
 import io.github.wapuniverse.view.ResizeableVo
 import io.github.wapuniverse.view.SBoxComponent
 import io.github.wapuniverse.view.SceneView
@@ -28,7 +28,7 @@ class SmartObjectPresenter(
     }
 
     private fun presentEntity(ent: Entity) {
-        if (ent is SmartObject) {
+        if (ent is AdaptiveEntity) {
             ResizeableVo(sceneView, sceneInputController, ent, sBoxComponent, root)
         }
     }

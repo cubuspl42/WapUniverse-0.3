@@ -16,7 +16,7 @@ private fun makeAlphaTileMapper(levelIndex: Int): AlphaTileMapper {
 }
 
 fun makeEntityLoaders(tileLayer: TileLayer): List<EntityLoader> {
-    return listOf(SmartObject.Loader(tileLayer))
+    return listOf(AdaptiveEntity.Loader(tileLayer))
 }
 
 class WorldLoader() {

@@ -2,7 +2,7 @@ package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.controller.SceneInputController
-import io.github.wapuniverse.core.SmartObject
+import io.github.wapuniverse.core.AdaptiveEntity
 import io.github.wapuniverse.core.tileWidth
 import io.github.wapuniverse.utils.Rectangle2Di
 import io.github.wapuniverse.utils.Vec2i
@@ -30,20 +30,20 @@ fun scaleUp(r: Rectangle2Di): Rectangle2D {
 class ResizeableVo(
         private val sceneView: SceneView,
         private val sceneInputController: SceneInputController,
-        private val smartObject: SmartObject,
+        private val adaptiveEntity: AdaptiveEntity,
         private val sBoxComponent: SBoxComponent,
         private val root: Node
 ) {
-    private val sBox = SBox(smartObject, scaleUp(smartObject.rect))
+    private val sBox = SBox(adaptiveEntity, scaleUp(adaptiveEntity.rect))
 
-    private val rubberBand = RubberBand(scaleUp(smartObject.rect), root)
+    private val rubberBand = RubberBand(scaleUp(adaptiveEntity.rect), root)
 
     init {
         sBoxComponent.addSBox(sBox)
         sceneView.addItem(rubberBand)
         updateColor()
 
-        smartObject.disposed.on {
+        adaptiveEntity.disposed.on {
             sBoxComponent.removeSBox(sBox)
             sceneView.removeItem(rubberBand)
             sceneInputController.removeInputHandler(rubberBand)
@@ -58,8 +58,8 @@ class ResizeableVo(
         }
     }
 
-    private val slotSoc = smartObject.changed.on {
-        val sur = scaleUp(smartObject.rect)
+    private val slotSoc = adaptiveEntity.changed.on {
+        val sur = scaleUp(adaptiveEntity.rect)
         sBox.boundingRect = sur
         rubberBand.offset = Vec2d(sur.minX, sur.minY)
         rubberBand.width = sur.width
@@ -89,8 +89,8 @@ class ResizeableVo(
     private val slotRr = rubberBand.resized.on { r ->
         val sdr = scaleDown(r)
         if (sdr.width > 0 && sdr.height > 0) {
-            smartObject.offset = Vec2i(sdr.minX, sdr.minY)
-            smartObject.resize(sdr.width, sdr.height)
+            adaptiveEntity.offset = Vec2i(sdr.minX, sdr.minY)
+            adaptiveEntity.resize(sdr.width, sdr.height)
         }
     }
 }
