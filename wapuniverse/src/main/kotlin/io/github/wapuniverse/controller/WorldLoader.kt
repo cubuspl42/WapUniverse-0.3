@@ -10,13 +10,6 @@ import io.github.wapuniverse.wap32.WwdObject
 
 val maxLevelIndex = 14
 
-data class World(
-        val levelIndex: Int,
-        val wwd: Wwd,
-        val tileLayer: TileLayer,
-        val entityComponent: EntityComponent
-)
-
 private fun makeAlphaTileMapper(levelIndex: Int): AlphaTileMapper {
     val fomulaGroup = formulaGroupMap[levelIndex]!!
     return AlphaTileMapper(fomulaGroup)

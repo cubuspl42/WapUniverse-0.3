@@ -1,5 +1,6 @@
 package io.github.wapuniverse.controller
 
+import io.github.wapuniverse.editor.World
 import io.github.wapuniverse.wap32.Wwd
 
 
