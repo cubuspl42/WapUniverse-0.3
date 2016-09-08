@@ -14,6 +14,6 @@ fun smartScript(
     }
 }
 
-fun makeSmartScriptMap(vararg scripts: SmartScript): Map<String, SmartScript> {
-    return scripts.map { Pair(it.name, it) }.toMap()
+fun makeSmartScriptMap(vararg scripts: SmartScript): ScriptMap {
+    return ScriptMap(scripts.map { Pair(it.name, it) }.toMap())
 }

@@ -111,24 +111,25 @@ class WorldController(
                 val se = sBoxComponent.selectedEntities
                 entityService.destroyEntities(se)
             }
-            val scriptMap = scriptMetaMap[world.levelIndex]!!
             val script = when (ev.text) {
-                "1" -> scriptMap["Block"]
-                "2" -> scriptMap["Ladder"]
-                "3" -> scriptMap["Spikes"]
-                "4" -> scriptMap["Column"]
-                "5" -> scriptMap["Platform"]
+                "1" -> "Block"
+                "2" -> "Ladder"
+                "3" -> "Spikes"
+                "4" -> "Column"
+                "5" -> "Platform"
                 else -> null
             }
             if (script != null) {
                 val spawnOffset = Vec2i(128, 128)
-                val entity = AdaptiveEntity(world.primaryLayerImpl, script)
-                entity.position = sceneView.cameraOffset.toVec2i() + spawnOffset
-                world.primaryLayer.addEntity(entity)
+                val repr = AdaptiveEntityRepr(
+                        scriptId = script,
+                        position = sceneView.cameraOffset.toVec2i() + spawnOffset
+                )
+                world.primaryLayer.addEntity(repr)
             }
         }
 
-        val at = object: AnimationTimer() {
+        val at = object : AnimationTimer() {
             override fun handle(t: Long) {
                 sceneView.render()
             }

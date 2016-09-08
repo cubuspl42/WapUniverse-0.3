@@ -5,9 +5,10 @@ import io.github.wapuniverse.wap32.Wwd
 class World(
         val levelIndex: Int,
         val wwd: Wwd,
-        alphaTileMapper: AlphaTileMapper,
+        formulaLevelMap: FormulaLevelMap,
+        scriptMap: ScriptMap,
         imageSet: String
 ) {
-    val primaryLayerImpl = LayerImpl(alphaTileMapper, imageSet)
+    val primaryLayerImpl = LayerImpl(formulaLevelMap, scriptMap, imageSet)
     val primaryLayer: MutableLayer = primaryLayerImpl
 }

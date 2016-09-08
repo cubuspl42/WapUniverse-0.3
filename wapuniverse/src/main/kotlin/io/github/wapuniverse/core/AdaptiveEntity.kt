@@ -32,13 +32,11 @@ class AdaptiveEntity(private val layer: LayerImpl, private val script: SmartScri
     class Loader(private val layer: LayerImpl) : EntityLoader {
         override val logicName = adaptiveEntityLogicName
 
-        override fun load(levelIndex: Int, wwdObject: WwdObject): AdaptiveEntity {
-            val scriptMap = scriptMetaMap[levelIndex]!!
-            val script = scriptMap[wwdObject.name]!!
-            val entity = AdaptiveEntity(layer, script)
-            entity.position = Vec2i(wwdObject.x, wwdObject.y)
-            entity.resize(wwdObject.width, wwdObject.height)
-            return entity
+        override fun load(levelIndex: Int, wwdObject: WwdObject): EntityRepr {
+            return AdaptiveEntityRepr(
+                    scriptId = wwdObject.name,
+                    position = Vec2i(wwdObject.x, wwdObject.y)
+            )
         }
     }
 

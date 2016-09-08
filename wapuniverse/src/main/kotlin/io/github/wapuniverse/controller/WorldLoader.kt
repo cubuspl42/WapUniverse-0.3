@@ -1,19 +1,13 @@
 package io.github.wapuniverse.controller
 
 import io.github.wapuniverse.core.*
-import io.github.wapuniverse.lsd.formulaGroupMap
-import io.github.wapuniverse.lsd.level1.level1FormulaGroup
+import io.github.wapuniverse.lsd.formulaMetaMap
 import io.github.wapuniverse.lsd.scriptMetaMap
 import io.github.wapuniverse.utils.Vec2i
 import io.github.wapuniverse.wap32.Wwd
 import io.github.wapuniverse.wap32.WwdObject
 
 val maxLevelIndex = 14
-
-private fun makeAlphaTileMapper(levelIndex: Int): AlphaTileMapper {
-    val fomulaGroup = formulaGroupMap[levelIndex]!!
-    return AlphaTileMapper(fomulaGroup)
-}
 
 fun makeEntityLoaders(layer: LayerImpl): List<EntityLoader> {
     return listOf(AdaptiveEntity.Loader(layer))
@@ -30,9 +24,9 @@ class WorldLoader() {
         val levelIndex = determineLevelIndex(wwd)
         val mainPlane = wwd.mainPlane!!
 
-        val alphaTileMapper = makeAlphaTileMapper(levelIndex)
-
-        val world = World(levelIndex, wwd, alphaTileMapper, mainPlane.imageSets.first())
+        val formulaLevelMap = formulaMetaMap[levelIndex]!!
+        val scriptMap = scriptMetaMap[levelIndex]!!
+        val world = World(levelIndex, wwd, formulaLevelMap, scriptMap, mainPlane.imageSets.first())
         val entityLoaders = makeEntityLoaders(world.primaryLayerImpl)
 
         mainPlane.objects.forEach {
@@ -43,17 +37,16 @@ class WorldLoader() {
     }
 
     private fun loadObject(
-            levelIndex: Int, obj: WwdObject, entityLoaders: List<EntityLoader>, layer: MutableLayer) {
+            levelIndex: Int, wwdObject: WwdObject, entityLoaders: List<EntityLoader>, layer: MutableLayer) {
         val loader = entityLoaders.firstOrNull { loader ->
-            obj.logic == loader.logicName
+            wwdObject.logic == loader.logicName
         }
 
-        val entity = if (loader != null) {
-            loader.load(levelIndex, obj)
+        if (loader != null) {
+            val repr = loader.load(levelIndex, wwdObject)
+            layer.addEntity(repr)
         } else {
-            WapObject(obj)
+            layer.addEntity(WapObjectRepr(wwdObject))
         }
-
-        layer.addEntity(entity)
     }
 }

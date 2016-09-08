@@ -22,6 +22,6 @@ data class FormulaGroup(
         val formulas: List<Formula>
 )
 
-fun formulaGroup(imageSet: String, formulas: List<Formula>): FormulaGroup {
-    return FormulaGroup(imageSet, formulas)
+fun formulaMap(formulas: List<Formula>): FormulaMap {
+    return FormulaMap(formulas.map { Pair(it.alphaTileSet, it.tileIndex) }.toMap())
 }

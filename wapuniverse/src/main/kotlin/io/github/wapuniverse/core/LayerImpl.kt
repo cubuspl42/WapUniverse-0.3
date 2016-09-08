@@ -6,10 +6,13 @@ import io.github.wapuniverse.utils.Vec2i
 import java.util.*
 
 class LayerImpl(
-        private val alphaTileMapper: AlphaTileMapper,
+        private val formulaLevelMap: FormulaLevelMap,
+        private val scriptMap: ScriptMap,
         override val imageSet: String) : MutableLayer {
 
     private val INVISIBLE_TILE_ID = -1
+
+    private val formulaMap = formulaLevelMap[imageSet]!!
 
     private val _entities = hashSetOf<Entity>()
 
@@ -17,9 +20,27 @@ class LayerImpl(
 
     override val onEntityAdded = Signal<Entity>()
 
-    override fun addEntity(entity: Entity) {
+    private fun <TEntity : Entity> _addEntity(entity: TEntity): TEntity {
         _entities.add(entity)
         onEntityAdded._emit(entity)
+        return entity
+    }
+
+    override fun addEntity(repr: AdaptiveEntityRepr): AdaptiveEntity {
+        val script = scriptMap[repr.scriptId]!!
+        val entity = AdaptiveEntity(this, script)
+        entity.position = repr.position
+        return _addEntity(entity)
+    }
+
+    override fun addEntity(repr: WapObjectRepr): WapObject {
+        val entity = WapObject(repr.wwdObject)
+        return _addEntity(entity)
+    }
+
+    override fun addEntity(repr: EntityRepr) = when (repr) {
+        is AdaptiveEntityRepr -> addEntity(repr)
+        else -> throw IllegalArgumentException()
     }
 
     override val onEntityRemoved = Signal<Entity>()
@@ -71,8 +92,7 @@ class LayerImpl(
                 .filter { it.rect.contains(p.x, p.y) }
                 .map { it.getAlphaTile(p.y, p.x) }
                 .toSet()
-        val tileIndex = alphaTileMapper.mapAlphaTileSet(alphaTileSet)
-        if (tileIndex != null) {
+        applyFormulas(formulaMap, alphaTileSet)?.let { tileIndex ->
             tileCache[p] = tileIndex
         }
     }

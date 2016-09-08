@@ -1,14 +1,11 @@
 package io.github.wapuniverse.lsd.level1
 
-import io.github.wapuniverse.core.SmartScript
-import io.github.wapuniverse.core.makeSmartScriptMap
-import io.github.wapuniverse.core.smartScript
-import io.github.wapuniverse.core.tiles
+import io.github.wapuniverse.core.*
 import io.github.wapuniverse.lsd.level1.Level1AlphaTile.*
 import io.github.wapuniverse.utils.Matrix
 
 
-val level1ScriptMap = makeSmartScriptMap(
+val level1ScriptMap: ScriptMap = makeSmartScriptMap(
         smartScript("Block", 4, 4, { w, h ->
             val t = tiles(h, w, EMPTY)
             for (i in 1..h) {

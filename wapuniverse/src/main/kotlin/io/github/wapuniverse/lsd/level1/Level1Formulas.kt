@@ -1,11 +1,12 @@
 package io.github.wapuniverse.lsd.level1
 
+import io.github.wapuniverse.core.FormulaLevelMap
 import io.github.wapuniverse.core.formula
-import io.github.wapuniverse.core.formulaGroup
+import io.github.wapuniverse.core.formulaMap
 import io.github.wapuniverse.lsd.level1.Level1AlphaTile.*
 
 
-val level1FormulaGroup = formulaGroup("ACTION", listOf(
+private val level1ActionFormulaMap = formulaMap(listOf(
         formula(BLOCK_TL, 303),
         formula(BLOCK_T, 304),
         formula(BLOCK_TR_1, 305),
@@ -37,4 +38,8 @@ val level1FormulaGroup = formulaGroup("ACTION", listOf(
         formula(PLATFORM_L, 331),
         formula(PLATFORM_T, 332),
         formula(PLATFORM_R, 334)
+))
+
+val level1FormulaMap = FormulaLevelMap(mapOf(
+        "ACTION" to level1ActionFormulaMap
 ))
