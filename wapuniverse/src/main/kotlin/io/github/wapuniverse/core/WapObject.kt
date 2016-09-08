@@ -6,7 +6,7 @@ import io.github.wapuniverse.wap32.WwdObject
 
 val wapObjectLogicName = "_WU_WapObject"
 
-class WapObject(val wwdObject: WwdObject) : Entity() {
+class WapObject(val wwdObject: WwdObject) : EntityImpl() {
     override fun dump(): WwdObject {
         return wwdObject.clone()
     }
