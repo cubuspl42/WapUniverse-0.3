@@ -41,7 +41,7 @@ class WorldController(
 
     // World
 
-    private val tileLayer = world.tileLayer
+    private val primaryLayer = world.primaryLayer
 
     // Services
 
@@ -55,7 +55,7 @@ class WorldController(
 
     private val sBoxComponent = SBoxComponent()
 
-    private val sceneView = SceneView(world.levelIndex, sceneCanvas, imageSetDatabase, imageMap, tileLayer)
+    private val sceneView = SceneView(world.levelIndex, sceneCanvas, imageSetDatabase, imageMap, primaryLayer)
 
     //
 
@@ -122,7 +122,7 @@ class WorldController(
             }
             if (script != null) {
                 val spawnOffset = Vec2i(128, 128)
-                val entity = AdaptiveEntity(tileLayer, script)
+                val entity = AdaptiveEntity(world.primaryLayerImpl, script)
                 entity.position = sceneView.cameraOffset.toVec2i() + spawnOffset
                 world.primaryLayer.addEntity(entity)
             }

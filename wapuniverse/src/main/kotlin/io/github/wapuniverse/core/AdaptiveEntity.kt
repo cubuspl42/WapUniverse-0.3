@@ -28,14 +28,14 @@ interface SmartScript {
 
 val adaptiveEntityLogicName = "_WU_SmartObject"
 
-class AdaptiveEntity(private val tileLayer: TileLayer, private val script: SmartScript) : Entity() {
-    class Loader(private val tileLayer: TileLayer) : EntityLoader {
+class AdaptiveEntity(private val layer: LayerImpl, private val script: SmartScript) : Entity() {
+    class Loader(private val layer: LayerImpl) : EntityLoader {
         override val logicName = adaptiveEntityLogicName
 
         override fun load(levelIndex: Int, wwdObject: WwdObject): AdaptiveEntity {
             val scriptMap = scriptMetaMap[levelIndex]!!
             val script = scriptMap[wwdObject.name]!!
-            val entity = AdaptiveEntity(tileLayer, script)
+            val entity = AdaptiveEntity(layer, script)
             entity.position = Vec2i(wwdObject.x, wwdObject.y)
             entity.resize(wwdObject.width, wwdObject.height)
             return entity
@@ -61,7 +61,7 @@ class AdaptiveEntity(private val tileLayer: TileLayer, private val script: Smart
 
     init {
         resize(script.defaultWidth, script.defaultHeight)
-        tileLayer.addMatrix(matrix)
+        layer.addMatrix(matrix)
     }
 
     var offset: Vec2i
@@ -91,6 +91,6 @@ class AdaptiveEntity(private val tileLayer: TileLayer, private val script: Smart
         }
 
     override fun onDispose() {
-        tileLayer.removeMatrix(matrix)
+        layer.removeMatrix(matrix)
     }
 }

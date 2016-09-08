@@ -15,8 +15,8 @@ private fun makeAlphaTileMapper(levelIndex: Int): AlphaTileMapper {
     return AlphaTileMapper(fomulaGroup)
 }
 
-fun makeEntityLoaders(tileLayer: TileLayer): List<EntityLoader> {
-    return listOf(AdaptiveEntity.Loader(tileLayer))
+fun makeEntityLoaders(layer: LayerImpl): List<EntityLoader> {
+    return listOf(AdaptiveEntity.Loader(layer))
 }
 
 class WorldLoader() {
@@ -31,10 +31,9 @@ class WorldLoader() {
         val mainPlane = wwd.mainPlane!!
 
         val alphaTileMapper = makeAlphaTileMapper(levelIndex)
-        val tileLayer = TileLayer(alphaTileMapper, mainPlane.imageSets.first())
 
-        val entityLoaders = makeEntityLoaders(tileLayer)
-        val world = World(levelIndex, wwd, tileLayer)
+        val world = World(levelIndex, wwd, alphaTileMapper, mainPlane.imageSets.first())
+        val entityLoaders = makeEntityLoaders(world.primaryLayerImpl)
 
         mainPlane.objects.forEach {
             loadObject(levelIndex, it, entityLoaders, world.primaryLayer)

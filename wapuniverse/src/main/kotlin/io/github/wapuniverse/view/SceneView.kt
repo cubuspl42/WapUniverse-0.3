@@ -1,9 +1,8 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.core.INVISIBLE_TILE_ID
 import io.github.wapuniverse.core.ImageSetDatabase
-import io.github.wapuniverse.core.TileLayer
+import io.github.wapuniverse.core.Layer
 import io.github.wapuniverse.core.tileWidth
 import io.github.wapuniverse.utils.div
 import io.github.wapuniverse.utils.toVec2i
@@ -15,6 +14,7 @@ import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
 import java.util.*
 
+private val INVISIBLE_TILE_ID = -1
 
 enum class EventHandlingStatus {
     EVENT_HANDLED,
@@ -78,11 +78,11 @@ class SceneView(
         private val canvas: Canvas,
         private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap,
-        private val tileLayer: TileLayer
+        private val layer: Layer
 ) {
     private val items = HashSet<SceneItem>()
 
-    private val tileImageCache = TileImageCache(levelIndex, tileLayer.imageSet, imageSetDatabase, imageMap)
+    private val tileImageCache = TileImageCache(levelIndex, layer.imageSet, imageSetDatabase, imageMap)
 
     var transform = Affine()
         private set
@@ -146,7 +146,7 @@ class SceneView(
 
         for (i in t0.y - 1..t1.y) {
             for (j in t0.x - 1..t1.x) {
-                val t = tileLayer.getTile(i, j)
+                val t = layer.getTile(i, j)
                 if (t != INVISIBLE_TILE_ID) {
                     // val img = imageMap.findTileImage(levelIndex, tileLayer.imageSet, t)
                     val img = tileImageCache.getTileImage(t) ?: continue
