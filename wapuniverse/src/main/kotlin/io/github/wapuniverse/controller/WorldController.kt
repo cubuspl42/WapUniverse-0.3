@@ -43,11 +43,9 @@ class WorldController(
 
     private val tileLayer = world.tileLayer
 
-    private val entityComponent = world.entityComponent
-
     // Services
 
-    private val entityService = EntityService(entityComponent)
+    private val entityService = EntityService(world.primaryLayer)
 
     // Controllers
 
@@ -68,8 +66,8 @@ class WorldController(
     fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
 
     init {
-        SmartObjectPresenter(entityComponent, sceneView, sceneInputController, sBoxComponent, root)
-        WapObjectPresenter(entityComponent, sceneView, imageSetDatabase, imageMap, world.levelIndex)
+        SmartObjectPresenter(world.primaryLayer, sceneView, sceneInputController, sBoxComponent, root)
+        WapObjectPresenter(world.primaryLayer, sceneView, imageSetDatabase, imageMap, world.levelIndex)
 
         sceneInputController.addInputHandler(MainInputHandler(root, sBoxComponent, sceneView))
 
@@ -126,7 +124,7 @@ class WorldController(
                 val spawnOffset = Vec2i(128, 128)
                 val entity = AdaptiveEntity(tileLayer, script)
                 entity.position = sceneView.cameraOffset.toVec2i() + spawnOffset
-                entityComponent.addEntity(entity)
+                world.primaryLayer.addEntity(entity)
             }
         }
 

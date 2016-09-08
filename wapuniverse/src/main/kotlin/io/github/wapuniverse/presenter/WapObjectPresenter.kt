@@ -30,18 +30,18 @@ class WapObjectVo(
 }
 
 class WapObjectPresenter(
-        private val entityComponent: EntityComponent,
+        layer: Layer,
         private val sceneView: SceneView,
         private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap,
         private val levelIndex: Int) {
 
     init {
-        entityComponent.entities.forEach { ent ->
+        layer.entities.forEach { ent ->
             presentEntity(ent)
         }
 
-        entityComponent.entityAdded.on { ent ->
+        layer.onEntityAdded.on { ent ->
             presentEntity(ent)
         }
     }

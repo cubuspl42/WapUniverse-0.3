@@ -16,7 +16,7 @@ class WorldDumper() {
         }.toMutableList()
 
         var nextObjId = mainPlane.objects.map { it.id }.max() ?: 0 + 1
-        world.entityComponent.entities.forEach {
+        world.primaryLayer.entities.forEach {
             val wwdObject = it.dump()
             wwdObject.id = nextObjId
             ++nextObjId

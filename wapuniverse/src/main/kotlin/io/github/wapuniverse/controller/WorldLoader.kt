@@ -32,18 +32,19 @@ class WorldLoader() {
 
         val alphaTileMapper = makeAlphaTileMapper(levelIndex)
         val tileLayer = TileLayer(alphaTileMapper, mainPlane.imageSets.first())
-        val entityComponent = EntityComponent()
 
         val entityLoaders = makeEntityLoaders(tileLayer)
+        val world = World(levelIndex, wwd, tileLayer)
+
         mainPlane.objects.forEach {
-            loadObject(levelIndex, it, entityLoaders, entityComponent)
+            loadObject(levelIndex, it, entityLoaders, world.primaryLayer)
         }
 
-        return World(levelIndex, wwd, tileLayer, entityComponent)
+        return world
     }
 
     private fun loadObject(
-            levelIndex: Int, obj: WwdObject, entityLoaders: List<EntityLoader>, entityComponent: EntityComponent) {
+            levelIndex: Int, obj: WwdObject, entityLoaders: List<EntityLoader>, layer: MutableLayer) {
         val loader = entityLoaders.firstOrNull { loader ->
             obj.logic == loader.logicName
         }
@@ -54,6 +55,6 @@ class WorldLoader() {
             WapObject(obj)
         }
 
-        entityComponent.addEntity(entity)
+        layer.addEntity(entity)
     }
 }

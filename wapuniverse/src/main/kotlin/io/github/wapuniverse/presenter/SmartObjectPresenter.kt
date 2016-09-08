@@ -2,8 +2,8 @@ package io.github.wapuniverse.presenter
 
 import io.github.wapuniverse.controller.SceneInputController
 import io.github.wapuniverse.core.Entity
-import io.github.wapuniverse.core.EntityComponent
 import io.github.wapuniverse.core.AdaptiveEntity
+import io.github.wapuniverse.core.Layer
 import io.github.wapuniverse.view.ResizeableVo
 import io.github.wapuniverse.view.SBoxComponent
 import io.github.wapuniverse.view.SceneView
@@ -11,18 +11,18 @@ import javafx.scene.Node
 
 
 class SmartObjectPresenter(
-        private val entityComponent: EntityComponent,
+        layer: Layer,
         private val sceneView: SceneView,
         private val sceneInputController: SceneInputController,
         private val sBoxComponent: SBoxComponent,
         private val root: Node) {
 
     init {
-        entityComponent.entities.forEach { ent ->
+        layer.entities.forEach { ent ->
             presentEntity(ent)
         }
 
-        entityComponent.entityAdded.on { ent ->
+        layer.onEntityAdded.on { ent ->
             presentEntity(ent)
         }
     }
