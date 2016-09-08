@@ -9,8 +9,8 @@ import io.github.wapuniverse.wap32.WwdObject
 
 val maxLevelIndex = 14
 
-fun makeEntityLoaders(layer: LayerImpl): List<EntityLoader> {
-    return listOf(AdaptiveEntity.Loader(layer))
+fun makeEntityLoaders(): List<EntityLoader> {
+    return listOf(AdaptiveEntity.Loader())
 }
 
 class WorldLoader() {
@@ -27,7 +27,7 @@ class WorldLoader() {
         val formulaLevelMap = formulaMetaMap[levelIndex]!!
         val scriptMap = scriptMetaMap[levelIndex]!!
         val world = World(levelIndex, wwd, formulaLevelMap, scriptMap, mainPlane.imageSets.first())
-        val entityLoaders = makeEntityLoaders(world.primaryLayerImpl)
+        val entityLoaders = makeEntityLoaders()
 
         mainPlane.objects.forEach {
             loadObject(levelIndex, it, entityLoaders, world.primaryLayer)

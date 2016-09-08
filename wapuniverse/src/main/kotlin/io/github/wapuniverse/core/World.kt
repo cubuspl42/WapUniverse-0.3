@@ -9,6 +9,5 @@ class World(
         scriptMap: ScriptMap,
         imageSet: String
 ) {
-    val primaryLayerImpl = LayerImpl(formulaLevelMap, scriptMap, imageSet)
-    val primaryLayer: MutableLayer = primaryLayerImpl
+    val primaryLayer: MutableLayer = LayerImpl(formulaLevelMap, scriptMap, imageSet)
 }

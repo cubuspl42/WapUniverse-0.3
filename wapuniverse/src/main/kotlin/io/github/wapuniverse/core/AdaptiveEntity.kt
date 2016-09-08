@@ -29,7 +29,7 @@ interface SmartScript {
 val adaptiveEntityLogicName = "_WU_SmartObject"
 
 class AdaptiveEntity(private val layer: LayerImpl, private val script: SmartScript) : EntityImpl() {
-    class Loader(private val layer: LayerImpl) : EntityLoader {
+    class Loader() : EntityLoader {
         override val logicName = adaptiveEntityLogicName
 
         override fun load(levelIndex: Int, wwdObject: WwdObject): EntityRepr {
