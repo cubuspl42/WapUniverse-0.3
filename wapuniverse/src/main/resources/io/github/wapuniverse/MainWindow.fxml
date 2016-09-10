@@ -1,7 +1,7 @@
-<?import io.github.wapuniverse.view.ResizableCanvas?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import io.github.wapuniverse.view.CanvasPane?>
+
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.github.wapuniverse.controller.MainWindowController">
     <top>
@@ -28,8 +28,6 @@
         </MenuBar>
     </top>
     <center>
-        <HBox fx:id="root">
-            <ResizableCanvas fx:id="sceneCanvas" width="640" height="480"/>
-        </HBox>
+        <CanvasPane fx:id="canvasPane"/>
     </center>
 </BorderPane>

@@ -1,10 +1,12 @@
 package io.github.wapuniverse.controller
 
+import io.github.wapuniverse.view.CanvasPane
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.Initializable
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.MenuItem
+import javafx.scene.layout.BorderPane
 import javafx.scene.layout.Region
 import java.net.URL
 import java.util.*
@@ -16,20 +18,20 @@ private val wwdPath = "/home/kuba/Dropbox/temp/LEVEL.wwd" // HARDCODED: wwd path
 class MainWindowController : Initializable {
     private val logger = Logger.getLogger(javaClass.simpleName)
 
-    @FXML
-    private lateinit var root: Region
+//    @FXML
+//    private lateinit var root: Region
 
     @FXML
+    private lateinit var canvasPane: CanvasPane
+
     private lateinit var sceneCanvas: Canvas
 
     private lateinit var mainController: MainController
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
-        sceneCanvas.widthProperty().bind(root.widthProperty())
-        sceneCanvas.heightProperty().bind(root.heightProperty())
+        sceneCanvas = canvasPane.canvas
         sceneCanvas.isFocusTraversable = true
-
-        mainController = MainController(root, sceneCanvas)
+        mainController = MainController(sceneCanvas)
     }
 
     @FXML

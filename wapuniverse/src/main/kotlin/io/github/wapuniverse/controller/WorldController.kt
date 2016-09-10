@@ -24,7 +24,6 @@ import java.io.FileOutputStream
 private val worldDumpPath = "/home/kuba/Dropbox/temp/LEVEL.wwd"
 
 class WorldController(
-        private val root: Node,
         private var wwdPath: String?,
         private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap,
@@ -66,10 +65,10 @@ class WorldController(
     fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
 
     init {
-        SmartObjectPresenter(world.primaryLayer, sceneView, sceneInputController, sBoxComponent, root)
+        SmartObjectPresenter(world.primaryLayer, sceneView, sceneInputController, sBoxComponent, sceneCanvas)
         WapObjectPresenter(world.primaryLayer, sceneView, imageSetDatabase, imageMap, world.levelIndex)
 
-        sceneInputController.addInputHandler(MainInputHandler(root, sBoxComponent, sceneView))
+        sceneInputController.addInputHandler(MainInputHandler(sceneCanvas, sBoxComponent, sceneView))
 
         sceneCanvas.setOnMousePressed { ev ->
             if (ev.button == MouseButton.PRIMARY) {
@@ -144,7 +143,7 @@ class WorldController(
             val fileChooser = FileChooser()
             fileChooser.title = "Open WWD File"
             fileChooser.extensionFilters.add(ExtensionFilter("WapWorld files", "*.wwd"))
-            val selectedFile = fileChooser.showSaveDialog(root.scene.window)
+            val selectedFile = fileChooser.showSaveDialog(sceneCanvas.scene.window)
             if (selectedFile != null) {
                 wwdPath = selectedFile.absolutePath
                 dumpWorld(selectedFile.absolutePath)

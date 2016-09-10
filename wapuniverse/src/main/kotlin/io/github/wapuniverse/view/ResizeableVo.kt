@@ -32,11 +32,11 @@ class ResizeableVo(
         private val sceneInputController: SceneInputController,
         private val adaptiveEntity: AdaptiveEntity,
         private val sBoxComponent: SBoxComponent,
-        private val root: Node
+        private val node: Node
 ) {
     private val sBox = SBox(adaptiveEntity, scaleUp(adaptiveEntity.rect))
 
-    private val rubberBand = RubberBand(scaleUp(adaptiveEntity.rect), root)
+    private val rubberBand = RubberBand(scaleUp(adaptiveEntity.rect), node)
 
     init {
         sBoxComponent.addSBox(sBox)

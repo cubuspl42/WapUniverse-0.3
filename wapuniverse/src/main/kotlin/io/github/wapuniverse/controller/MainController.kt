@@ -17,7 +17,7 @@ private val IMAGE_BASE_DIR_PATH = "/home/kuba/tmp/CLAW/"
 
 private val wwdExt = "wwd"
 
-class MainController(private val rootNode: Node, private val sceneCanvas: Canvas) {
+class MainController(private val sceneCanvas: Canvas) {
 
     private val imageSetDatabase = loadImageSetDatabaseFromFile("imageSetDatabase.yaml")
 
@@ -26,7 +26,7 @@ class MainController(private val rootNode: Node, private val sceneCanvas: Canvas
     private var worldController: WorldController? = null
 
     private fun makeWorldController(wwd: Wwd, wwdPath: String?) =
-            WorldController(rootNode, wwdPath, imageSetDatabase, imageMap, sceneCanvas, wwd)
+            WorldController(wwdPath, imageSetDatabase, imageMap, sceneCanvas, wwd)
 
     init {
         sceneCanvas.setOnDragOver {

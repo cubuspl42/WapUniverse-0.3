@@ -15,7 +15,7 @@ class SmartObjectPresenter(
         private val sceneView: SceneView,
         private val sceneInputController: SceneInputController,
         private val sBoxComponent: SBoxComponent,
-        private val root: Node) {
+        private val node: Node) {
 
     init {
         layer.entities.forEach { ent ->
@@ -29,7 +29,7 @@ class SmartObjectPresenter(
 
     private fun presentEntity(ent: Entity) {
         if (ent is AdaptiveEntity) {
-            ResizeableVo(sceneView, sceneInputController, ent, sBoxComponent, root)
+            ResizeableVo(sceneView, sceneInputController, ent, sBoxComponent, node)
         }
     }
 }

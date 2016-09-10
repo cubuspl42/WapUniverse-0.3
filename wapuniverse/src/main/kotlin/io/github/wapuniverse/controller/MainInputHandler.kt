@@ -17,7 +17,7 @@ import java.util.logging.Logger
 private val mainInputHandlerPriority = 0
 
 class MainInputHandler(
-        private val root: Node,
+        private val node: Node,
         private val sBoxComponent: SBoxComponent,
         private val sceneView: SceneView) : InputHandler {
 
@@ -82,9 +82,9 @@ class MainInputHandler(
         val wv = invTr(ev.x, ev.y)
         val sBoxes = sBoxComponent.query(wv)
         if (sBoxes.any { it.isSelected && it.boundingRect.contains(wv.toPoint2D()) }) {
-            root.cursor = Cursor.MOVE
+            node.cursor = Cursor.MOVE
         } else {
-            root.cursor = Cursor.DEFAULT
+            node.cursor = Cursor.DEFAULT
         }
 
 

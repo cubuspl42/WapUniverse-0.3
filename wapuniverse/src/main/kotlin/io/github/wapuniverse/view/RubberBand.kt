@@ -22,7 +22,7 @@ class RubberBand(
         var offset: Vec2d,
         var width: Double,
         var height: Double,
-        private val root: Node) : SceneItem(), InputHandler by InputHandlerImpl() {
+        private val node: Node) : SceneItem(), InputHandler by InputHandlerImpl() {
 
     constructor(rect: Rectangle2D, root: Node) :
         this(Vec2d(rect.minX, rect.minY), rect.width, rect.height, root)
@@ -96,7 +96,7 @@ class RubberBand(
             r.x == -1 && r.y == 0 -> Cursor.W_RESIZE
             else -> return EVENT_NOT_HANDLED
         }
-        root.cursor = cursor
+        node.cursor = cursor
         return EVENT_HANDLED
     }
 
