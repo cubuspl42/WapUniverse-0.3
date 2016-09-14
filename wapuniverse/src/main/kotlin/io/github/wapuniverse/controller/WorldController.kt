@@ -11,6 +11,7 @@ import io.github.wapuniverse.view.ImageMap
 import io.github.wapuniverse.view.SBoxComponent
 import io.github.wapuniverse.view.SceneView
 import io.github.wapuniverse.wap32.Wwd
+import io.github.wapuniverse.wap32.WwdObject
 import io.github.wapuniverse.wap32.dumpWwd
 import javafx.animation.AnimationTimer
 import javafx.scene.Node
@@ -66,7 +67,7 @@ class WorldController(
 
     init {
         SmartObjectPresenter(world.primaryLayer, sceneView, sceneInputController, sBoxComponent, sceneCanvas)
-        WapObjectPresenter(world.primaryLayer, sceneView, imageSetDatabase, imageMap, world.levelIndex)
+        WapObjectPresenter(world.primaryLayer, sceneView, imageSetDatabase, imageMap, world.levelIndex, sBoxComponent)
 
         sceneInputController.addInputHandler(MainInputHandler(sceneCanvas, sBoxComponent, sceneView))
 
@@ -105,6 +106,16 @@ class WorldController(
                 "a" -> sBoxComponent.selectAll()
 //                "s" -> dumpWorld()
                 "s" -> save()
+                "w" -> {
+                    primaryLayer.addEntity(WapObjectRepr(WwdObject(
+                            id = -1,
+                            logic = "Officer",
+                            imageSet = "LEVEL_OFFICER",
+                            x = 32,
+                            y = 32,
+                            i = -1
+                    )))
+                }
             }
             if (ev.code == KeyCode.DELETE) {
                 val se = sBoxComponent.selectedEntities
