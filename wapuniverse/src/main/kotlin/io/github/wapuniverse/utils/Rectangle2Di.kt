@@ -18,6 +18,10 @@ class Rectangle2Di(val minX: Int = 0, val minY: Int = 0, val width: Int = 0, val
         return x >= minX && y >= minY && x < maxX && y < maxY
     }
 
+    fun intersects(rect: Rectangle2Di): Boolean {
+        return toRectangle2D().intersects(rect.toRectangle2D())
+    }
+
     fun toRectangle2D(): Rectangle2D {
         return Rectangle2D(minX.toDouble(), minY.toDouble(), width.toDouble(), height.toDouble())
     }

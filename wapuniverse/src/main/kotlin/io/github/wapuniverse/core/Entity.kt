@@ -8,4 +8,5 @@ interface Entity {
     fun dispose()
     val disposed: Signal<Entity>
     fun dump(): WwdObject
+    val bounds: Rectangle2Di
 }

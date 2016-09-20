@@ -10,4 +10,5 @@ interface Layer {
     val imageSet: String
     fun getTile(i: Int, j: Int): Int
     fun calculateBounds(): Rectangle2Di
+    fun getEntitiesByArea(rect: Rectangle2Di): List<Entity>
 }

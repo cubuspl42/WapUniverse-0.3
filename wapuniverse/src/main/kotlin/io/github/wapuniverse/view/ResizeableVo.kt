@@ -31,59 +31,28 @@ class ResizeableVo(
         private val sceneView: SceneView,
         private val sceneInputController: SceneInputController,
         private val adaptiveEntity: AdaptiveEntity,
-        private val sBoxComponent: SBoxComponent,
         private val node: Node
 ) {
-    private val sBox = SBox(adaptiveEntity, scaleUp(adaptiveEntity.rect))
-
     private val rubberBand = RubberBand(scaleUp(adaptiveEntity.rect), node)
 
     init {
-        sBoxComponent.addSBox(sBox)
         sceneView.addItem(rubberBand)
         updateColor()
 
         adaptiveEntity.disposed.on {
-            sBoxComponent.removeSBox(sBox)
             sceneView.removeItem(rubberBand)
             sceneInputController.removeInputHandler(rubberBand)
         }
     }
 
     private fun updateColor() {
-        rubberBand.color = when {
-            sBox.isSelected -> Color.RED
-            sBox.isHovered -> Color.BLUE
-            else -> Color.LIGHTBLUE
-        }
     }
 
     private val slotSoc = adaptiveEntity.changed.on {
         val sur = scaleUp(adaptiveEntity.rect)
-        sBox.boundingRect = sur
         rubberBand.offset = Vec2d(sur.minX, sur.minY)
         rubberBand.width = sur.width
         rubberBand.height = sur.height
-    }
-
-    private val slotSh = sBox.hovered.on {
-        updateColor()
-    }
-
-    private val slotSuh = sBox.unhovered.on {
-        updateColor()
-    }
-
-    private val slotSs = sBox.selected.on {
-        rubberBand.z = 100000.0
-        updateColor()
-        sceneInputController.addInputHandler(rubberBand)
-    }
-
-    private val slotSus = sBox.unselected.on {
-        rubberBand.z = 0.0
-        updateColor()
-        sceneInputController.removeInputHandler(rubberBand)
     }
 
     private val slotRr = rubberBand.resized.on { r ->

@@ -15,10 +15,8 @@ class WapObjectVo(
         private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap,
         private val levelIndex: Int,
-        private val wapObject: WapObject,
-        private val sBoxComponent: SBoxComponent
+        private val wapObject: WapObject
 ) {
-    private var sBox: SBox? = null
     private var sceneImage: SceneImage? = null
 
     private fun update() {
@@ -35,17 +33,6 @@ class WapObjectVo(
             val rect = Rectangle2D(
                     minV.x.toDouble(), minV.y.toDouble(),
                     imageSize.x.toDouble(), imageSize.y.toDouble())
-
-            if(sBox == null || sBox!!.boundingRect != rect) {
-                sBox?.let { sBoxComponent.removeSBox(it) }
-                val sb = SBox(wapObject, rect)
-                sBoxComponent.addSBox(sb)
-                sBox = sb
-            }
-
-            sBox?.let {
-                it.boundingRect = rect
-            }
 
             sceneImage?.let { sceneView.removeItem(it) }
             sceneImage = SceneImage(offset.toVec2d(), image)
@@ -67,9 +54,8 @@ class WapObjectPresenter(
         private val sceneView: SceneView,
         private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap,
-        private val levelIndex: Int,
-        private val sBoxComponent: SBoxComponent) {
-
+        private val levelIndex: Int
+) {
     init {
         layer.entities.forEach { ent ->
             presentEntity(ent)
@@ -82,7 +68,7 @@ class WapObjectPresenter(
 
     private fun presentEntity(ent: Entity) {
         if (ent is WapObject) {
-            WapObjectVo(sceneView, imageSetDatabase, imageMap, levelIndex, ent, sBoxComponent)
+            WapObjectVo(sceneView, imageSetDatabase, imageMap, levelIndex, ent)
         }
     }
 }

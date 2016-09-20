@@ -8,7 +8,6 @@ import io.github.wapuniverse.presenter.SmartObjectPresenter
 import io.github.wapuniverse.presenter.WapObjectPresenter
 import io.github.wapuniverse.utils.*
 import io.github.wapuniverse.view.ImageMap
-import io.github.wapuniverse.view.SBoxComponent
 import io.github.wapuniverse.view.SceneView
 import io.github.wapuniverse.wap32.Wwd
 import io.github.wapuniverse.wap32.WwdObject
@@ -37,6 +36,8 @@ class WorldController(
 
     private val world = worldLoader.loadWorld(wwd)
 
+    private val worldEditor = WorldEditor(world)
+
     private val worldDumper = WorldDumper()
 
     // World
@@ -53,8 +54,6 @@ class WorldController(
 
     // View
 
-    private val sBoxComponent = SBoxComponent()
-
     private val sceneView = SceneView(world.levelIndex, sceneCanvas, imageSetDatabase, imageMap, primaryLayer)
 
     //
@@ -66,10 +65,10 @@ class WorldController(
     fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
 
     init {
-        SmartObjectPresenter(world.primaryLayer, sceneView, sceneInputController, sBoxComponent, sceneCanvas)
-        WapObjectPresenter(world.primaryLayer, sceneView, imageSetDatabase, imageMap, world.levelIndex, sBoxComponent)
+        SmartObjectPresenter(world.primaryLayer, sceneView, sceneInputController, sceneCanvas)
+        WapObjectPresenter(world.primaryLayer, sceneView, imageSetDatabase, imageMap, world.levelIndex)
 
-        sceneInputController.addInputHandler(MainInputHandler(sceneCanvas, sBoxComponent, sceneView))
+        sceneInputController.addInputHandler(MainInputHandler(sceneCanvas, sceneView, worldEditor))
 
         sceneCanvas.setOnMousePressed { ev ->
             if (ev.button == MouseButton.PRIMARY) {
@@ -103,7 +102,6 @@ class WorldController(
 
         sceneCanvas.setOnKeyPressed { ev ->
             when (ev.text) {
-                "a" -> sBoxComponent.selectAll()
 //                "s" -> dumpWorld()
                 "s" -> save()
                 "w" -> {
@@ -118,8 +116,6 @@ class WorldController(
                 }
             }
             if (ev.code == KeyCode.DELETE) {
-                val se = sBoxComponent.selectedEntities
-                entityService.destroyEntities(se)
             }
             val script = when (ev.text) {
                 "1" -> "Block"

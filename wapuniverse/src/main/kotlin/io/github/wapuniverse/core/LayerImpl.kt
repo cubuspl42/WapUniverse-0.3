@@ -110,4 +110,10 @@ class LayerImpl(
                     }
                 }
     }
+
+    override fun getEntitiesByArea(rect: Rectangle2Di): List<Entity> {
+        return _entities.filter {
+            it.bounds.intersects(rect)
+        }
+    }
 }
