@@ -32,9 +32,7 @@ class WorldController(
 ) {
     // World loader
 
-    private val worldLoader = WorldLoader()
-
-    private val world = worldLoader.loadWorld(wwd)
+    private val world = loadWorld(wwd)
 
     private val worldEditor = WorldEditor(world)
 
