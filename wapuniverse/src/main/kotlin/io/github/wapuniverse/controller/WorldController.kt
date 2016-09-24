@@ -44,10 +44,6 @@ class WorldController(
 
     private val primaryLayer = world.primaryLayer
 
-    // Services
-
-    private val entityService = EntityService(world.primaryLayer)
-
     // Controllers
 
     private val sceneInputController = SceneInputController()
