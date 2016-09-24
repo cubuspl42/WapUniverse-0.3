@@ -36,8 +36,6 @@ class WorldController(
 
     private val worldEditor = WorldEditor(world)
 
-    private val worldDumper = WorldDumper()
-
     // World
 
     private val primaryLayer = world.primaryLayer
@@ -153,7 +151,7 @@ class WorldController(
     }
 
     fun dumpWorld(wwdPath: String) {
-        val wwd = worldDumper.dumpWorld(world)
+        val wwd = dumpWorld(world)
         FileOutputStream(wwdPath).use {
             dumpWwd(it, wwd)
         }
