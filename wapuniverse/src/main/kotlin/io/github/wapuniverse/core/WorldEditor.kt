@@ -1,9 +1,8 @@
 package io.github.wapuniverse.core
 
+import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.utils.Signal
 import io.github.wapuniverse.utils.Vec2i
-import io.github.wapuniverse.wap32.Wwd
-import java.util.logging.Logger
 
 class WorldEditor(
         val world: World
@@ -26,6 +25,10 @@ class WorldEditor(
     fun _clearEntitySelection() {
         _entitySelection = null
     }
+
+    var cameraOffset = Vec2d(0.0, 0.0)
+
+    var cameraZoom = 1.0
 
     val onSelectionStarted = Signal<EntitySelection>()
 

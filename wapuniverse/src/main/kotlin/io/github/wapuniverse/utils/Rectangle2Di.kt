@@ -10,6 +10,12 @@ class Rectangle2Di(val minX: Int = 0, val minY: Int = 0, val width: Int = 0, val
     val maxY: Int
         get() = minY + height
 
+    val minV: Vec2i
+        get() = Vec2i(minX, minY)
+
+    val maxV: Vec2i
+        get() = Vec2i(maxY, maxY)
+
     fun contains(x: Int, y: Int): Boolean {
         return x >= minX && y >= minY && x < maxX && y < maxY
     }

@@ -1,19 +1,19 @@
 package io.github.wapuniverse.controller
 
-import com.google.common.io.Files
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.core.*
-import io.github.wapuniverse.lsd.scriptMetaMap
-import io.github.wapuniverse.presenter.SmartObjectPresenter
-import io.github.wapuniverse.presenter.WapObjectPresenter
+import io.github.wapuniverse.core.AdaptiveEntityRepr
+import io.github.wapuniverse.core.ImageSetDatabase
+import io.github.wapuniverse.core.WapObjectRepr
+import io.github.wapuniverse.core.WorldEditor
+import io.github.wapuniverse.presenter.WorldPresenter
 import io.github.wapuniverse.utils.*
 import io.github.wapuniverse.view.ImageMap
-import io.github.wapuniverse.view.SceneView
+import io.github.wapuniverse.view.WorldNode
+import io.github.wapuniverse.view.makeTransforms
 import io.github.wapuniverse.wap32.Wwd
 import io.github.wapuniverse.wap32.WwdObject
 import io.github.wapuniverse.wap32.dumpWwd
 import javafx.animation.AnimationTimer
-import javafx.scene.Node
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.MouseButton
@@ -42,11 +42,13 @@ class WorldController(
 
     // Controllers
 
-    private val sceneInputController = SceneInputController()
+    private val worldNode = WorldNode(world)
+
+    private val worldPresenter = WorldPresenter(world, worldNode, imageSetDatabase, imageMap)
 
     // View
 
-    private val sceneView = SceneView(world.levelIndex, sceneCanvas, imageSetDatabase, imageMap, primaryLayer)
+//    private val sceneView = SceneView(world.levelIndex, sceneCanvas, imageSetDatabase, imageMap, primaryLayer)
 
     //
 
@@ -54,17 +56,19 @@ class WorldController(
 
     private var dragAnchor = Vec2d(0.0, 0.0)
 
-    fun invTr(x: Double, y: Double) = sceneView.invTransform.transform(x, y).toVec2d()
+    fun invTr(x: Double, y: Double): Vec2d {
+        val ap = makeTransforms(worldEditor.cameraOffset, worldEditor.cameraZoom)
+        return ap.invTransform.transform(x, y).toVec2d()
+    }
 
     init {
-        SmartObjectPresenter(world.primaryLayer, sceneView, sceneInputController, sceneCanvas)
-        WapObjectPresenter(world.primaryLayer, sceneView, imageSetDatabase, imageMap, world.levelIndex)
+//        SmartObjectPresenter(world.primaryLayer, sceneView, sceneInputController, sceneCanvas)
+//        WapObjectPresenter(world.primaryLayer, sceneView, imageSetDatabase, imageMap, world.levelIndex)
 
-        sceneInputController.addInputHandler(MainInputHandler(sceneCanvas, sceneView, worldEditor))
+//        sceneInputController.addInputHandler(MainInputHandler(sceneCanvas, sceneView, worldEditor))
 
         sceneCanvas.setOnMousePressed { ev ->
             if (ev.button == MouseButton.PRIMARY) {
-                sceneInputController.onMousePressed(ev)
             } else if (ev.button == MouseButton.SECONDARY) {
                 isDragged = true
                 dragAnchor = invTr(ev.x, ev.y)
@@ -73,7 +77,6 @@ class WorldController(
 
         sceneCanvas.setOnMouseReleased { ev ->
             if (ev.button == MouseButton.PRIMARY) {
-                sceneInputController.onMouseReleased(ev)
             } else if (ev.button == MouseButton.SECONDARY) {
                 isDragged = false
             }
@@ -82,14 +85,12 @@ class WorldController(
         sceneCanvas.setOnMouseDragged { ev ->
             if (ev.isSecondaryButtonDown) {
                 val mv = Vec2d(ev.x, ev.y)
-                sceneView.cameraOffset = dragAnchor - (mv * sceneView.scale)
+                worldEditor.cameraOffset = dragAnchor - (mv * worldEditor.cameraZoom)
             } else if (ev.isPrimaryButtonDown) {
-                sceneInputController.onMouseDragged(ev)
             }
         }
 
         sceneCanvas.setOnMouseMoved { ev ->
-            sceneInputController.onMouseMoved(ev)
         }
 
         sceneCanvas.setOnKeyPressed { ev ->
@@ -121,7 +122,7 @@ class WorldController(
                 val spawnOffset = Vec2i(128, 128)
                 val repr = AdaptiveEntityRepr(
                         scriptId = script,
-                        position = sceneView.cameraOffset.toVec2i() + spawnOffset
+                        position = worldEditor.cameraOffset.toVec2i() + spawnOffset
                 )
                 world.primaryLayer.addEntity(repr)
             }
@@ -129,10 +130,15 @@ class WorldController(
 
         val at = object : AnimationTimer() {
             override fun handle(t: Long) {
-                sceneView.render()
+                draw()
             }
         }
         at.start()
+    }
+
+    fun draw() {
+        val viewport = Vec2i(sceneCanvas.width.toInt(), sceneCanvas.height.toInt())
+        worldNode.draw(sceneCanvas.graphicsContext2D, worldEditor.cameraOffset, worldEditor.cameraZoom, viewport)
     }
 
     fun save() {
