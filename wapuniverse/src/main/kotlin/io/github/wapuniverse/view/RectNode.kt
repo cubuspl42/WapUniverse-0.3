@@ -14,6 +14,7 @@ import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.Image
 import javafx.scene.paint.Color
+import javafx.scene.paint.Paint
 import javafx.scene.transform.Affine
 import java.util.*
 
@@ -24,6 +25,11 @@ class RectNode(
     val z = 0
 
     fun draw(gc: GraphicsContext, transform: Affine) {
-
+        val v0 = transform.transform(rect.minX.toDouble(), rect.minY.toDouble())
+        val v1 = transform.transform(rect.maxX.toDouble(), rect.maxY.toDouble())
+        val w = v1.x - v0.x
+        val h = v1.y - v0.y
+        gc.stroke = color
+        gc.strokeRect(v0.x, v0.y, w, h)
     }
 }

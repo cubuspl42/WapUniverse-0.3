@@ -58,4 +58,20 @@ class LayerNode(
         gc.transform = Affine()
         rectNodes.forEach { it.draw(gc, ap.transform) }
     }
+
+    fun addImageNode(imageNode: ImageNode) {
+        imageNodes.add(imageNode)
+    }
+
+    fun removeImageNode(imageNode: ImageNode) {
+        imageNodes.remove(imageNode)
+    }
+
+    fun removeRectNode(rectNode: RectNode) {
+        rectNodes.remove(rectNode)
+    }
+
+    fun addRectNode(rectNode: RectNode) {
+        rectNodes.add(rectNode)
+    }
 }

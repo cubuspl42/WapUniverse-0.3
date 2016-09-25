@@ -7,9 +7,6 @@ class AdaptiveEntityPresenter(
         private val worldPresenter: WorldPresenter
 ) : EntityPresenter {
     fun present() {
-//        val imageSetDatabase = worldPresenter.imageSetDatabase
-//        val levelIndex = worldPresenter.world.levelIndex
-//        val image = worldPresenter.imageSetDatabase.findObjectImageMetadata(levelIndex, adaptiveEntity)
     }
 
     init {

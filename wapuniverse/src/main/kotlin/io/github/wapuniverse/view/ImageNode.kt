@@ -16,10 +16,10 @@ import javafx.scene.transform.Affine
 import java.util.*
 
 class ImageNode(
-        private val image: Image
+        private val image: Image,
+        private val x: Double,
+        private val y: Double
 ) {
-    val x = 0.0
-    val y = 0.0
     val z = 0
 
     fun draw(gc: GraphicsContext) = gc.drawImage(image, x, y)

@@ -3,6 +3,7 @@ package io.github.wapuniverse.presenter
 import io.github.wapuniverse.core.AdaptiveEntity
 import io.github.wapuniverse.core.Entity
 import io.github.wapuniverse.core.Layer
+import io.github.wapuniverse.core.WapObject
 import io.github.wapuniverse.view.LayerNode
 
 class LayerPresenter(
@@ -14,6 +15,7 @@ class LayerPresenter(
 
     private fun makeEntityPresenter(entity: Entity) = when (entity) {
         is AdaptiveEntity -> AdaptiveEntityPresenter(entity, worldPresenter)
+        is WapObject -> WapObjectPresenter(entity, layerNode, worldPresenter)
         else -> throw IllegalArgumentException()
     }
 
