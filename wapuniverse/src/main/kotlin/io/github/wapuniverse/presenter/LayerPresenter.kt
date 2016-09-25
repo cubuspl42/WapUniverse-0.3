@@ -14,7 +14,7 @@ class LayerPresenter(
     val entityPresenters = hashSetOf<EntityPresenter>()
 
     private fun makeEntityPresenter(entity: Entity) = when (entity) {
-        is AdaptiveEntity -> AdaptiveEntityPresenter(entity, worldPresenter)
+        is AdaptiveEntity -> AdaptiveEntityPresenter(entity, layerNode)
         is WapObject -> WapObjectPresenter(entity, layerNode, worldPresenter)
         else -> throw IllegalArgumentException()
     }
