@@ -2,15 +2,18 @@ package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.core.Layer
+import io.github.wapuniverse.core.WorldEditor
 import io.github.wapuniverse.core.tileWidth
 import io.github.wapuniverse.utils.Vec2i
 import io.github.wapuniverse.utils.div
 import io.github.wapuniverse.utils.toVec2i
 import javafx.scene.canvas.GraphicsContext
+import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
 
 class LayerNode(
         private val layer: Layer,
+        private val worldEditor: WorldEditor,
         private val tileImageCache: TileImageCache
 ) {
     private val INVISIBLE_TILE_ID = -1
@@ -53,11 +56,19 @@ class LayerNode(
         imageNodesByZ.filter { it.z >= 0 }.forEach { it.draw(gc) }
     }
 
+    private fun  drawSelectionArea(gc: GraphicsContext, transform: Affine) {
+        worldEditor.entitySelection?.let {
+            drawRect(gc, transform, it.area, Color.PINK, Color.DEEPPINK)
+        }
+    }
+
     fun drawOverlay(gc: GraphicsContext, camera: Vec2d, scale: Double, viewport: Vec2i) {
         val ap = makeTransforms(camera, scale)
         gc.transform = Affine()
         rectNodes.forEach { it.draw(gc, ap.transform) }
+        drawSelectionArea(gc, ap.transform)
     }
+
 
     fun addImageNode(imageNode: ImageNode) {
         imageNodes.add(imageNode)

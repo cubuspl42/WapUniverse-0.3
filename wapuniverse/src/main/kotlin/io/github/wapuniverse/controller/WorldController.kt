@@ -1,10 +1,7 @@
 package io.github.wapuniverse.controller
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.core.AdaptiveEntityRepr
-import io.github.wapuniverse.core.ImageSetDatabase
-import io.github.wapuniverse.core.WapObjectRepr
-import io.github.wapuniverse.core.WorldEditor
+import io.github.wapuniverse.core.*
 import io.github.wapuniverse.presenter.WorldPresenter
 import io.github.wapuniverse.utils.*
 import io.github.wapuniverse.view.ImageMap
@@ -44,13 +41,17 @@ class WorldController(
 
     private val worldNode = WorldNode(world)
 
-    private val worldPresenter = WorldPresenter(world, worldNode, imageSetDatabase, imageMap)
+    private val worldPresenter = WorldPresenter(world, worldEditor, worldNode, imageSetDatabase, imageMap)
 
     // View
 
 //    private val sceneView = SceneView(world.levelIndex, sceneCanvas, imageSetDatabase, imageMap, primaryLayer)
 
     //
+
+    private var selectionController: SelectionController? = null
+
+    private var entitySelection: EntitySelection? = null
 
     private var isDragged = false
 
@@ -69,6 +70,7 @@ class WorldController(
 
         sceneCanvas.setOnMousePressed { ev ->
             if (ev.button == MouseButton.PRIMARY) {
+                entitySelection = worldEditor.startSelection(invTr(ev.x, ev.y).toVec2i())
             } else if (ev.button == MouseButton.SECONDARY) {
                 isDragged = true
                 dragAnchor = invTr(ev.x, ev.y)
@@ -77,6 +79,10 @@ class WorldController(
 
         sceneCanvas.setOnMouseReleased { ev ->
             if (ev.button == MouseButton.PRIMARY) {
+                entitySelection?.let {
+                    it.commit()
+                    entitySelection = null
+                }
             } else if (ev.button == MouseButton.SECONDARY) {
                 isDragged = false
             }
@@ -87,6 +93,14 @@ class WorldController(
                 val mv = Vec2d(ev.x, ev.y)
                 worldEditor.cameraOffset = dragAnchor - (mv * worldEditor.cameraZoom)
             } else if (ev.isPrimaryButtonDown) {
+                entitySelection?.let {
+                    val minV = it.area.minV
+                    val maxV = invTr(ev.x, ev.y)
+                    val w = Math.max(maxV.x - minV.x, 0.0)
+                    val h = Math.max(maxV.y - minV.y, 0.0)
+                    val rect = Rectangle2Di(minV.x, minV.y, w.toInt(), h.toInt())
+                    it.updateArea(rect)
+                }
             }
         }
 
