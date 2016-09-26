@@ -42,9 +42,7 @@ class WorldController(
     private val worldNode = WorldNode(world)
 
     private val worldPresenter = WorldPresenter(world, worldEditor, worldNode, imageSetDatabase, imageMap)
-
-    private var selectionController: SelectionController? = null
-
+    
     private var entitySelection: EntitySelection? = null
 
     private var isDragged = false
