@@ -43,12 +43,6 @@ class WorldController(
 
     private val worldPresenter = WorldPresenter(world, worldEditor, worldNode, imageSetDatabase, imageMap)
 
-    // View
-
-//    private val sceneView = SceneView(world.levelIndex, sceneCanvas, imageSetDatabase, imageMap, primaryLayer)
-
-    //
-
     private var selectionController: SelectionController? = null
 
     private var entitySelection: EntitySelection? = null
@@ -63,11 +57,6 @@ class WorldController(
     }
 
     init {
-//        SmartObjectPresenter(world.primaryLayer, sceneView, sceneInputController, sceneCanvas)
-//        WapObjectPresenter(world.primaryLayer, sceneView, imageSetDatabase, imageMap, world.levelIndex)
-
-//        sceneInputController.addInputHandler(MainInputHandler(sceneCanvas, sceneView, worldEditor))
-
         sceneCanvas.setOnMousePressed { ev ->
             if (ev.button == MouseButton.PRIMARY) {
                 entitySelection = worldEditor.startSelection(invTr(ev.x, ev.y).toVec2i())
@@ -109,7 +98,6 @@ class WorldController(
 
         sceneCanvas.setOnKeyPressed { ev ->
             when (ev.text) {
-//                "s" -> dumpWorld()
                 "s" -> save()
                 "w" -> {
                     primaryLayer.addEntity(WapObjectRepr(WwdObject(
