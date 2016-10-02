@@ -14,11 +14,24 @@ import javafx.animation.AnimationTimer
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.MouseButton
+import javafx.scene.input.MouseEvent
 import javafx.stage.FileChooser
 import javafx.stage.FileChooser.ExtensionFilter
 import java.io.FileOutputStream
 
 private val worldDumpPath = "/home/kuba/Dropbox/temp/LEVEL.wwd"
+
+class UiController {
+    fun onPrimaryMousePressed(ev: MouseEvent): Boolean {
+    }
+
+}
+
+class AreaSelectionController {
+    fun onPrimaryButtonPressed(ev: MouseEvent): Boolean {
+    }
+
+}
 
 class WorldController(
         private var wwdPath: String?,
@@ -42,7 +55,7 @@ class WorldController(
     private val worldNode = WorldNode(world)
 
     private val worldPresenter = WorldPresenter(world, worldEditor, worldNode, imageSetDatabase, imageMap)
-    
+
     private var entitySelection: EntitySelection? = null
 
     private var isDragged = false
@@ -54,10 +67,24 @@ class WorldController(
         return ap.invTransform.transform(x, y).toVec2d()
     }
 
+    private val uiController = UiController()
+
+    private var areaSelectionController: AreaSelectionController? = null
+
+    private fun onPrimaryButtonPressed(ev: MouseEvent) {
+        if(uiController.onPrimaryMousePressed(ev)) {
+            entitySelection = worldEditor.startSelection(invTr(ev.x, ev.y).toVec2i())
+        }
+    }
+
+    private fun startAreaSelection(): AreaSelectionController {
+        return AreaSelectionController()
+    }
+
     init {
         sceneCanvas.setOnMousePressed { ev ->
             if (ev.button == MouseButton.PRIMARY) {
-                entitySelection = worldEditor.startSelection(invTr(ev.x, ev.y).toVec2i())
+                onPrimaryButtonPressed(ev)
             } else if (ev.button == MouseButton.SECONDARY) {
                 isDragged = true
                 dragAnchor = invTr(ev.x, ev.y)
