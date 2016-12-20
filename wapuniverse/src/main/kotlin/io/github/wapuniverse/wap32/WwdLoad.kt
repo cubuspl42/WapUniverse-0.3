@@ -2,7 +2,7 @@ package io.github.wapuniverse.wap32
 
 import com.google.common.io.ByteStreams
 import com.google.common.primitives.Bytes
-import io.github.wapuniverse.utils.decompress
+import io.github.wapuniverse.util.decompress
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 

@@ -1,6 +1,6 @@
 package io.github.wapuniverse.wap32
 
-import io.github.wapuniverse.utils.flagProperty
+import io.github.wapuniverse.util.flagProperty
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream

@@ -1,18 +1,13 @@
 package io.github.wapuniverse.wap32
 
-import com.google.common.io.ByteStreams
 import com.google.common.io.LittleEndianDataOutputStream
-import com.google.common.primitives.Bytes
-import io.github.wapuniverse.core.tileWidth
-import io.github.wapuniverse.main
-import io.github.wapuniverse.utils.compress
-import io.github.wapuniverse.utils.decompress
-import java.io.*
-import java.nio.charset.StandardCharsets
+import io.github.wapuniverse.util.compress
+import java.io.ByteArrayOutputStream
+import java.io.OutputStream
 import java.nio.charset.StandardCharsets.US_ASCII
 
+private val tileWidth = 64
 private val SIZEOF_INT = 4
-
 private val SIZEOF_NULL_BYTE = 1
 
 

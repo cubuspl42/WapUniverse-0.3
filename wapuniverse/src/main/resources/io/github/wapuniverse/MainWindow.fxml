@@ -2,28 +2,19 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import io.github.wapuniverse.view.CanvasPane?>
 
+<?import javafx.scene.layout.StackPane?>
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="io.github.wapuniverse.controller.MainWindowController">
+            fx:controller="io.github.wapuniverse.view.MainWindowController">
     <top>
         <MenuBar fx:id="menuBar">
             <Menu text="File">
                 <Menu text="New">
                     <MenuItem text="Level 1" fx:id="level1" onAction="#handleNewLevel"/>
-                    <!--<MenuItem text="Level 2" fx:id="level2" onAction="#handleNewLevel"/>-->
                 </Menu>
-                <!--<MenuItem text="Open" onAction="#handleMenuOpen"/>-->
-                <MenuItem text="Save" onAction="#handleMenuSave"/>
             </Menu>
-            <!--<Menu text="Edit">-->
-            <!--<items>-->
-            <!--<MenuItem text="Copy"/>-->
-            <!--<MenuItem text="Cut"/>-->
-            <!--<MenuItem text="Paste"/>-->
-            <!--</items>-->
-            <!--</Menu>-->
         </MenuBar>
     </top>
     <center>
-        <CanvasPane fx:id="canvasPane"/>
+        <BorderPane fx:id="borderPane"/>
     </center>
 </BorderPane>
