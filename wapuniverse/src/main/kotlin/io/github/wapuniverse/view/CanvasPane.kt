@@ -1,7 +1,6 @@
 package io.github.wapuniverse.view
 
 import javafx.scene.canvas.Canvas
-import javafx.scene.canvas.GraphicsContext
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import java.util.logging.Logger

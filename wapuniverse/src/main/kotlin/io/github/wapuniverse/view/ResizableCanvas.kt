@@ -5,8 +5,8 @@ import javafx.scene.canvas.GraphicsContext
 
 abstract class ResizableCanvas : Canvas() {
     init {
-        widthProperty().addListener({ evt -> draw(graphicsContext2D, width, height) })
-        heightProperty().addListener({ evt -> draw(graphicsContext2D, width, height) })
+        widthProperty().addListener({ evt -> draw() })
+        heightProperty().addListener({ evt -> draw() })
     }
 
     override fun isResizable() = true
@@ -19,5 +19,5 @@ abstract class ResizableCanvas : Canvas() {
         return height
     }
 
-    abstract fun draw(gc: GraphicsContext, width: Double, height: Double)
+    abstract fun draw()
 }
