@@ -4,6 +4,8 @@ import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.BBlock
 import io.github.wapuniverse.PxCanvas
 import io.github.wapuniverse.util.*
+import io.github.wapuniverse.Brush
+import io.github.wapuniverse.BrushState
 import javafx.animation.AnimationTimer
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
@@ -32,7 +34,7 @@ class MainWindowController : Initializable {
 
     private val pxCanvas = PxCanvas()
 
-    private var brushPositionT = Vec2i()
+    private var brush: Brush = Brush(pxCanvas)
 
     private var screen2world = Affine()
 
@@ -102,7 +104,7 @@ class MainWindowController : Initializable {
         }
 
         gc.fill = Color.BLUE
-        val brp = brushPositionT.toVec2d() * T
+        val brp = brush.position.toVec2d() * T
         gc.fillRect(brp.x, brp.y, T, T)
     }
 
@@ -113,18 +115,12 @@ class MainWindowController : Initializable {
 
     private fun onMouseMoved(ev: MouseEvent) {
         val wv = screen2world.transform(ev.x, ev.y).toVec2d()
-        brushPositionT = world2tile(wv)
+        brush.position = world2tile(wv)
     }
 
     private fun onMouseDragged(ev: MouseEvent) {
-        if (ev.isSecondaryButtonDown) {
-            updateCameraOffset(anchorPositionW!!, Vec2d(ev.x, ev.y))
-        } else if (ev.isPrimaryButtonDown) {
-            val wv = screen2world.transform(ev.x, ev.y).toVec2d()
-            onMouseMoved(ev)
-            val mousePositionT = world2tile(wv)
-            pxCanvas.setPixel(mousePositionT, Color.CORAL)
-        }
+        onMouseMoved(ev)
+        if (ev.isSecondaryButtonDown) updateCameraOffset(anchorPositionW!!, Vec2d(ev.x, ev.y))
     }
 
     private fun updateCameraOffset(anchorPositionW: Vec2d, zoomCenter: Vec2d) {
@@ -135,22 +131,26 @@ class MainWindowController : Initializable {
     }
 
     private fun onMousePressed(ev: MouseEvent) {
-        if (ev.button == MouseButton.SECONDARY) {
-            anchorPositionW = screen2world.transform(ev.x, ev.y).toVec2d()
+        when (ev.button) {
+            MouseButton.PRIMARY -> brush.state = BrushState.PRESSED
+            MouseButton.SECONDARY -> anchorPositionW = screen2world.transform(ev.x, ev.y).toVec2d()
+            else -> Unit
         }
     }
 
     private fun onMouseReleased(ev: MouseEvent) {
-        if(ev.button == MouseButton.SECONDARY) {
-            anchorPositionW = null
+        when (ev.button) {
+            MouseButton.PRIMARY -> brush.state = BrushState.RELEASED
+            MouseButton.SECONDARY -> anchorPositionW = null
+            else -> Unit
         }
     }
 
     private fun onScroll(ev: ScrollEvent) {
         val anchorPositionW = anchorPositionW ?: screen2world.transform(ev.x, ev.y).toVec2d()
-        val m = if(ev.deltaY > 0) 2.0 else 0.5
+        val m = if (ev.deltaY > 0) 2.0 else 0.5
         val newCameraZoom = m * cameraZoom
-        if(newCameraZoom in (0.005..10.0)) {
+        if (newCameraZoom in (0.005..10.0)) {
             cameraZoom = newCameraZoom
             updateCameraOffset(anchorPositionW, Vec2d(ev.x, ev.y))
         }
