@@ -1,11 +1,10 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.BBlock
-import io.github.wapuniverse.PxCanvas
-import io.github.wapuniverse.util.*
 import io.github.wapuniverse.Brush
 import io.github.wapuniverse.BrushState
+import io.github.wapuniverse.PxCanvas
+import io.github.wapuniverse.util.*
 import javafx.animation.AnimationTimer
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
