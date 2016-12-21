@@ -2,6 +2,7 @@ package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.BBlock
+import io.github.wapuniverse.PxCanvas
 import io.github.wapuniverse.util.*
 import javafx.animation.AnimationTimer
 import javafx.event.ActionEvent
@@ -29,7 +30,7 @@ class MainWindowController : Initializable {
 
     private lateinit var canvas: ResizableCanvas
 
-    private val bblock = BBlock(Vec2i(2, 2), mutableSetOf(Vec2i(0, 0)))
+    private val pxCanvas = PxCanvas()
 
     private var brushPositionT = Vec2i()
 
@@ -93,9 +94,10 @@ class MainWindowController : Initializable {
 
         gc.transform = world2screen
 
-        gc.fill = Color.BLACK
-        bblock.blocks.forEach { bpT ->
+        pxCanvas.pixels.forEach { entry ->
+            val (bpT, color) = entry
             val bp = bpT * T
+            gc.fill = color
             gc.fillRect(bp.x.toDouble(), bp.y.toDouble(), T, T)
         }
 
@@ -121,7 +123,7 @@ class MainWindowController : Initializable {
             val wv = screen2world.transform(ev.x, ev.y).toVec2d()
             onMouseMoved(ev)
             val mousePositionT = world2tile(wv)
-            bblock.blocks.add(mousePositionT)
+            pxCanvas.setPixel(mousePositionT, Color.CORAL)
         }
     }
 
