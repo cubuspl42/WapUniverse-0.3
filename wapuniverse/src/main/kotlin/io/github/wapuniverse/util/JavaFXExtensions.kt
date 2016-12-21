@@ -9,6 +9,9 @@ infix operator fun Vec2d.minus(v: Vec2d): Vec2d {
     return Vec2d(x - v.x, y - v.y)
 }
 
+infix operator fun Vec2d.plus(v: Vec2d): Vec2d {
+    return Vec2d(x + v.x, y + v.y)
+}
 
 infix operator fun Point2D.minus(v: Vec2d): Point2D {
     return Point2D(x - v.x, y - v.y)
@@ -52,4 +55,12 @@ fun Point2D.toVec2i(): Vec2i {
 
 fun Vec2d.toSize(): Size {
     return Size(x, y)
+}
+
+fun Vec2d.round(): Vec2i {
+    return Vec2i(Math.round(x).toInt(), Math.round(y).toInt())
+}
+
+fun Vec2d.floor(): Vec2d {
+    return Vec2d(Math.floor(x), Math.floor(y))
 }

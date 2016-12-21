@@ -1,8 +1,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-<?import io.github.wapuniverse.view.CanvasPane?>
 
-<?import javafx.scene.layout.StackPane?>
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="io.github.wapuniverse.view.MainWindowController">
     <top>
