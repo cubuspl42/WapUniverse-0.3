@@ -64,3 +64,9 @@ fun Vec2d.round(): Vec2i {
 fun Vec2d.floor(): Vec2d {
     return Vec2d(Math.floor(x), Math.floor(y))
 }
+
+val Vec2d.width: Double
+    get() = Math.abs(x)
+
+val Vec2d.height: Double
+    get() = Math.abs(y)
