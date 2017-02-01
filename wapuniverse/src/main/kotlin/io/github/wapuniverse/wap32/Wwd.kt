@@ -192,6 +192,12 @@ data class WwdPlane(
             imageSets = imageSets.toMutableList(),
             objects = objects.map { it.clone() }.toMutableList()
     )
+
+    fun getTile(i: Int, j: Int): Int {
+        val idx = i * tilesWide + j
+        val t = tiles[idx]
+        return t
+    }
 }
 
 class WwdObjectDynamicFlags(var dword: Int = 0) {

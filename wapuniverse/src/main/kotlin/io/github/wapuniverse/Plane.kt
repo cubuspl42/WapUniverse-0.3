@@ -2,7 +2,7 @@ package io.github.wapuniverse
 
 import io.github.wapuniverse.util.Vec2i
 
-private val INVISIBLE_TILE = -1
+private val INVISIBLE_TILE = -2 // TODO: Correct value
 
 class Plane {
     val tiles = hashMapOf<Vec2i, Int>()

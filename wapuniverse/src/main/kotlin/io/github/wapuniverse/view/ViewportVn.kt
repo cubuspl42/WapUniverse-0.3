@@ -95,10 +95,17 @@ class ViewportVn(private val plane: Plane, private val imageMap: ImageMap) {
 
         val LEVEL_INDEX = 1
         val TILE_IMAGE_SET = "ACTION"
-        val t0 = plane.getTile(Vec2i(0, 0))
-        val tImg = imageMap.findTileImage(LEVEL_INDEX, TILE_IMAGE_SET, t0)
 
-        gc.drawImage(tImg, 0.0, 0.0, T, T)
+        val A = 512 // FIXME
+        for (i in (0..A)) {
+            for (j in (0..A)) {
+                val t = plane.getTile(Vec2i(i, j))
+                if(t > 0) {
+                    val tImg = imageMap.findTileImage(LEVEL_INDEX, TILE_IMAGE_SET, t)
+                    gc.drawImage(tImg, j * T, i * T, T, T)
+                }
+            }
+        }
 
         pxCanvas.pixels.forEach { entry ->
             val (bpT, color) = entry
