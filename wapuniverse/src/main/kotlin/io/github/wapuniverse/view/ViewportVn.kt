@@ -3,6 +3,7 @@ package io.github.wapuniverse.view
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.Brush
 import io.github.wapuniverse.BrushState
+import io.github.wapuniverse.Plane
 import io.github.wapuniverse.PxCanvas
 import io.github.wapuniverse.util.*
 import javafx.scene.canvas.GraphicsContext
@@ -16,7 +17,7 @@ private val T = 64.0
 
 private fun world2tile(wv: Vec2d): Vec2i = (wv / T).floor().toVec2i()
 
-class ViewportVn {
+class ViewportVn(private val plane: Plane, private val imageMap: ImageMap) {
     private val pxCanvas = PxCanvas()
 
     private var brush: Brush = Brush(pxCanvas)
@@ -91,6 +92,13 @@ class ViewportVn {
         gc.clearRect(0.0, 0.0, size.width, size.height)
 
         gc.transform = world2screen
+
+        val LEVEL_INDEX = 1
+        val TILE_IMAGE_SET = "ACTION"
+        val t0 = plane.getTile(Vec2i(0, 0))
+        val tImg = imageMap.findTileImage(LEVEL_INDEX, TILE_IMAGE_SET, t0)
+
+        gc.drawImage(tImg, 0.0, 0.0, T, T)
 
         pxCanvas.pixels.forEach { entry ->
             val (bpT, color) = entry
