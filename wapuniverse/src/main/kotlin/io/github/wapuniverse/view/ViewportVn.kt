@@ -17,6 +17,8 @@ private val T = 64.0
 
 private fun world2tile(wv: Vec2d): Vec2i = (wv / T).floor().toVec2i()
 
+private val INITIAL_ZOOM = 1.0
+
 class ViewportVn(private val plane: Plane, private val imageMap: ImageMap) {
     private val pxCanvas = PxCanvas()
 
@@ -34,7 +36,7 @@ class ViewportVn(private val plane: Plane, private val imageMap: ImageMap) {
 
     private var anchorPositionW: Vec2d? = null
 
-    private var cameraZoom: Double = 2.0
+    private var cameraZoom: Double = INITIAL_ZOOM
         set(value) {
             field = value
             updateTransform(cameraOffset)
