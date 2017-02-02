@@ -1,28 +1,26 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.Brush
-import io.github.wapuniverse.BrushState
-import io.github.wapuniverse.PxCanvas
 import io.github.wapuniverse.util.*
 import io.github.wapuniverse.wap32.Wwd
+import javafx.animation.AnimationTimer
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
 import javafx.scene.input.ScrollEvent
-import javafx.scene.paint.Color
+import javafx.scene.layout.BorderPane
 import javafx.scene.transform.Affine
 
 private val T = 64.0
+private val INITIAL_ZOOM = 1.0
 
 private fun world2tile(wv: Vec2d): Vec2i = (wv / T).floor().toVec2i()
 
-private val INITIAL_ZOOM = 1.0
 
-class ViewportVn(private val wwd: Wwd, private val imageMap: ImageMap) {
-    private val pxCanvas = PxCanvas()
+class SceneView(private val wwd: Wwd, private val imageMap: ImageMap) : BorderPane() {
+    private val canvas = makeResizableCanvas()
 
-    private var brush: Brush = Brush(pxCanvas)
+    private val animationTimer = makeAnimationTimer()
 
     private var screen2world = Affine()
 
@@ -43,7 +41,35 @@ class ViewportVn(private val wwd: Wwd, private val imageMap: ImageMap) {
         }
 
     init {
+        children.add(canvas)
+
         updateTransform(cameraOffset)
+
+        canvas.widthProperty().bind(widthProperty())
+        canvas.heightProperty().bind(heightProperty())
+
+        canvas.setOnMouseMoved { ev -> onMouseMoved(ev) }
+        canvas.setOnMouseDragged { ev -> onMouseDragged(ev) }
+        canvas.setOnMousePressed { ev -> onMousePressed(ev) }
+        canvas.setOnMouseReleased { ev -> onMouseReleased(ev) }
+        canvas.setOnScroll { ev -> onScroll(ev) }
+
+        animationTimer.start()
+    }
+
+    private fun makeResizableCanvas(): ResizableCanvas = object : ResizableCanvas() {
+        override fun draw() {
+            draw(canvas.graphicsContext2D, Vec2d(canvas.width, canvas.height))
+        }
+    }
+
+    private fun makeAnimationTimer(): AnimationTimer {
+        val animationTimer = object : AnimationTimer() {
+            override fun handle(t: Long) {
+                draw(canvas.graphicsContext2D, Vec2d(canvas.width, canvas.height))
+            }
+        }
+        return animationTimer
     }
 
     private fun updateTransform(newCameraOffset: Vec2d) {
@@ -53,9 +79,15 @@ class ViewportVn(private val wwd: Wwd, private val imageMap: ImageMap) {
         screen2world = world2screen.createInverse()
     }
 
+    private fun updateCameraOffset(anchorPositionW: Vec2d, zoomCenter: Vec2d) {
+        val w0 = screen2world.transform(0.0, 0.0).toVec2d()
+        val wv = screen2world.transform(zoomCenter.x, zoomCenter.y).toVec2d()
+        val r = wv - w0
+        cameraOffset = anchorPositionW - r
+    }
+
     fun onMouseMoved(ev: MouseEvent) {
         val wv = screen2world.transform(ev.x, ev.y).toVec2d()
-        brush.position = world2tile(wv)
     }
 
     fun onMouseDragged(ev: MouseEvent) {
@@ -65,7 +97,6 @@ class ViewportVn(private val wwd: Wwd, private val imageMap: ImageMap) {
 
     fun onMousePressed(ev: MouseEvent) {
         when (ev.button) {
-            MouseButton.PRIMARY -> brush.state = BrushState.PRESSED
             MouseButton.SECONDARY -> anchorPositionW = screen2world.transform(ev.x, ev.y).toVec2d()
             else -> Unit
         }
@@ -73,7 +104,6 @@ class ViewportVn(private val wwd: Wwd, private val imageMap: ImageMap) {
 
     fun onMouseReleased(ev: MouseEvent) {
         when (ev.button) {
-            MouseButton.PRIMARY -> brush.state = BrushState.RELEASED
             MouseButton.SECONDARY -> anchorPositionW = null
             else -> Unit
         }
@@ -95,45 +125,27 @@ class ViewportVn(private val wwd: Wwd, private val imageMap: ImageMap) {
 
         gc.transform = world2screen
 
-        val LEVEL_INDEX = 1
-        val TILE_IMAGE_SET = "ACTION"
+        val levelIndex = 1
+        val tileImageSet = "ACTION"
 
         val actionPlane = wwd.planes[1]
         for (i in (0..actionPlane.tilesHigh - 1)) {
             for (j in (0..actionPlane.tilesWide - 1)) {
-                val t = actionPlane.getTile(i, j)
-                if (t > 0) {
-                    val tImg = imageMap.findTileImage(LEVEL_INDEX, TILE_IMAGE_SET, t)
+                val tileIdx = actionPlane.getTile(i, j)
+                if (tileIdx > 0) {
+                    val tImg = imageMap.findTileImage(levelIndex, tileImageSet, tileIdx)
                     gc.drawImage(tImg, j * T, i * T, T, T)
                 }
             }
         }
 
         val objects = actionPlane.objects
-        for(obj in objects) {
-            imageMap.findObjectImage(LEVEL_INDEX, obj.imageSet, obj.i)?.let { objImg ->
+        for (obj in objects) {
+            imageMap.findObjectImage(levelIndex, obj.imageSet, obj.i)?.let { objImg ->
                 val centerPos = Vec2d(obj.x.toDouble(), obj.y.toDouble())
                 val pos = centerPos - Vec2d(objImg.width, objImg.height) / 2.0
                 gc.drawImage(objImg, pos.x, pos.y)
             }
         }
-
-        pxCanvas.pixels.forEach { entry ->
-            val (bpT, color) = entry
-            val bp = bpT * T
-            gc.fill = color
-            gc.fillRect(bp.x.toDouble(), bp.y.toDouble(), T, T)
-        }
-
-        gc.fill = Color.BLUE
-        val brp = brush.position.toVec2d() * T
-        gc.fillRect(brp.x, brp.y, T, T)
-    }
-
-    private fun updateCameraOffset(anchorPositionW: Vec2d, zoomCenter: Vec2d) {
-        val w0 = screen2world.transform(0.0, 0.0).toVec2d()
-        val wv = screen2world.transform(zoomCenter.x, zoomCenter.y).toVec2d()
-        val r = wv - w0
-        cameraOffset = anchorPositionW - r
     }
 }
