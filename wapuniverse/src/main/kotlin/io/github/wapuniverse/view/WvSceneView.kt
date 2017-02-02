@@ -6,6 +6,7 @@ import io.github.wapuniverse.util.minus
 import io.github.wapuniverse.util.toVec2d
 import io.github.wapuniverse.util.width
 import io.github.wapuniverse.wap32.Wwd
+import io.github.wapuniverse.world.World
 import javafx.animation.AnimationTimer
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
@@ -17,7 +18,7 @@ import javafx.scene.transform.Affine
 private val INITIAL_ZOOM = 1.0
 
 
-class SceneView(private val wwd: Wwd, private val imageMap: ImageMap) : BorderPane() {
+class SceneView : BorderPane() {
 
     val scene = WvScene()
 

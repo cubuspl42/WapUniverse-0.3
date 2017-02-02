@@ -85,7 +85,7 @@ class ImageSetDatabase(yamlDocumentStream: InputStream) {
                 val expandedImageSetId = imageSetId.replaceFirst("GAME_", "GAME_IMAGES_")
                 return findImageMetadata(expandedImageSetId, frameIndex)
             }
-            else -> throw IllegalArgumentException(imageSetId)
+            else -> return null
         }
     }
 

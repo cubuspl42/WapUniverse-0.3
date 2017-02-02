@@ -5,6 +5,9 @@ import io.github.wapuniverse.loadImageSetDatabaseFromFile
 import io.github.wapuniverse.util.*
 import io.github.wapuniverse.wap32.Wwd
 import io.github.wapuniverse.wap32.loadWwd
+import io.github.wapuniverse.world.WObject
+import io.github.wapuniverse.world.World
+import io.github.wapuniverse.world.makeWorld
 import javafx.scene.Scene
 import javafx.stage.Stage
 
@@ -14,54 +17,55 @@ private val WWD_PATH = "RETAIL01.WWD"
 private val INITIAL_TITLE = "WapUniverse Editor"
 private val INITIAL_WIDTH = 640.0
 private val INITIAL_HEIGHT = 480.0
-private val NO_DRAW_ALPHA = 0.5
+
 
 class ApplicationController(stage: Stage) {
 
-    private val wwd = loadWwd()
+    private val world = makeWorld()
 
     private val imageSetDatabase = loadImageSetDatabaseFromFile(IMAGE_SET_DATABASE_PATH)
 
     private val imageMap = loadImageMapFromResources(imageSetDatabase, CLAW_PREFIX)
 
-    private val sceneView = SceneView(wwd, imageMap)
+    private val sceneView = SceneView()
+
+    private val scene = sceneView.scene
 
     init {
-        updateSceneView()
+        val tileMatrixNode = WvTileMatrixNode(world, imageMap)
+        scene.addNode(tileMatrixNode)
+
+        world.objectAdded.on { wObject ->
+            WObjectController(wObject, scene, imageMap, imageSetDatabase)
+        }
+
+        loadWorld(world)
 
         stage.title = INITIAL_TITLE
         stage.scene = Scene(sceneView, INITIAL_WIDTH, INITIAL_HEIGHT)
         stage.show()
     }
 
-    private fun loadWwd(): Wwd {
+    private fun loadWorld(world: World) {
         getResourceAsStream(WWD_PATH).use {
             val wwd = loadWwd(it)
-            return wwd
-        }
-    }
+            val actionPlane = wwd.planes[1]
 
-    private fun updateSceneView() {
-        val actionPlane = wwd.planes[1]
-        val tileMatrixNode = WvTileMatrixNode(actionPlane, imageMap)
-        sceneView.scene.addNode(tileMatrixNode)
+            for (i in (0..actionPlane.tilesHigh - 1)) {
+                for (j in (0..actionPlane.tilesWide - 1)) {
+                    val tileIdx = actionPlane.getTile(i, j)
+                    if (tileIdx > 0) {
+                        world.setTile(Vec2i(j, i), tileIdx)
+                    }
+                }
+            }
 
-        val levelIndex = 1 // FIXME
-
-        val objects = actionPlane.objects
-        for (obj in objects) {
-            imageMap.findObjectImage(levelIndex, obj.imageSet, obj.i)?.let { objImg ->
-                // FIXME: imageMap/imageSetDatabase
-                val imgMd = imageSetDatabase.findObjectImageMetadata(levelIndex, obj.imageSet, obj.i)!!
-                val halfSize = Vec2d(objImg.width, objImg.height) / 2.0
-                val anchor = halfSize - imgMd.offset
-                val spriteNode = WvSpriteNode(objImg, anchor)
-                spriteNode.position = Vec2i(obj.x, obj.y).toVec2d()
-                spriteNode.alpha = if(obj.drawFlags.noDraw) NO_DRAW_ALPHA else 1.0
-                spriteNode.scale.x = if(obj.drawFlags.mirror) -1.0 else 1.0
-                spriteNode.scale.y = if(obj.drawFlags.invert) -1.0 else 1.0
-                sceneView.scene.addNode(spriteNode)
+            val objects = actionPlane.objects
+            for (wwdObject in objects) {
+                val wObject = world.addObject()
+                wObject.wwdObject = wwdObject
             }
         }
     }
 }
+
