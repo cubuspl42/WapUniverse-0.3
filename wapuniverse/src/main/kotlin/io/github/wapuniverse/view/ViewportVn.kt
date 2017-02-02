@@ -59,8 +59,8 @@ class ViewportVn(private val wwd: Wwd, private val imageMap: ImageMap) {
     }
 
     fun onMouseDragged(ev: MouseEvent) {
-        onMouseMoved(ev)
         if (ev.isSecondaryButtonDown) updateCameraOffset(anchorPositionW!!, Vec2d(ev.x, ev.y))
+        onMouseMoved(ev)
     }
 
     fun onMousePressed(ev: MouseEvent) {
