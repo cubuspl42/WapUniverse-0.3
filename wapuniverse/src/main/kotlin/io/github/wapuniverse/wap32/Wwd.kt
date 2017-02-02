@@ -207,7 +207,10 @@ class WwdObjectDynamicFlags(var dword: Int = 0) {
 }
 
 class WwdObjectDrawFlags(var dword: Int = 0) {
-    // TODO
+    var noDraw: Boolean by flagProperty(this, WwdObjectDrawFlags::dword, 0)
+    var mirror: Boolean by flagProperty(this, WwdObjectDrawFlags::dword, 1)
+    var invert: Boolean by flagProperty(this, WwdObjectDrawFlags::dword, 2)
+    var flash: Boolean by flagProperty(this, WwdObjectDrawFlags::dword, 3)
 
     fun copy() = WwdObjectDrawFlags(dword)
 }

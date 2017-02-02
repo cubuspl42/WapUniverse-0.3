@@ -1,7 +1,10 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.util.*
+import io.github.wapuniverse.util.height
+import io.github.wapuniverse.util.minus
+import io.github.wapuniverse.util.toVec2d
+import io.github.wapuniverse.util.width
 import io.github.wapuniverse.wap32.Wwd
 import javafx.animation.AnimationTimer
 import javafx.scene.canvas.GraphicsContext
@@ -11,13 +14,13 @@ import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.BorderPane
 import javafx.scene.transform.Affine
 
-private val T = 64.0
 private val INITIAL_ZOOM = 1.0
-
-private fun world2tile(wv: Vec2d): Vec2i = (wv / T).floor().toVec2i()
 
 
 class SceneView(private val wwd: Wwd, private val imageMap: ImageMap) : BorderPane() {
+
+    val scene = WvScene()
+
     private val canvas = makeResizableCanvas()
 
     private val animationTimer = makeAnimationTimer()
@@ -124,28 +127,7 @@ class SceneView(private val wwd: Wwd, private val imageMap: ImageMap) : BorderPa
         gc.clearRect(0.0, 0.0, size.width, size.height)
 
         gc.transform = world2screen
-
-        val levelIndex = 1
-        val tileImageSet = "ACTION"
-
-        val actionPlane = wwd.planes[1]
-        for (i in (0..actionPlane.tilesHigh - 1)) {
-            for (j in (0..actionPlane.tilesWide - 1)) {
-                val tileIdx = actionPlane.getTile(i, j)
-                if (tileIdx > 0) {
-                    val tImg = imageMap.findTileImage(levelIndex, tileImageSet, tileIdx)
-                    gc.drawImage(tImg, j * T, i * T, T, T)
-                }
-            }
-        }
-
-        val objects = actionPlane.objects
-        for (obj in objects) {
-            imageMap.findObjectImage(levelIndex, obj.imageSet, obj.i)?.let { objImg ->
-                val centerPos = Vec2d(obj.x.toDouble(), obj.y.toDouble())
-                val pos = centerPos - Vec2d(objImg.width, objImg.height) / 2.0
-                gc.drawImage(objImg, pos.x, pos.y)
-            }
-        }
+        val nodes = scene.nodes.sortedBy { it.z }
+        nodes.forEach { it.draw(gc) }
     }
 }
