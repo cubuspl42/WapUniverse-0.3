@@ -109,6 +109,15 @@ class ViewportVn(private val wwd: Wwd, private val imageMap: ImageMap) {
             }
         }
 
+        val objects = actionPlane.objects
+        for(obj in objects) {
+            imageMap.findObjectImage(LEVEL_INDEX, obj.imageSet, obj.i)?.let { objImg ->
+                val centerPos = Vec2d(obj.x.toDouble(), obj.y.toDouble())
+                val pos = centerPos - Vec2d(objImg.width, objImg.height) / 2.0
+                gc.drawImage(objImg, pos.x, pos.y)
+            }
+        }
+
         pxCanvas.pixels.forEach { entry ->
             val (bpT, color) = entry
             val bp = bpT * T
