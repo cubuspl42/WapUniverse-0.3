@@ -1,10 +1,10 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.Plane
 import io.github.wapuniverse.loadImageSetDatabaseFromFile
 import io.github.wapuniverse.util.Vec2i
 import io.github.wapuniverse.util.getResourceAsStream
+import io.github.wapuniverse.wap32.Wwd
 import io.github.wapuniverse.wap32.loadWwd
 import javafx.animation.AnimationTimer
 import javafx.scene.Scene
@@ -21,7 +21,7 @@ private val INITIAL_HEIGHT = 480.0
 
 class ApplicationController(stage: Stage) {
 
-    private val plane = Plane()
+    private val wwd = loadWwd()
 
     private val imageSetDatabase = loadImageSetDatabaseFromFile(IMAGE_SET_DATABASE_PATH)
 
@@ -31,22 +31,9 @@ class ApplicationController(stage: Stage) {
 
     private val animationTimer = makeAnimationTimer()
 
-    private val viewportVn = ViewportVn(plane, imageMap)
+    private val viewportVn = ViewportVn(wwd, imageMap)
 
     init {
-        getResourceAsStream(WWD_PATH).use {
-            val wwd = loadWwd(it)
-            val A = 512 // FIXME
-            for (i in (0..A)) {
-                for (j in (0..A)) {
-                    try {
-                        val t = wwd.planes[1].getTile(i, j)
-                        plane.setTile(Vec2i(i, j), t)
-                    } catch(e: Exception) {} // FIXME
-                }
-            }
-        }
-
         val borderPane = BorderPane(canvas)
 
         stage.title = INITIAL_TITLE
@@ -63,6 +50,13 @@ class ApplicationController(stage: Stage) {
         canvas.setOnScroll { ev -> viewportVn.onScroll(ev) }
 
         animationTimer.start()
+    }
+
+    private fun loadWwd(): Wwd {
+        getResourceAsStream(WWD_PATH).use {
+            val wwd = loadWwd(it)
+            return wwd
+        }
     }
 
     private fun makeResizableCanvas(): ResizableCanvas = object : ResizableCanvas() {

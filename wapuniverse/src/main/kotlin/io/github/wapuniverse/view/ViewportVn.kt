@@ -3,9 +3,9 @@ package io.github.wapuniverse.view
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.Brush
 import io.github.wapuniverse.BrushState
-import io.github.wapuniverse.Plane
 import io.github.wapuniverse.PxCanvas
 import io.github.wapuniverse.util.*
+import io.github.wapuniverse.wap32.Wwd
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
@@ -19,7 +19,7 @@ private fun world2tile(wv: Vec2d): Vec2i = (wv / T).floor().toVec2i()
 
 private val INITIAL_ZOOM = 1.0
 
-class ViewportVn(private val plane: Plane, private val imageMap: ImageMap) {
+class ViewportVn(private val wwd: Wwd, private val imageMap: ImageMap) {
     private val pxCanvas = PxCanvas()
 
     private var brush: Brush = Brush(pxCanvas)
@@ -98,11 +98,11 @@ class ViewportVn(private val plane: Plane, private val imageMap: ImageMap) {
         val LEVEL_INDEX = 1
         val TILE_IMAGE_SET = "ACTION"
 
-        val A = 512 // FIXME
-        for (i in (0..A)) {
-            for (j in (0..A)) {
-                val t = plane.getTile(Vec2i(i, j))
-                if(t > 0) {
+        val actionPlane = wwd.planes[1]
+        for (i in (0..actionPlane.tilesHigh - 1)) {
+            for (j in (0..actionPlane.tilesWide - 1)) {
+                val t = actionPlane.getTile(i, j)
+                if (t > 0) {
                     val tImg = imageMap.findTileImage(LEVEL_INDEX, TILE_IMAGE_SET, t)
                     gc.drawImage(tImg, j * T, i * T, T, T)
                 }
