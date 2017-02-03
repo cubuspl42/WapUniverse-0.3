@@ -17,7 +17,7 @@ private val WWD_PATH = "RETAIL01.WWD"
 private val INITIAL_TITLE = "WapUniverse Editor"
 private val INITIAL_WIDTH = 640.0
 private val INITIAL_HEIGHT = 480.0
-
+private val SELECTION_NODE_Z = 1000000
 
 class ApplicationController(stage: Stage) {
 
@@ -35,8 +35,13 @@ class ApplicationController(stage: Stage) {
         val tileMatrixNode = WvTileMatrixNode(world, imageMap)
         scene.addNode(tileMatrixNode)
 
+        val selectionNode = WvSelectionNode()
+        selectionNode.z = SELECTION_NODE_Z
+        scene.addNode(selectionNode)
+
         world.objectAdded.on { wObject ->
-            WObjectController(wObject, scene, imageMap, imageSetDatabase)
+            val snItem = selectionNode.addItem()
+            WObjectController(wObject, scene, snItem, imageMap, imageSetDatabase)
         }
 
         loadWorld(world)
