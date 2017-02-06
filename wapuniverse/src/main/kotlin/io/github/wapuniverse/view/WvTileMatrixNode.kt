@@ -1,5 +1,6 @@
 package io.github.wapuniverse.view
 
+import io.github.wapuniverse.CFG_LEVEL_INDEX
 import io.github.wapuniverse.util.Vec2i
 import io.github.wapuniverse.world.World
 import javafx.scene.canvas.GraphicsContext
@@ -8,7 +9,7 @@ private val T = 64.0
 
 class WvTileMatrixNode(val world: World, private val imageMap: ImageMap) : WvNode() {
     override fun draw(gc: GraphicsContext) {
-        val levelIndex = 1 // FIXME
+        val levelIndex = CFG_LEVEL_INDEX // FIXME
         val tileImageSet = "ACTION" // FIXME
         val bounds = world.tilesBounds
         for (i in (bounds.minY..bounds.maxY - 1)) {

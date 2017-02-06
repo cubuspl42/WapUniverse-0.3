@@ -1,6 +1,7 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
+import io.github.wapuniverse.CFG_LEVEL_INDEX
 import io.github.wapuniverse.loadImageSetDatabaseFromFile
 import io.github.wapuniverse.util.*
 import io.github.wapuniverse.wap32.Wwd
@@ -13,7 +14,7 @@ import javafx.stage.Stage
 
 private val IMAGE_SET_DATABASE_PATH = "imageSetDatabase.yaml"
 private val CLAW_PREFIX = "CLAW/"
-private val WWD_PATH = "RETAIL01.WWD"
+private val WWD_PATH = "RETAIL0$CFG_LEVEL_INDEX.WWD"
 private val INITIAL_TITLE = "WapUniverse Editor"
 private val INITIAL_WIDTH = 640.0
 private val INITIAL_HEIGHT = 480.0

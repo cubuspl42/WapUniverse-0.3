@@ -1,6 +1,7 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
+import io.github.wapuniverse.CFG_LEVEL_INDEX
 import io.github.wapuniverse.ImageSetDatabase
 import io.github.wapuniverse.util.*
 import io.github.wapuniverse.wap32.WwdObject
@@ -27,7 +28,7 @@ class WObjectController(
     }
 
     private fun update(wwdObject: WwdObject) {
-        val levelIndex = 1 // FIXME
+        val levelIndex = CFG_LEVEL_INDEX // FIXME
 
         spriteNode?.let {
             scene.removeNode(it)
