@@ -18,7 +18,7 @@ import javafx.scene.transform.Affine
 private val INITIAL_ZOOM = 1.0
 
 
-class SceneView : BorderPane() {
+class DScene : BorderPane() {
     private val canvas = makeResizableCanvas()
 
     private val animationTimer = makeAnimationTimer()

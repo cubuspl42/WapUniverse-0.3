@@ -12,7 +12,7 @@ private val NO_DRAW_ALPHA = 0.5
 
 class WObjectController(
         wObject: WObject,
-        private val scene: SceneView,
+        private val scene: DScene,
         private val snItem: SnItem,
         private val imageMap: ImageMap,
         private val imageSetDatabase: ImageSetDatabase) {

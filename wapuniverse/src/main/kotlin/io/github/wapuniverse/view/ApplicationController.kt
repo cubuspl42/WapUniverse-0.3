@@ -28,25 +28,25 @@ class ApplicationController(stage: Stage) {
 
     private val imageMap = loadImageMapFromResources(imageSetDatabase, CLAW_PREFIX)
 
-    private val sceneView = SceneView()
+    private val worldScene = DScene()
 
     init {
         val tileMatrixNode = WvTileMatrixNode(world, imageMap)
-        sceneView.addNode(tileMatrixNode)
+        worldScene.addNode(tileMatrixNode)
 
         val selectionNode = WvSelectionNode()
         selectionNode.z = SELECTION_NODE_Z
-        sceneView.addNode(selectionNode)
+        worldScene.addNode(selectionNode)
 
         world.objectAdded.on { wObject ->
             val snItem = selectionNode.addItem()
-            WObjectController(wObject, sceneView, snItem, imageMap, imageSetDatabase)
+            WObjectController(wObject, worldScene, snItem, imageMap, imageSetDatabase)
         }
 
         loadWorld(world)
 
         stage.title = INITIAL_TITLE
-        stage.scene = Scene(sceneView, INITIAL_WIDTH, INITIAL_HEIGHT)
+        stage.scene = Scene(worldScene, INITIAL_WIDTH, INITIAL_HEIGHT)
         stage.show()
     }
 
