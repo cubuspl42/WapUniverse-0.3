@@ -19,9 +19,6 @@ private val INITIAL_ZOOM = 1.0
 
 
 class SceneView : BorderPane() {
-
-    val scene = WvScene()
-
     private val canvas = makeResizableCanvas()
 
     private val animationTimer = makeAnimationTimer()
@@ -43,6 +40,10 @@ class SceneView : BorderPane() {
             field = value
             updateTransform(cameraOffset)
         }
+
+    private val _nodes = mutableSetOf<WvNode>()
+
+    val nodes = _nodes
 
     init {
         children.add(canvas)
@@ -128,7 +129,15 @@ class SceneView : BorderPane() {
         gc.clearRect(0.0, 0.0, size.width, size.height)
 
         gc.transform = world2screen
-        val nodes = scene.nodes.sortedBy { it.z }
+        val nodes = nodes.sortedBy { it.z }
         nodes.forEach { it.draw(gc) }
+    }
+
+    fun addNode(node: WvNode) {
+        _nodes.add(node)
+    }
+
+    fun removeNode(node: WvNode) {
+        _nodes.remove(node)
     }
 }

@@ -30,19 +30,17 @@ class ApplicationController(stage: Stage) {
 
     private val sceneView = SceneView()
 
-    private val scene = sceneView.scene
-
     init {
         val tileMatrixNode = WvTileMatrixNode(world, imageMap)
-        scene.addNode(tileMatrixNode)
+        sceneView.addNode(tileMatrixNode)
 
         val selectionNode = WvSelectionNode()
         selectionNode.z = SELECTION_NODE_Z
-        scene.addNode(selectionNode)
+        sceneView.addNode(selectionNode)
 
         world.objectAdded.on { wObject ->
             val snItem = selectionNode.addItem()
-            WObjectController(wObject, scene, snItem, imageMap, imageSetDatabase)
+            WObjectController(wObject, sceneView, snItem, imageMap, imageSetDatabase)
         }
 
         loadWorld(world)
