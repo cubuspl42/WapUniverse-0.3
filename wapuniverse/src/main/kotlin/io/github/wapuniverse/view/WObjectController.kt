@@ -17,7 +17,7 @@ class WObjectController(
         private val imageMap: ImageMap,
         private val imageSetDatabase: ImageSetDatabase) {
 
-    private var spriteNode: WvSpriteNode? = null
+    private var spriteNode: DSpriteNode? = null
 
     init {
         wObject.wwdObjectChanged.on {
@@ -41,7 +41,7 @@ class WObjectController(
             val objSize = Vec2d(objImg.width, objImg.height)
             val halfSize = objSize / 2.0
             val anchor = halfSize - imgMd.offset
-            val newSpriteNode = WvSpriteNode(objImg, anchor)
+            val newSpriteNode = DSpriteNode(objImg, anchor)
             val objPos = Vec2i(wwdObject.x, wwdObject.y).toVec2d()
             newSpriteNode.position = objPos
             newSpriteNode.alpha = if (wwdObject.drawFlags.noDraw) NO_DRAW_ALPHA else 1.0

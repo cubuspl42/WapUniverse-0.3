@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.Image
 
 
-class WvSpriteNode(val image: Image, val anchor: Vec2d) : WvNode() {
+class DSpriteNode(val image: Image, val anchor: Vec2d) : DNode() {
     var position = Vec2d()
 
     var scale = Vec2d(1.0, 1.0)

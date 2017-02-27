@@ -7,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext
 
 private val T = 64.0
 
-class WvTileMatrixNode(val world: World, private val imageMap: ImageMap) : WvNode() {
+class DTileMatrixNode(val world: World, private val imageMap: ImageMap) : DNode() {
     override fun draw(gc: GraphicsContext) {
         val levelIndex = CFG_LEVEL_INDEX // FIXME
         val tileImageSet = "ACTION" // FIXME

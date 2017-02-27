@@ -3,7 +3,7 @@ package io.github.wapuniverse.view
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
 
-class WvSelectionNode : WvNode() {
+class DSelectionNode : DNode() {
     private val items = mutableSetOf<SnItemImpl>()
 
     fun addItem(): SnItem {

@@ -31,10 +31,10 @@ class ApplicationController(stage: Stage) {
     private val worldScene = DScene()
 
     init {
-        val tileMatrixNode = WvTileMatrixNode(world, imageMap)
+        val tileMatrixNode = DTileMatrixNode(world, imageMap)
         worldScene.addNode(tileMatrixNode)
 
-        val selectionNode = WvSelectionNode()
+        val selectionNode = DSelectionNode()
         selectionNode.z = SELECTION_NODE_Z
         worldScene.addNode(selectionNode)
 

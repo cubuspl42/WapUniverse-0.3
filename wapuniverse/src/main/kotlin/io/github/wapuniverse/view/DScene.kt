@@ -41,7 +41,7 @@ class DScene : BorderPane() {
             updateTransform(cameraOffset)
         }
 
-    private val _nodes = mutableSetOf<WvNode>()
+    private val _nodes = mutableSetOf<DNode>()
 
     val nodes = _nodes
 
@@ -133,11 +133,11 @@ class DScene : BorderPane() {
         nodes.forEach { it.draw(gc) }
     }
 
-    fun addNode(node: WvNode) {
+    fun addNode(node: DNode) {
         _nodes.add(node)
     }
 
-    fun removeNode(node: WvNode) {
+    fun removeNode(node: DNode) {
         _nodes.remove(node)
     }
 }
