@@ -4,8 +4,11 @@
     <groupId>io.github.wapuniverse</groupId>
     <artifactId>wapuniverse</artifactId>
     <version>0.1.0</version>
+    <modules>
+        <module>editor</module>
+    </modules>
     <name>wapuniverse</name>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <properties>
         <kotlin.version>1.0.3</kotlin.version>
@@ -20,6 +23,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.wapuniverse</groupId>
+            <artifactId>editor</artifactId>
+            <version>0.1.0</version>
+        </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
