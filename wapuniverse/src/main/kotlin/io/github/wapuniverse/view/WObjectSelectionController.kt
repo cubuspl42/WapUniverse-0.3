@@ -17,5 +17,11 @@ class WObjectSelectionController(world: World, worldScene: DScene, stPlane: StPl
             mvMap.put(wObject, stNode)
         }
 
+        worldScene.onTransformChanged.connect {
+            mvMap.forEach {
+                val viewRect = worldScene.transform.transform
+
+            }
+        }
     }
 }

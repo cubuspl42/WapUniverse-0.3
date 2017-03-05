@@ -1,6 +1,8 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
+import io.github.wapuniverse.common.Emitter
+import io.github.wapuniverse.common.Signal
 import io.github.wapuniverse.common.util.height
 import io.github.wapuniverse.common.util.minus
 import io.github.wapuniverse.common.util.toVec2d
@@ -12,6 +14,7 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.BorderPane
 import javafx.scene.transform.Affine
+import javafx.scene.transform.Transform
 
 private val INITIAL_ZOOM = 1.0
 
@@ -42,6 +45,16 @@ class DScene : BorderPane() {
     private val _nodes = mutableSetOf<DNode>()
 
     val nodes = _nodes
+
+    val transform: Transform
+        get() = world2screen
+
+    val invertedTransform: Transform
+        get() = screen2world
+
+    private val emitTransformChanged = Emitter<Transform>()
+
+    val onTransformChanged: Signal<Transform> = emitTransformChanged
 
     init {
         children.add(canvas)
@@ -80,6 +93,7 @@ class DScene : BorderPane() {
         world2screen.appendScale(cameraZoom, cameraZoom)
         world2screen.appendTranslation(-newCameraOffset.x, -newCameraOffset.y)
         screen2world = world2screen.createInverse()
+        emitTransformChanged(world2screen)
     }
 
     private fun updateCameraOffset(anchorPositionW: Vec2d, zoomCenter: Vec2d) {

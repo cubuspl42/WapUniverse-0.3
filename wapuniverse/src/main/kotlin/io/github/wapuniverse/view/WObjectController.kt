@@ -1,6 +1,5 @@
 package io.github.wapuniverse.view
 
-import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.CFG_LEVEL_INDEX
 import io.github.wapuniverse.ImageSetDatabase
 import io.github.wapuniverse.common.util.*
