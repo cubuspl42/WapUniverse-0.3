@@ -1,8 +1,7 @@
-package io.github.wapuniverse.world
+package io.github.wapuniverse.editor
 
 import io.github.wapuniverse.common.Emitter
 import io.github.wapuniverse.common.util.Rectangle2Di
-import io.github.wapuniverse.common.Signal
 import io.github.wapuniverse.common.util.Vec2i
 
 private val INVISIBLE_TILE_INDEX = -2 // FIXME

@@ -2,7 +2,7 @@ package io.github.wapuniverse.view
 
 import io.github.wapuniverse.CFG_LEVEL_INDEX
 import io.github.wapuniverse.common.util.Vec2i
-import io.github.wapuniverse.world.World
+import io.github.wapuniverse.editor.World
 import javafx.scene.canvas.GraphicsContext
 
 private val T = 64.0

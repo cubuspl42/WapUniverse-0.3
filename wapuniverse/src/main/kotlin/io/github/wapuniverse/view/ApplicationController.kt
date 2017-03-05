@@ -6,9 +6,9 @@ import io.github.wapuniverse.common.util.Vec2i
 import io.github.wapuniverse.common.util.getResourceAsStream
 import io.github.wapuniverse.common.wap32.loadWwd
 import io.github.wapuniverse.loadImageSetDatabaseFromFile
-import io.github.wapuniverse.world.WObject
-import io.github.wapuniverse.world.World
-import io.github.wapuniverse.world.makeWorld
+import io.github.wapuniverse.editor.WObject
+import io.github.wapuniverse.editor.World
+import io.github.wapuniverse.editor.makeWorld
 import javafx.scene.Scene
 import javafx.stage.Stage
 

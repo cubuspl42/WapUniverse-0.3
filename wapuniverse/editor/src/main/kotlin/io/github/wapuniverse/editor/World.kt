@@ -1,4 +1,4 @@
-package io.github.wapuniverse.world
+package io.github.wapuniverse.editor
 
 import io.github.wapuniverse.common.Signal
 import io.github.wapuniverse.common.util.Rectangle2Di

@@ -5,7 +5,7 @@ import io.github.wapuniverse.CFG_LEVEL_INDEX
 import io.github.wapuniverse.ImageSetDatabase
 import io.github.wapuniverse.common.util.*
 import io.github.wapuniverse.common.wap32.WwdObject
-import io.github.wapuniverse.world.WObject
+import io.github.wapuniverse.editor.WObject
 
 
 private val NO_DRAW_ALPHA = 0.5
