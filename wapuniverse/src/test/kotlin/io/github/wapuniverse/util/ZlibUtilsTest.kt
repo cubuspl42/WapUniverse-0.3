@@ -2,6 +2,8 @@ package io.github.wapuniverse.util
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import io.github.wapuniverse.common.util.compress
+import io.github.wapuniverse.common.util.decompress
 import org.junit.Test
 import java.nio.charset.StandardCharsets.UTF_8
 

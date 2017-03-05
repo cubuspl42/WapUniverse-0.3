@@ -1,4 +1,4 @@
-package io.github.wapuniverse.util
+package io.github.wapuniverse.common.util
 
 import com.sun.javafx.geom.Vec2d
 import javafx.geometry.Point2D

@@ -1,8 +1,8 @@
 package io.github.wapuniverse.view
 
 import io.github.wapuniverse.ImageSetDatabase
-import io.github.wapuniverse.util.ResourceNotFound
-import io.github.wapuniverse.util.getResourceAsStream
+import io.github.wapuniverse.common.util.ResourceNotFound
+import io.github.wapuniverse.common.util.getResourceAsStream
 import javafx.scene.image.Image
 
 

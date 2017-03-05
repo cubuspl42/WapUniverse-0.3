@@ -3,7 +3,8 @@ package io.github.wapuniverse.wap32
 import com.google.common.io.ByteStreams
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import io.github.wapuniverse.util.getResourceAsStream
+import io.github.wapuniverse.common.util.getResourceAsStream
+import io.github.wapuniverse.common.wap32.*
 import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream

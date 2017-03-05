@@ -1,7 +1,7 @@
 package io.github.wapuniverse.view
 
 import io.github.wapuniverse.CFG_LEVEL_INDEX
-import io.github.wapuniverse.util.Vec2i
+import io.github.wapuniverse.common.util.Vec2i
 import io.github.wapuniverse.world.World
 import javafx.scene.canvas.GraphicsContext
 

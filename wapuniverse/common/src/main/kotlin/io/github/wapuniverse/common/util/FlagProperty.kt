@@ -1,4 +1,4 @@
-package io.github.wapuniverse.util
+package io.github.wapuniverse.common.util
 
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KProperty

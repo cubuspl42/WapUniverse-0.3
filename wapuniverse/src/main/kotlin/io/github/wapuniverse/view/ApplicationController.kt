@@ -2,10 +2,10 @@ package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.CFG_LEVEL_INDEX
+import io.github.wapuniverse.common.util.Vec2i
+import io.github.wapuniverse.common.util.getResourceAsStream
+import io.github.wapuniverse.common.wap32.loadWwd
 import io.github.wapuniverse.loadImageSetDatabaseFromFile
-import io.github.wapuniverse.util.*
-import io.github.wapuniverse.wap32.Wwd
-import io.github.wapuniverse.wap32.loadWwd
 import io.github.wapuniverse.world.WObject
 import io.github.wapuniverse.world.World
 import io.github.wapuniverse.world.makeWorld
@@ -38,7 +38,7 @@ class ApplicationController(stage: Stage) {
         selectionNode.z = SELECTION_NODE_Z
         worldScene.addNode(selectionNode)
 
-        world.objectAdded.on { wObject ->
+        world.objectAdded.connect { wObject ->
             val snItem = selectionNode.addItem()
             WObjectController(wObject, worldScene, snItem, imageMap, imageSetDatabase)
         }

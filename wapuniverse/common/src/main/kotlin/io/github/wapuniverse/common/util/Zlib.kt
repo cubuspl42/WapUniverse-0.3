@@ -1,4 +1,4 @@
-package io.github.wapuniverse.util
+package io.github.wapuniverse.common.util
 
 import java.io.ByteArrayOutputStream
 import java.util.zip.Deflater
@@ -18,7 +18,7 @@ fun decompress(byteArray: ByteArray, offset: Int, size: Int): ByteArray {
 }
 
 fun decompress(byteArray: ByteArray, offset: Int): ByteArray {
-    return io.github.wapuniverse.util.decompress(byteArray, offset, byteArray.size - offset)
+    return decompress(byteArray, offset, byteArray.size - offset)
 }
 
 fun compress(byteArray: ByteArray): ByteArray {

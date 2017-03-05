@@ -1,8 +1,8 @@
-package io.github.wapuniverse.wap32
+package io.github.wapuniverse.common.wap32
 
 import com.google.common.io.ByteStreams
 import com.google.common.primitives.Bytes
-import io.github.wapuniverse.util.decompress
+import io.github.wapuniverse.common.util.decompress
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 

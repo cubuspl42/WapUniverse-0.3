@@ -1,7 +1,7 @@
-package io.github.wapuniverse.wap32
+package io.github.wapuniverse.common.wap32
 
 import com.google.common.io.LittleEndianDataOutputStream
-import io.github.wapuniverse.util.compress
+import io.github.wapuniverse.common.util.compress
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.nio.charset.StandardCharsets.US_ASCII

@@ -1,8 +1,8 @@
 package io.github.wapuniverse.world
 
-import io.github.wapuniverse.util.Rectangle2Di
-import io.github.wapuniverse.util.Signal
-import io.github.wapuniverse.util.Vec2i
+import io.github.wapuniverse.common.Signal
+import io.github.wapuniverse.common.util.Rectangle2Di
+import io.github.wapuniverse.common.util.Vec2i
 
 interface World {
     val tilesChanged: Signal<Vec2i>

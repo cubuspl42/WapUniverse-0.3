@@ -6,6 +6,7 @@
     <version>0.1.0</version>
     <modules>
         <module>editor</module>
+        <module>common</module>
     </modules>
     <name>wapuniverse</name>
     <packaging>pom</packaging>

@@ -1,12 +1,10 @@
 package io.github.wapuniverse.view
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.util.height
-import io.github.wapuniverse.util.minus
-import io.github.wapuniverse.util.toVec2d
-import io.github.wapuniverse.util.width
-import io.github.wapuniverse.wap32.Wwd
-import io.github.wapuniverse.world.World
+import io.github.wapuniverse.common.util.height
+import io.github.wapuniverse.common.util.minus
+import io.github.wapuniverse.common.util.toVec2d
+import io.github.wapuniverse.common.util.width
 import javafx.animation.AnimationTimer
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.input.MouseButton

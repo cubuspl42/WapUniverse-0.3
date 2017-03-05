@@ -1,6 +1,6 @@
 package io.github.wapuniverse.view
 
-import io.github.wapuniverse.util.Rectangle2Di
+import io.github.wapuniverse.common.util.Rectangle2Di
 
 class SnItemImpl() : SnItem {
     override var bbox = Rectangle2Di()

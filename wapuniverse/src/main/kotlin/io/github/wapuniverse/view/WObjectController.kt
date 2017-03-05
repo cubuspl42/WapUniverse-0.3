@@ -3,8 +3,8 @@ package io.github.wapuniverse.view
 import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.CFG_LEVEL_INDEX
 import io.github.wapuniverse.ImageSetDatabase
-import io.github.wapuniverse.util.*
-import io.github.wapuniverse.wap32.WwdObject
+import io.github.wapuniverse.common.util.*
+import io.github.wapuniverse.common.wap32.WwdObject
 import io.github.wapuniverse.world.WObject
 
 
@@ -20,7 +20,7 @@ class WObjectController(
     private var spriteNode: DSpriteNode? = null
 
     init {
-        wObject.wwdObjectChanged.on {
+        wObject.wwdObjectChanged.connect {
             update(it)
         }
 

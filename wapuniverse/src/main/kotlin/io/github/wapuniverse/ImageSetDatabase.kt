@@ -1,7 +1,7 @@
 package io.github.wapuniverse
 
 import com.sun.javafx.geom.Vec2d
-import io.github.wapuniverse.util.getResourceAsStream
+import io.github.wapuniverse.common.util.getResourceAsStream
 import org.yaml.snakeyaml.TypeDescription
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
