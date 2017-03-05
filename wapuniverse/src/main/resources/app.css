@@ -3,3 +3,12 @@
     -fx-font-weight: bold;
     -fx-padding: 15;
 }
+
+.stnode {
+    border-style: solid;
+    border-color: grey;
+}
+
+.stnode-selected {
+    border-color: red;
+}

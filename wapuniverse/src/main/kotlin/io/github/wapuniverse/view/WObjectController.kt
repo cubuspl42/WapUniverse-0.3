@@ -13,16 +13,20 @@ private val NO_DRAW_ALPHA = 0.5
 class WObjectController(
         wObject: WObject,
         private val scene: DScene,
-        private val snItem: SnItem,
+        private val stPlane: StPlane,
         private val imageMap: ImageMap,
         private val imageSetDatabase: ImageSetDatabase) {
 
     private var spriteNode: DSpriteNode? = null
 
+    private val stNode = StNode()
+
     init {
         wObject.wwdObjectChanged.connect {
             update(it)
         }
+
+        stPlane.addNode(stNode)
 
         update(wObject.wwdObject)
     }
@@ -55,7 +59,7 @@ class WObjectController(
             val minVi = minV.toVec2i()
             val objSizei = objSize.toVec2i()
             val bbox = Rectangle2Di(minVi.x, minVi.y, objSizei.x, objSizei.y)
-            snItem.bbox = bbox
+            stNode.bounds = bbox
         }
     }
 }

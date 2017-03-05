@@ -1,5 +1,6 @@
 package io.github.wapuniverse.common.util
 
+import com.sun.javafx.geom.Vec2d
 import javafx.geometry.Rectangle2D
 
 
@@ -31,6 +32,8 @@ class Rectangle2Di(val minX: Int = 0, val minY: Int = 0, val width: Int = 0, val
     fun contains(x: Double, y: Double): Boolean {
         return x >= minX && y >= minY && x < maxX && y < maxY
     }
+
+    fun contains(v: Vec2d) = contains(v.x, v.y)
 
     fun intersects(rect: Rectangle2Di): Boolean {
         return toRectangle2D().intersects(rect.toRectangle2D())
