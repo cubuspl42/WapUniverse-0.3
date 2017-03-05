@@ -1,14 +1,12 @@
 package io.github.wapuniverse.view
 
-import com.sun.javafx.geom.Vec2d
 import io.github.wapuniverse.CFG_LEVEL_INDEX
 import io.github.wapuniverse.common.util.Vec2i
 import io.github.wapuniverse.common.util.getResourceAsStream
 import io.github.wapuniverse.common.wap32.loadWwd
-import io.github.wapuniverse.loadImageSetDatabaseFromFile
-import io.github.wapuniverse.editor.WObject
 import io.github.wapuniverse.editor.World
-import io.github.wapuniverse.editor.makeWorld
+import io.github.wapuniverse.editor.makeEditor
+import io.github.wapuniverse.loadImageSetDatabaseFromFile
 import javafx.scene.Scene
 import javafx.stage.Stage
 
@@ -22,7 +20,9 @@ private val SELECTION_NODE_Z = 1000000
 
 class ApplicationController(stage: Stage) {
 
-    private val world = makeWorld()
+    private val editor = makeEditor()
+
+    private val world = editor.world
 
     private val imageSetDatabase = loadImageSetDatabaseFromFile(IMAGE_SET_DATABASE_PATH)
 

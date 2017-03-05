@@ -17,5 +17,3 @@ interface World {
 
     fun addObject(): WObject
 }
-
-fun makeWorld(): World = WorldImpl()
