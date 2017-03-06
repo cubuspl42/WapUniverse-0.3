@@ -59,11 +59,6 @@ class DScene : BorderPane() {
 
         updateTransform(cameraOffset)
 
-        val clipRect = Rectangle()
-        clipRect.widthProperty().bind(widthProperty())
-        clipRect.heightProperty().bind(heightProperty())
-        clip = clipRect
-
         canvas.widthProperty().bind(widthProperty())
         canvas.heightProperty().bind(heightProperty())
 

@@ -5,6 +5,8 @@ import io.github.wapuniverse.common.util.getResourceAsStream
 import io.github.wapuniverse.common.wap32.loadWwd
 import io.github.wapuniverse.editor.Editor
 import javafx.scene.Scene
+import javafx.scene.control.MenuBar
+import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 
@@ -19,9 +21,17 @@ class ApplicationController(stage: Stage) {
 
     private val sceneVBox = VBox()
 
-    private val editorController = EditorController(editor, sceneVBox)
+    private val menuBar = MenuBar()
+
+    private val contentFrame = ContentPane()
+
+    private val editorController = EditorController(editor, menuBar, contentFrame)
 
     init {
+        sceneVBox.children.add(menuBar)
+        sceneVBox.children.add(contentFrame)
+        VBox.setVgrow(contentFrame, Priority.ALWAYS)
+
         stage.title = INITIAL_TITLE
         val scene = Scene(sceneVBox, INITIAL_WIDTH, INITIAL_HEIGHT)
         stage.scene = scene

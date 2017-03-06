@@ -2,26 +2,19 @@ package io.github.wapuniverse.view
 
 import io.github.wapuniverse.editor.Editor
 import io.github.wapuniverse.loadImageSetDatabaseFromFile
-import javafx.event.ActionEvent
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuBar
 import javafx.scene.control.MenuItem
-import javafx.scene.image.Image
 import javafx.scene.input.KeyCode
-import javafx.scene.layout.Priority
-import javafx.scene.layout.VBox
-import java.beans.EventHandler
 
 private val IMAGE_SET_DATABASE_PATH = "imageSetDatabase.yaml"
 private val CLAW_PREFIX = "CLAW/"
 
-class EditorController(private val editor: Editor, sceneVBox: VBox) {
+class EditorController(private val editor: Editor, menuBar: MenuBar, contentPane: ContentPane) {
 
     private val imageSetDatabase = loadImageSetDatabaseFromFile(IMAGE_SET_DATABASE_PATH)
 
     private val world = editor.world
-
-    private val menuBar = MenuBar()
 
     val worldScene = DScene()
 
@@ -33,11 +26,9 @@ class EditorController(private val editor: Editor, sceneVBox: VBox) {
             editor, worldScene, stPlane, imageSetDatabase, imageMap)
 
     init {
-        sceneVBox.children.add(menuBar)
-        sceneVBox.children.add(worldScene)
-        VBox.setVgrow(worldScene, Priority.ALWAYS)
+        initMenu(menuBar)
 
-        initMenu()
+        contentPane.children.add(worldScene)
 
         val tileMatrixNode = DTileMatrixNode(world, imageMap)
         worldScene.addNode(tileMatrixNode)
@@ -57,7 +48,7 @@ class EditorController(private val editor: Editor, sceneVBox: VBox) {
         worldScene.requestFocus()
     }
 
-    private fun initMenu() {
+    private fun initMenu(menuBar: MenuBar) {
         val menuFile = Menu("File")
 
         val menuEdit = Menu("Edit")
