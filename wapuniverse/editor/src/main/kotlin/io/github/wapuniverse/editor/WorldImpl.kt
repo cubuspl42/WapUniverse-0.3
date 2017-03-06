@@ -17,7 +17,7 @@ class WorldImpl(wwd: Wwd) : World {
 
     override val objects = mutableSetOf<WObject>()
 
-    override val objectAdded = Emitter<WObject>()
+    override val onObjectAdded = Emitter<WObject>()
 
     init {
         val actionPlane = wwd.planes[1] // FIXME
@@ -45,8 +45,14 @@ class WorldImpl(wwd: Wwd) : World {
     private fun addObject(): WObject {
         val obj = WObjectImpl()
         objects.add(obj)
-        objectAdded(obj)
+        onObjectAdded(obj)
         return obj
+    }
+
+    fun removeObject(obj: WObject): Boolean {
+        val objImpl = obj as WObjectImpl
+        objImpl.preRemoved(Unit)
+        return objects.remove(obj)
     }
 
     private fun setTile(vt: Vec2i, tileIdx: Int) {

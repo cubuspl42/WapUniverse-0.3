@@ -2,13 +2,17 @@ package io.github.wapuniverse.view
 
 import io.github.wapuniverse.common.util.Rect2d
 import io.github.wapuniverse.common.util.Vec2d
-import io.github.wapuniverse.common.util.Rectangle2Di
 import javafx.scene.Parent
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 
 class StPlane : Parent() {
-    private val stNodes = hashSetOf<StNode>()
+    private val nodesSet = hashSetOf<StNode>()
+
+    val nodes: Set<StNode> = nodesSet
+
+    val selectedNodes: Set<StNode>
+        get() = nodes.filter { it.isSelected }.toSet()
 
     init {
         setOnMouseClicked { ev ->
@@ -17,7 +21,7 @@ class StPlane : Parent() {
     }
 
     fun addNode(node: StNode): Boolean {
-        val wasAdded = stNodes.add(node)
+        val wasAdded = nodesSet.add(node)
         if (wasAdded) {
             children.add(node)
         }
@@ -25,7 +29,7 @@ class StPlane : Parent() {
     }
 
     fun removeNode(node: StNode): Boolean {
-        val wasRemoved = stNodes.remove(node)
+        val wasRemoved = nodesSet.remove(node)
         if (wasRemoved) {
             children.remove(node)
         }
@@ -33,9 +37,9 @@ class StPlane : Parent() {
     }
 
     private fun selectNodesAt(p: Vec2d) {
-        stNodes.forEach { it.isSelected = false }
-        val nodes = stNodes.filter { it.bounds.contains(p) }
-        nodes.forEach { it.isSelected = true }
+        nodesSet.forEach { it.isSelected = false }
+        val nodesAt = nodesSet.filter { it.bounds.contains(p) }
+        nodesAt.forEach { it.isSelected = true }
     }
 }
 

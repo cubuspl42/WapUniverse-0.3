@@ -4,13 +4,14 @@ import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
 import io.github.wapuniverse.CFG_LEVEL_INDEX
 import io.github.wapuniverse.ImageSetDatabase
+import io.github.wapuniverse.editor.Editor
 import io.github.wapuniverse.editor.WObject
 import io.github.wapuniverse.editor.World
 
 class WObjectSelectionController(
-        world: World,
+        private val editor: Editor,
         worldScene: DScene,
-        stPlane: StPlane,
+        private val stPlane: StPlane,
         imageSetDatabase: ImageSetDatabase,
         imageMap: ImageMap
 ) {
@@ -19,9 +20,11 @@ class WObjectSelectionController(
     private val vmMap = mvMap.inverse()
 
     init {
+        val world = editor.world
+
         world.objects.forEach { presentWObject(stPlane, it) }
 
-        world.objectAdded.connect { presentWObject(stPlane, it) }
+        world.onObjectAdded.connect { presentWObject(stPlane, it) }
 
         worldScene.onTransformChanged.connect {
             mvMap.forEach {
@@ -39,9 +42,21 @@ class WObjectSelectionController(
         val stNode = StNode()
         stPlane.addNode(stNode)
         mvMap.put(wObject, stNode)
+
+        wObject.preRemoved.connect {
+            stPlane.removeNode(stNode)
+            mvMap.remove(wObject)
+        }
     }
 
     private fun initPresentation(world: World) {
 
+    }
+
+    fun destroySelectedObjects() {
+        stPlane.selectedNodes.forEach {
+            val wObject = vmMap[it]!!
+            editor.destroyObject(wObject)
+        }
     }
 }

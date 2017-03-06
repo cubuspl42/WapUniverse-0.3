@@ -44,7 +44,7 @@ class DScene : BorderPane() {
 
     private val _nodes = mutableSetOf<DNode>()
 
-    val nodes = _nodes
+    val nodesSet = _nodes
 
     val transform: Transform
         get() = world2screen
@@ -141,8 +141,8 @@ class DScene : BorderPane() {
         gc.clearRect(0.0, 0.0, size.width, size.height)
 
         gc.transform = world2screen
-        val nodes = nodes.sortedBy { it.z }
-        nodes.forEach { it.draw(gc) }
+        val nodesSet = nodesSet.sortedBy { it.z }
+        nodesSet.forEach { it.draw(gc) }
     }
 
     fun addNode(node: DNode) {

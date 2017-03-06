@@ -10,5 +10,7 @@ interface Editor {
     }
 
     val world: World
+
+    fun destroyObject(obj: WObject)
 }
 

@@ -6,5 +6,7 @@ import io.github.wapuniverse.common.wap32.WwdObject
 interface WObject {
     var wwdObject: WwdObject
 
-    val wwdObjectChanged: Signal<WwdObject>
+    val onWwdObjectChanged: Signal<WwdObject>
+
+    val preRemoved: Signal<Unit>
 }

@@ -20,8 +20,11 @@ class ApplicationController(stage: Stage) {
 
     init {
         stage.title = INITIAL_TITLE
-        stage.scene = Scene(editorController.worldScene, INITIAL_WIDTH, INITIAL_HEIGHT)
+        val scene = Scene(editorController.worldScene, INITIAL_WIDTH, INITIAL_HEIGHT)
+        stage.scene = scene
         stage.show()
+
+        editorController.worldScene.requestFocus()
     }
 
     private fun makeEditor(): Editor {

@@ -18,8 +18,12 @@ class WObjectController(
     private var spriteNode: DSpriteNode? = null
 
     init {
-        wObject.wwdObjectChanged.connect {
+        wObject.onWwdObjectChanged.connect {
             update(wObject)
+        }
+
+        wObject.preRemoved.connect {
+            spriteNode?.let { scene.removeNode(it) }
         }
 
         update(wObject)
