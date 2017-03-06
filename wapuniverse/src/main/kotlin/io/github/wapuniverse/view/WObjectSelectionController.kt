@@ -19,11 +19,9 @@ class WObjectSelectionController(
     private val vmMap = mvMap.inverse()
 
     init {
-        world.objectAdded.connect { wObject ->
-            val stNode = StNode()
-            stPlane.addNode(stNode)
-            mvMap.put(wObject, stNode)
-        }
+        world.objects.forEach { presentWObject(stPlane, it) }
+
+        world.objectAdded.connect { presentWObject(stPlane, it) }
 
         worldScene.onTransformChanged.connect {
             mvMap.forEach {
@@ -35,6 +33,12 @@ class WObjectSelectionController(
         }
 
         initPresentation(world)
+    }
+
+    private fun presentWObject(stPlane: StPlane, wObject: WObject) {
+        val stNode = StNode()
+        stPlane.addNode(stNode)
+        mvMap.put(wObject, stNode)
     }
 
     private fun initPresentation(world: World) {

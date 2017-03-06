@@ -14,8 +14,4 @@ interface World {
     val objectAdded: Signal<WObject>
 
     fun getTile(vt: Vec2i): Int
-
-    fun setTile(vt: Vec2i, tileIdx: Int)
-
-    fun addObject(): WObject
 }
