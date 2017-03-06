@@ -1,6 +1,6 @@
 package io.github.wapuniverse.common.util
 
-import io.github.wapuniverse.common.util.Vec2d
+import com.sun.javafx.geom.Vec2d
 import javafx.geometry.Rectangle2D
 
 
@@ -23,7 +23,7 @@ class Rectangle2Di(val minX: Int = 0, val minY: Int = 0, val width: Int = 0, val
         get() = Vec2i(minX, minY)
 
     val maxV: Vec2i
-        get() = Vec2i(maxX, maxY)
+        get() = Vec2i(maxY, maxY)
 
     fun contains(x: Int, y: Int): Boolean {
         return x >= minX && y >= minY && x < maxX && y < maxY

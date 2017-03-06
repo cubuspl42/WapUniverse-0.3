@@ -2,10 +2,18 @@ package io.github.wapuniverse.view
 
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
+import io.github.wapuniverse.CFG_LEVEL_INDEX
+import io.github.wapuniverse.ImageSetDatabase
 import io.github.wapuniverse.editor.WObject
 import io.github.wapuniverse.editor.World
 
-class WObjectSelectionController(world: World, worldScene: DScene, stPlane: StPlane) {
+class WObjectSelectionController(
+        world: World,
+        worldScene: DScene,
+        stPlane: StPlane,
+        imageSetDatabase: ImageSetDatabase,
+        imageMap: ImageMap
+) {
     private val mvMap: BiMap<WObject, StNode> = HashBiMap.create();
 
     private val vmMap = mvMap.inverse()
@@ -19,9 +27,17 @@ class WObjectSelectionController(world: World, worldScene: DScene, stPlane: StPl
 
         worldScene.onTransformChanged.connect {
             mvMap.forEach {
-                val viewRect = worldScene.transform.transform
-
+                val (wObject, stNode) = it
+                val worldBounds = wObjectBounds(wObject, CFG_LEVEL_INDEX, imageSetDatabase, imageMap)!!
+                val viewBounds = worldScene.transform.map(worldBounds)
+                stNode.bounds = viewBounds
             }
         }
+
+        initPresentation(world)
+    }
+
+    private fun initPresentation(world: World) {
+
     }
 }

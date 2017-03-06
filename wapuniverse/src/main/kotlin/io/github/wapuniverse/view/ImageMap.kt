@@ -1,8 +1,8 @@
 package io.github.wapuniverse.view
 
 import io.github.wapuniverse.ImageSetDatabase
-import io.github.wapuniverse.common.util.ResourceNotFound
-import io.github.wapuniverse.common.util.getResourceAsStream
+import io.github.wapuniverse.common.util.*
+import io.github.wapuniverse.editor.WObject
 import javafx.scene.image.Image
 
 
@@ -50,4 +50,21 @@ fun loadImageMapFromResources(imageSetDatabase: ImageSetDatabase, prefix: String
         }
     }
     return ImageMap(imageSetDatabase, imagesDict)
+}
+
+fun wObjectBounds(
+        wObject: WObject, levelIndex: Int, imageSetDatabase: ImageSetDatabase, imageMap: ImageMap
+): Rect2d? {
+    val wwdObject = wObject.wwdObject
+    imageMap.findObjectImage(levelIndex, wwdObject.imageSet, wwdObject.i)?.let { objImg ->
+        val imgMd = imageSetDatabase.findObjectImageMetadata(levelIndex, wwdObject.imageSet, wwdObject.i)!!
+        val objSize = Vec2d(objImg.width, objImg.height)
+        val halfSize = objSize / 2.0
+        val anchor = halfSize - imgMd.offset
+        val objPos = Vec2i(wwdObject.x, wwdObject.y).toVec2d()
+        val minV = objPos - anchor
+        val bbox = Rect2d(minV.x, minV.y, objSize.x, objSize.y)
+        return bbox
+    }
+    return null
 }

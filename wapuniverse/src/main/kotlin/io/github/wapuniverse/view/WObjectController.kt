@@ -12,25 +12,21 @@ private val NO_DRAW_ALPHA = 0.5
 class WObjectController(
         wObject: WObject,
         private val scene: DScene,
-        private val stPlane: StPlane,
         private val imageMap: ImageMap,
         private val imageSetDatabase: ImageSetDatabase) {
 
     private var spriteNode: DSpriteNode? = null
 
-    private val stNode = StNode()
-
     init {
         wObject.wwdObjectChanged.connect {
-            update(it)
+            update(wObject)
         }
 
-        stPlane.addNode(stNode)
-
-        update(wObject.wwdObject)
+        update(wObject)
     }
 
-    private fun update(wwdObject: WwdObject) {
+    private fun update(wObject: WObject) {
+        val wwdObject = wObject.wwdObject
         val levelIndex = CFG_LEVEL_INDEX // FIXME
 
         spriteNode?.let {
@@ -48,17 +44,12 @@ class WObjectController(
             val objPos = Vec2i(wwdObject.x, wwdObject.y).toVec2d()
             newSpriteNode.position = objPos
             newSpriteNode.alpha = if (wwdObject.drawFlags.noDraw) NO_DRAW_ALPHA else 1.0
-            newSpriteNode.scale.x = if (wwdObject.drawFlags.mirror) -1.0 else 1.0
-            newSpriteNode.scale.y = if (wwdObject.drawFlags.invert) -1.0 else 1.0
+            val sx = if (wwdObject.drawFlags.mirror) -1.0 else 1.0
+            val sy =  if (wwdObject.drawFlags.invert) -1.0 else 1.0
+            newSpriteNode.scale = Vec2d(sx, sy)
 
             spriteNode = newSpriteNode
             scene.addNode(newSpriteNode)
-
-            val minV = objPos - anchor
-            val minVi = minV.toVec2i()
-            val objSizei = objSize.toVec2i()
-            val bbox = Rectangle2Di(minVi.x, minVi.y, objSizei.x, objSizei.y)
-            stNode.bounds = bbox
         }
     }
 }

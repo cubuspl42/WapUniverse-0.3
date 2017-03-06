@@ -9,6 +9,8 @@ interface World {
 
     val tilesBounds: Rectangle2Di
 
+    val objects: Set<WObject>
+
     val objectAdded: Signal<WObject>
 
     fun getTile(vt: Vec2i): Int

@@ -1,6 +1,6 @@
 package io.github.wapuniverse.view
 
-import io.github.wapuniverse.common.util.Vec2d
+import com.sun.javafx.geom.Vec2d
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.Image
 

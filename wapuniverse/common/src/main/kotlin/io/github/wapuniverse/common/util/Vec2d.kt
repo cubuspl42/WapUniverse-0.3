@@ -6,7 +6,7 @@ data class Vec2d(val x: Double = 0.0, val y: Double = 0.0) {
     }
 
     val width: Double
-        get() = Math.abs(y)
+        get() = Math.abs(x)
 
     val height: Double
         get() = Math.abs(y)
@@ -25,5 +25,9 @@ data class Vec2d(val x: Double = 0.0, val y: Double = 0.0) {
 
     infix operator fun div(a: Double): Vec2d {
         return Vec2d(x / a, y / a)
+    }
+
+    operator fun unaryMinus(): Vec2d {
+        return Vec2d(-x, -y)
     }
 }

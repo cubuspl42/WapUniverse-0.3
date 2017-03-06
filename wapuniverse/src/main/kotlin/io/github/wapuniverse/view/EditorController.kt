@@ -25,15 +25,15 @@ class EditorController(editor: Editor) {
 
     private val imageMap = loadImageMapFromResources(imageSetDatabase, CLAW_PREFIX)
 
-    private val wObjectSelectionController = WObjectSelectionController(world, worldScene, stPlane)
-
     init {
         val tileMatrixNode = DTileMatrixNode(world, imageMap)
         worldScene.addNode(tileMatrixNode)
 
         world.objectAdded.connect { wObject ->
-            WObjectController(wObject, worldScene, stPlane, imageMap, imageSetDatabase)
+            WObjectController(wObject, worldScene, imageMap, imageSetDatabase)
         }
+
+        WObjectSelectionController(world, worldScene, stPlane, imageSetDatabase, imageMap)
 
         loadWorld(world)
 

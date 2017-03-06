@@ -14,7 +14,7 @@ class WorldImpl : World {
     override var tilesBounds = Rectangle2Di()
         private set
 
-    private val objects = mutableSetOf<WObject>()
+    override val objects = mutableSetOf<WObject>()
 
     override val objectAdded = Emitter<WObject>()
 

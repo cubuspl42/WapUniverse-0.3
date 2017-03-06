@@ -1,33 +1,32 @@
 package io.github.wapuniverse.common.util
 
-import io.github.wapuniverse.common.util.Vec2d
 import javafx.geometry.Rectangle2D
 
 
-class Rectangle2Di(val minX: Int = 0, val minY: Int = 0, val width: Int = 0, val height: Int = 0) {
+class Rect2d(val minX: Double = 0.0, val minY: Double = 0.0, val width: Double = 0.0, val height: Double = 0.0) {
     companion object {
-        fun fromBounds(minX: Int, minY: Int, maxX: Int, maxY: Int): Rectangle2Di {
+        fun fromBounds(minX: Double, minY: Double, maxX: Double, maxY: Double): Rect2d {
             assert(maxX >= minX)
             assert(maxY >= minY)
-            return Rectangle2Di(minX, minY, maxX - minX, maxY - minY)
+            return Rect2d(minX, minY, maxX - minX, maxY - minY)
+        }
+
+        fun fromBounds(minV: Vec2d, maxV: Vec2d): Rect2d {
+            return fromBounds(minV.x, minV.y, maxV.x, maxV.y)
         }
     }
 
-    val maxX: Int
+    val maxX: Double
         get() = minX + width
 
-    val maxY: Int
+    val maxY: Double
         get() = minY + height
 
-    val minV: Vec2i
-        get() = Vec2i(minX, minY)
+    val minV: Vec2d
+        get() = Vec2d(minX, minY)
 
-    val maxV: Vec2i
-        get() = Vec2i(maxX, maxY)
-
-    fun contains(x: Int, y: Int): Boolean {
-        return x >= minX && y >= minY && x < maxX && y < maxY
-    }
+    val maxV: Vec2d
+        get() = Vec2d(maxX, maxY)
 
     fun contains(x: Double, y: Double): Boolean {
         return x >= minX && y >= minY && x < maxX && y < maxY
@@ -35,15 +34,15 @@ class Rectangle2Di(val minX: Int = 0, val minY: Int = 0, val width: Int = 0, val
 
     fun contains(v: Vec2d) = contains(v.x, v.y)
 
-    fun intersects(rect: Rectangle2Di): Boolean {
+    fun intersects(rect: Rect2d): Boolean {
         return toRectangle2D().intersects(rect.toRectangle2D())
     }
 
     fun toRectangle2D(): Rectangle2D {
-        return Rectangle2D(minX.toDouble(), minY.toDouble(), width.toDouble(), height.toDouble())
+        return Rectangle2D(minX, minY, width, height)
     }
 
-    fun union(v: Vec2i): Rectangle2Di {
+    fun union(v: Vec2d): Rect2d {
         val minX = Math.min(v.x, minX)
         val maxX = Math.max(v.x, maxX)
         val minY = Math.min(v.y, minY)

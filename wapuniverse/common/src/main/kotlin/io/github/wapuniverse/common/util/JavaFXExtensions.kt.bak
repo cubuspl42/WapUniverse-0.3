@@ -1,6 +1,6 @@
 package io.github.wapuniverse.common.util
 
-import io.github.wapuniverse.common.util.Vec2d
+import com.sun.javafx.geom.Vec2d
 import javafx.geometry.Point2D
 import javafx.geometry.Rectangle2D
 
