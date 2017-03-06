@@ -4,7 +4,7 @@ import io.github.wapuniverse.common.Emitter
 import io.github.wapuniverse.common.Signal
 import io.github.wapuniverse.common.wap32.WwdObject
 
-class WObjectImpl : WObject {
+internal class WObjectImpl : WObject {
     override var wwdObject = WwdObject()
         get() = field.clone()
         set(value) {

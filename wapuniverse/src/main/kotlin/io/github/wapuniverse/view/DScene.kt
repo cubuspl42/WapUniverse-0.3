@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
+import javafx.scene.shape.Rectangle
 import javafx.scene.transform.Affine
 
 private val INITIAL_ZOOM = 1.0
@@ -57,6 +58,11 @@ class DScene : BorderPane() {
         children.add(canvas)
 
         updateTransform(cameraOffset)
+
+        val clipRect = Rectangle()
+        clipRect.widthProperty().bind(widthProperty())
+        clipRect.heightProperty().bind(heightProperty())
+        clip = clipRect
 
         canvas.widthProperty().bind(widthProperty())
         canvas.heightProperty().bind(heightProperty())

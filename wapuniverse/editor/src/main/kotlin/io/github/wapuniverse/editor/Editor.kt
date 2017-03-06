@@ -11,6 +11,8 @@ interface Editor {
 
     val world: World
 
+    val undoStack: UndoStack
+
     fun destroyObject(obj: WObject)
 }
 

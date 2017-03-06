@@ -5,6 +5,7 @@ import io.github.wapuniverse.common.util.getResourceAsStream
 import io.github.wapuniverse.common.wap32.loadWwd
 import io.github.wapuniverse.editor.Editor
 import javafx.scene.Scene
+import javafx.scene.layout.VBox
 import javafx.stage.Stage
 
 
@@ -16,11 +17,13 @@ private val INITIAL_HEIGHT = 480.0
 class ApplicationController(stage: Stage) {
     private val editor = makeEditor()
 
-    private val editorController = EditorController(editor)
+    private val sceneVBox = VBox()
+
+    private val editorController = EditorController(editor, sceneVBox)
 
     init {
         stage.title = INITIAL_TITLE
-        val scene = Scene(editorController.worldScene, INITIAL_WIDTH, INITIAL_HEIGHT)
+        val scene = Scene(sceneVBox, INITIAL_WIDTH, INITIAL_HEIGHT)
         stage.scene = scene
         stage.show()
 

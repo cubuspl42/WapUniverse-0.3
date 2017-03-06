@@ -42,7 +42,7 @@ class WorldImpl(wwd: Wwd) : World {
         return tiles[vt] ?: INVISIBLE_TILE_INDEX
     }
 
-    private fun addObject(): WObject {
+    fun addObject(): WObject {
         val obj = WObjectImpl()
         objects.add(obj)
         onObjectAdded(obj)
