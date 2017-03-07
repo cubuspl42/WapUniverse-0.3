@@ -23,7 +23,7 @@ class EditorController(private val editor: Editor, menuBar: MenuBar, contentPane
     private val imageMap = loadImageMapFromResources(imageSetDatabase, CLAW_PREFIX)
 
     private val objectSelectionController = WObjectSelectionController(
-            editor, worldScene, stPlane, imageSetDatabase, imageMap)
+            editor, stPlane, imageSetDatabase, imageMap)
 
     init {
         initMenu(menuBar)
@@ -38,6 +38,9 @@ class EditorController(private val editor: Editor, menuBar: MenuBar, contentPane
         world.onObjectAdded.connect { WObjectController(it, worldScene, imageMap, imageSetDatabase) }
 
         worldScene.children.add(stPlane)
+        worldScene.onTransformChanged.connect {
+            stPlane.transforms.setAll(worldScene.transform.toAffine())
+        }
 
         worldScene.setOnKeyPressed { ev ->
             when {
