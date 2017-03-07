@@ -29,6 +29,7 @@ class EditorController(private val editor: Editor, menuBar: MenuBar, contentPane
         initMenu(menuBar)
 
         contentPane.children.add(worldScene)
+        worldScene.children.add(stPlane)
 
         val tileMatrixNode = DTileMatrixNode(world, imageMap)
         worldScene.addNode(tileMatrixNode)
@@ -37,7 +38,6 @@ class EditorController(private val editor: Editor, menuBar: MenuBar, contentPane
 
         world.onObjectAdded.connect { WObjectController(it, worldScene, imageMap, imageSetDatabase) }
 
-        worldScene.children.add(stPlane)
         worldScene.onTransformChanged.connect {
             stPlane.transforms.setAll(worldScene.transform.toAffine())
         }

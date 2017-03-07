@@ -3,6 +3,8 @@ package io.github.wapuniverse.common.util
 import io.github.wapuniverse.common.util.Vec2d
 import javafx.geometry.Point2D
 import javafx.geometry.Rectangle2D
+import javafx.scene.input.MouseEvent
+import javafx.scene.shape.Rectangle
 
 
 infix operator fun Vec2d.minus(v: Vec2d): Vec2d {
@@ -70,3 +72,17 @@ val Vec2d.width: Double
 
 val Vec2d.height: Double
     get() = Math.abs(y)
+
+var Rectangle.rect: Rect2d
+    get() {
+        return Rect2d(x, y, width, height)
+    }
+    set(value) {
+        x = value.minX
+        y = value.minY
+        width = value.width
+        height = value.height
+    }
+
+val MouseEvent.position: Vec2d
+    get() = Vec2d(x, y)

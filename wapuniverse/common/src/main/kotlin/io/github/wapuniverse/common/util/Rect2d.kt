@@ -14,6 +14,14 @@ class Rect2d(val minX: Double = 0.0, val minY: Double = 0.0, val width: Double =
         fun fromBounds(minV: Vec2d, maxV: Vec2d): Rect2d {
             return fromBounds(minV.x, minV.y, maxV.x, maxV.y)
         }
+
+        fun fromDiagonal(diag: LineSegment2d): Rect2d {
+            val minX = Math.min(diag.a.x, diag.b.x)
+            val maxX = Math.max(diag.a.x, diag.b.x)
+            val minY = Math.min(diag.a.y, diag.b.y)
+            val maxY = Math.max(diag.a.y, diag.b.y)
+            return Rect2d.fromBounds(minX, minY, maxX, maxY)
+        }
     }
 
     val maxX: Double
