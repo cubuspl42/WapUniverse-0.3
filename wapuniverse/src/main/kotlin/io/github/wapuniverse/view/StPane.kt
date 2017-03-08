@@ -2,12 +2,14 @@ package io.github.wapuniverse.view
 
 import io.github.wapuniverse.common.util.*
 import javafx.scene.Group
-import javafx.scene.Parent
-import javafx.scene.input.MouseEvent
+import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
+import java.util.logging.Logger
 
-class StPlane : Parent() {
+class StPane(private val dScene: DScene) : Pane() {
+    private val log = Logger.getLogger(this.javaClass.name)
+
     private val nodesSet = hashSetOf<StNode>()
 
     private val nodesGroup = Group()
@@ -17,10 +19,7 @@ class StPlane : Parent() {
     private var selectionAreaDiagonal: LineSegment2d? = null
         set(value) {
             field = value
-            if(value != null) {
-                val rect = Rect2d.fromDiagonal(value)
-                selectionAreaRect.rect = rect
-            }
+            updateAreaSelectionRect(value)
         }
 
     val nodes: Set<StNode> = nodesSet
@@ -32,14 +31,25 @@ class StPlane : Parent() {
         children.add(nodesGroup)
         children.add(selectionAreaRect)
 
-        selectionAreaRect.fill = Color.DARKGREEN
+        selectionAreaRect.fill = Color.rgb(255, 0, 0, 0.1)
+        selectionAreaRect.stroke = Color.RED
 
         setOnMousePressed { ev ->
-            selectionAreaDiagonal = LineSegment2d(ev.position, ev.position)
+            val a = dScene.invertedTransform.map(ev.position)
+            selectionAreaDiagonal = LineSegment2d(a, a)
         }
 
         setOnMouseDragged { ev ->
-            selectionAreaDiagonal = selectionAreaDiagonal?.copy(b = ev.position)
+            val b = dScene.invertedTransform.map(ev.position)
+            selectionAreaDiagonal = selectionAreaDiagonal?.copy(b = b)
+        }
+
+        setOnMouseReleased {
+            selectionAreaDiagonal = null
+        }
+
+        dScene.onTransformChanged.connect {
+            updateAreaSelectionRect(selectionAreaDiagonal)
         }
     }
 
@@ -64,6 +74,20 @@ class StPlane : Parent() {
         val nodesAt = nodesSet.filter { it.bounds.contains(p) }
         nodesAt.forEach { it.isSelected = true }
     }
+
+    private fun updateAreaSelectionRect(diagonal: LineSegment2d?) {
+        when {
+            diagonal != null -> {
+                val rect = Rect2d.fromDiagonal(diagonal)
+                val viewRect = dScene.transform.map(rect)
+                selectionAreaRect.rect = viewRect
+                selectionAreaRect.isVisible = true
+            }
+            else -> {
+                selectionAreaRect.isVisible = false
+            }
+        }
+    }
 }
 
 class StNode : Rectangle() {
@@ -71,12 +95,6 @@ class StNode : Rectangle() {
     private val SELECTED_CLASS = "stnode-selected"
 
     init {
-//        isMouseTransparent = true
-
-        setOnMousePressed {
-            Unit
-        }
-
         styleClass.add(STNODE_CLASS)
 
         fill = Color.TRANSPARENT

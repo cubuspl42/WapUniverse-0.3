@@ -23,8 +23,7 @@ class Transform(translate: Vec2d = Vec2d(0.0, 0.0), scale: Double = 1.0) {
     }
 
     fun map(v: Vec2d): Vec2d {
-        val p = affine.transform(Point2D(v.x, v.y))
-        return Vec2d(p.x, p.y)
+        return map(v.x, v.y)
     }
 
     fun createInverse(): Transform {

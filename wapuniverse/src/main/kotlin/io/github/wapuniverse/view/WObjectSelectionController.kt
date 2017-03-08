@@ -9,7 +9,7 @@ import io.github.wapuniverse.editor.WObject
 
 class WObjectSelectionController(
         private val editor: Editor,
-        private val stPlane: StPlane,
+        private val stPane: StPane,
         private val imageSetDatabase: ImageSetDatabase,
         private val imageMap: ImageMap
 ) {
@@ -20,26 +20,26 @@ class WObjectSelectionController(
     init {
         val world = editor.world
 
-        world.objects.forEach { presentWObject(stPlane, it) }
+        world.objects.forEach { presentWObject(stPane, it) }
 
-        world.onObjectAdded.connect { presentWObject(stPlane, it) }
+        world.onObjectAdded.connect { presentWObject(stPane, it) }
     }
 
-    private fun presentWObject(stPlane: StPlane, wObject: WObject) {
+    private fun presentWObject(stPane: StPane, wObject: WObject) {
         val stNode = StNode()
-        stPlane.addNode(stNode)
+        stPane.addNode(stNode)
         stNode.bounds = wObjectBounds(wObject, CFG_LEVEL_INDEX, imageSetDatabase, imageMap)!!
         mvMap.put(wObject, stNode)
 
         wObject.preRemoved.connect {
-            stPlane.removeNode(stNode)
+            stPane.removeNode(stNode)
             mvMap.remove(wObject)
         }
     }
 
 
     fun destroySelectedObjects() {
-        stPlane.selectedNodes.forEach {
+        stPane.selectedNodes.forEach {
             val wObject = vmMap[it]!!
             editor.destroyObject(wObject)
         }

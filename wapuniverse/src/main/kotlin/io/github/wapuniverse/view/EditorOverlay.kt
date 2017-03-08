@@ -3,6 +3,10 @@ package io.github.wapuniverse.view
 import io.github.wapuniverse.common.util.Transform
 import io.github.wapuniverse.common.util.Vec2d
 import io.github.wapuniverse.common.util.position
+import javafx.event.EventHandler
+import javafx.scene.input.MouseButton
+import javafx.scene.input.MouseEvent
+import javafx.scene.input.ScrollEvent
 import javafx.scene.layout.Pane
 
 class EditorOverlay(
@@ -13,15 +17,27 @@ class EditorOverlay(
     var scale = 1.0
 
     init {
-        setOnMousePressed { ev ->
-            worldConstraint = mapViewConstraint(ev.position)
-        }
+        addEventFilter(MouseEvent.MOUSE_PRESSED, { ev ->
+            if (ev.button == MouseButton.SECONDARY) {
+                worldConstraint = mapViewConstraint(ev.position)
+                ev.consume()
+            }
+        })
 
-        setOnMouseDragged { ev ->
-            updateTransform(ev.position, worldConstraint!!, scale)
-        }
+        addEventFilter(MouseEvent.MOUSE_DRAGGED, { ev ->
+            if (ev.button == MouseButton.SECONDARY) {
+                updateTransform(ev.position, worldConstraint!!, scale)
+                ev.consume()
+            }
+        })
 
-        setOnScroll { ev ->
+        addEventFilter(MouseEvent.MOUSE_RELEASED, { ev ->
+            if (ev.button == MouseButton.SECONDARY) {
+                ev.consume()
+            }
+        })
+
+        addEventFilter(ScrollEvent.SCROLL, { ev ->
             val scaleMultiplier = when {
                 ev.deltaY > 0 -> 2.0
                 else -> 0.5
@@ -29,7 +45,8 @@ class EditorOverlay(
             scale *= scaleMultiplier
 
             updateTransform(ev.position, mapViewConstraint(ev.position), scale)
-        }
+            ev.consume()
+        })
     }
 
     private fun mapViewConstraint(viewConstraint: Vec2d): Vec2d {

@@ -3,7 +3,7 @@ package io.github.wapuniverse.common.util
 import javafx.geometry.Rectangle2D
 
 
-class Rect2d(val minX: Double = 0.0, val minY: Double = 0.0, val width: Double = 0.0, val height: Double = 0.0) {
+data class Rect2d(val minX: Double = 0.0, val minY: Double = 0.0, val width: Double = 0.0, val height: Double = 0.0) {
     companion object {
         fun fromBounds(minX: Double, minY: Double, maxX: Double, maxY: Double): Rect2d {
             assert(maxX >= minX)

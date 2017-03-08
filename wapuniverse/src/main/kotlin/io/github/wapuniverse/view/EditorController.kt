@@ -18,21 +18,22 @@ class EditorController(private val editor: Editor, menuBar: MenuBar, contentPane
 
     val worldScene = DScene()
 
-    private val stPlane = StPlane()
+    private val stPane = StPane(worldScene)
 
     private val imageMap = loadImageMapFromResources(imageSetDatabase, CLAW_PREFIX)
 
     private val objectSelectionController = WObjectSelectionController(
-            editor, stPlane, imageSetDatabase, imageMap)
+            editor, stPane, imageSetDatabase, imageMap)
 
     init {
         initMenu(menuBar)
 
         contentPane.children.add(worldScene)
-        worldScene.children.add(stPlane)
 
         val editorOverlay = EditorOverlay(worldScene)
         contentPane.children.add(editorOverlay)
+
+        editorOverlay.children.add(stPane)
 
         val tileMatrixNode = DTileMatrixNode(world, imageMap)
         worldScene.addNode(tileMatrixNode)
@@ -40,10 +41,6 @@ class EditorController(private val editor: Editor, menuBar: MenuBar, contentPane
         world.objects.forEach { WObjectController(it, worldScene, imageMap, imageSetDatabase) }
 
         world.onObjectAdded.connect { WObjectController(it, worldScene, imageMap, imageSetDatabase) }
-
-        worldScene.onTransformChanged.connect {
-            stPlane.transforms.setAll(worldScene.transform.toAffine())
-        }
 
         worldScene.setOnKeyPressed { ev ->
             when {
