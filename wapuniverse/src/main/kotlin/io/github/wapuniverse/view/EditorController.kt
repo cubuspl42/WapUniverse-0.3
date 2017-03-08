@@ -31,6 +31,9 @@ class EditorController(private val editor: Editor, menuBar: MenuBar, contentPane
         contentPane.children.add(worldScene)
         worldScene.children.add(stPlane)
 
+        val editorOverlay = EditorOverlay(worldScene)
+        contentPane.children.add(editorOverlay)
+
         val tileMatrixNode = DTileMatrixNode(world, imageMap)
         worldScene.addNode(tileMatrixNode)
 

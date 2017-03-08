@@ -22,33 +22,18 @@ class DScene : BorderPane() {
 
     private val animationTimer = makeAnimationTimer()
 
-    private var screen2world = Transform()
-
-    private var world2screen = Transform()
-
-    private var cameraOffset = Vec2d()
-        set(value) {
-            updateTransform(value)
-            field = value
-        }
-
-    private var anchorPositionW: Vec2d? = null
-
-    private var cameraZoom: Double = INITIAL_ZOOM
-        set(value) {
-            field = value
-            updateTransform(cameraOffset)
-        }
-
     private val _nodes = mutableSetOf<DNode>()
 
     val nodes = _nodes
 
-    val transform: Transform
-        get() = world2screen
+    var transform: Transform = Transform()
+        set(value) {
+            field = value
+            emitTransformChanged(value)
+        }
 
     val invertedTransform: Transform
-        get() = screen2world
+        get() = transform.createInverse()
 
     private val emitTransformChanged = Emitter<Transform>()
 
@@ -57,16 +42,8 @@ class DScene : BorderPane() {
     init {
         children.add(canvas)
 
-        updateTransform(cameraOffset)
-
         canvas.widthProperty().bind(widthProperty())
         canvas.heightProperty().bind(heightProperty())
-
-        canvas.setOnMouseMoved { ev -> onMouseMoved(ev) }
-        canvas.setOnMouseDragged { ev -> onMouseDragged(ev) }
-        canvas.setOnMousePressed { ev -> onMousePressed(ev) }
-        canvas.setOnMouseReleased { ev -> onMouseReleased(ev) }
-        canvas.setOnScroll { ev -> onScroll(ev) }
 
         animationTimer.start()
     }
@@ -86,57 +63,11 @@ class DScene : BorderPane() {
         return animationTimer
     }
 
-    private fun updateTransform(newCameraOffset: Vec2d) {
-        world2screen = Transform(-newCameraOffset, cameraZoom)
-        screen2world = world2screen.createInverse()
-        emitTransformChanged(world2screen)
-    }
-
-    private fun updateCameraOffset(anchorPositionW: Vec2d, zoomCenter: Vec2d) {
-        val w0 = screen2world.map(Vec2d())
-        val wv = screen2world.map(zoomCenter)
-        val r = wv - w0
-        cameraOffset = anchorPositionW - r
-    }
-
-    fun onMouseMoved(ev: MouseEvent) {
-        val wv = screen2world.map(ev.x, ev.y)
-    }
-
-    fun onMouseDragged(ev: MouseEvent) {
-        if (ev.isSecondaryButtonDown) updateCameraOffset(anchorPositionW!!, Vec2d(ev.x, ev.y))
-        onMouseMoved(ev)
-    }
-
-    fun onMousePressed(ev: MouseEvent) {
-        when (ev.button) {
-            MouseButton.SECONDARY -> anchorPositionW = screen2world.map(ev.x, ev.y)
-            else -> Unit
-        }
-    }
-
-    fun onMouseReleased(ev: MouseEvent) {
-        when (ev.button) {
-            MouseButton.SECONDARY -> anchorPositionW = null
-            else -> Unit
-        }
-    }
-
-    fun onScroll(ev: ScrollEvent) {
-        val anchorPositionW = anchorPositionW ?: screen2world.map(ev.x, ev.y)
-        val m = if (ev.deltaY > 0) 2.0 else 0.5
-        val newCameraZoom = m * cameraZoom
-        if (newCameraZoom in (0.005..10.0)) {
-            cameraZoom = newCameraZoom
-            updateCameraOffset(anchorPositionW, Vec2d(ev.x, ev.y))
-        }
-    }
-
     fun draw(gc: GraphicsContext, size: Vec2d) {
         gc.transform = Affine()
         gc.clearRect(0.0, 0.0, size.width, size.height)
 
-        gc.transform = world2screen.toAffine()
+        gc.transform = transform.toAffine()
         val nodes = nodes.sortedBy { it.z }
         nodes.forEach { it.draw(gc) }
     }

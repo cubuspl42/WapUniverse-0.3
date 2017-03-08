@@ -3,6 +3,7 @@ package io.github.wapuniverse.common.util
 import io.github.wapuniverse.common.util.Vec2d
 import javafx.geometry.Point2D
 import javafx.geometry.Rectangle2D
+import javafx.scene.input.GestureEvent
 import javafx.scene.input.MouseEvent
 import javafx.scene.shape.Rectangle
 
@@ -85,4 +86,7 @@ var Rectangle.rect: Rect2d
     }
 
 val MouseEvent.position: Vec2d
+    get() = Vec2d(x, y)
+
+val GestureEvent.position: Vec2d
     get() = Vec2d(x, y)
