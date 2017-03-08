@@ -5,6 +5,7 @@ import javafx.scene.Group
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
+import org.w3c.dom.css.Rect
 import java.util.logging.Logger
 
 class StPane(private val dScene: DScene) : Pane() {
@@ -14,11 +15,12 @@ class StPane(private val dScene: DScene) : Pane() {
 
     private val nodesGroup = Group()
 
-    private val selectionAreaRect = Rectangle()
+    private val selectionAreaRectNode = Rectangle()
 
     private var selectionAreaDiagonal: LineSegment2d? = null
         set(value) {
             field = value
+            updateSelection(value)
             updateAreaSelectionRect(value)
         }
 
@@ -29,10 +31,10 @@ class StPane(private val dScene: DScene) : Pane() {
 
     init {
         children.add(nodesGroup)
-        children.add(selectionAreaRect)
+        children.add(selectionAreaRectNode)
 
-        selectionAreaRect.fill = Color.rgb(255, 0, 0, 0.1)
-        selectionAreaRect.stroke = Color.RED
+        selectionAreaRectNode.fill = Color.rgb(255, 0, 0, 0.1)
+        selectionAreaRectNode.stroke = Color.RED
 
         setOnMousePressed { ev ->
             val a = dScene.invertedTransform.map(ev.position)
@@ -49,6 +51,7 @@ class StPane(private val dScene: DScene) : Pane() {
         }
 
         dScene.onTransformChanged.connect {
+            updateRectNodes()
             updateAreaSelectionRect(selectionAreaDiagonal)
         }
     }
@@ -56,7 +59,9 @@ class StPane(private val dScene: DScene) : Pane() {
     fun addNode(node: StNode): Boolean {
         val wasAdded = nodesSet.add(node)
         if (wasAdded) {
-            nodesGroup.children.add(node)
+            node.dScene = dScene
+            nodesGroup.children.add(node.rectNode)
+            node.updateRectNode()
         }
         return wasAdded
     }
@@ -64,15 +69,35 @@ class StPane(private val dScene: DScene) : Pane() {
     fun removeNode(node: StNode): Boolean {
         val wasRemoved = nodesSet.remove(node)
         if (wasRemoved) {
-            nodesGroup.children.remove(node)
+            node.dScene = null
+            nodesGroup.children.remove(node.rectNode)
         }
         return wasRemoved
     }
 
-    private fun selectNodesAt(p: Vec2d) {
+    private fun unselectAllNodes() {
         nodesSet.forEach { it.isSelected = false }
-        val nodesAt = nodesSet.filter { it.bounds.contains(p) }
+    }
+
+    private fun selectNodes(rect: Rect2d) {
+        unselectAllNodes()
+        val nodesAt = nodesSet.filter { it.bounds.intersects(rect) }
         nodesAt.forEach { it.isSelected = true }
+    }
+
+    private fun updateRectNodes() {
+        nodesSet.forEach { it.updateRectNode() }
+    }
+
+    private fun updateSelection(diagonal: LineSegment2d?) {
+        when {
+            diagonal != null -> {
+                selectNodes(Rect2d.fromDiagonal(diagonal))
+            }
+            else -> {
+                selectionAreaRectNode.isVisible = false
+            }
+        }
     }
 
     private fun updateAreaSelectionRect(diagonal: LineSegment2d?) {
@@ -80,39 +105,37 @@ class StPane(private val dScene: DScene) : Pane() {
             diagonal != null -> {
                 val rect = Rect2d.fromDiagonal(diagonal)
                 val viewRect = dScene.transform.map(rect)
-                selectionAreaRect.rect = viewRect
-                selectionAreaRect.isVisible = true
+                selectionAreaRectNode.rect = viewRect
+                selectionAreaRectNode.isVisible = true
             }
             else -> {
-                selectionAreaRect.isVisible = false
+                selectionAreaRectNode.isVisible = false
             }
         }
     }
 }
 
-class StNode : Rectangle() {
-    private val STNODE_CLASS = "stnode"
-    private val SELECTED_CLASS = "stnode-selected"
+class StNode {
+    var bounds: Rect2d = Rect2d()
+        set(value) {
+            field = value
+            updateRectNode()
+        }
+
+    internal var dScene: DScene? = null
+
+    internal var rectNode = Rectangle()
 
     init {
-        styleClass.add(STNODE_CLASS)
-
-        fill = Color.TRANSPARENT
-        strokeWidth = 1.0
-
+        rectNode.fill = null
         updateStyle()
     }
 
-    var bounds: Rect2d
-        get() {
-            return Rect2d(x, y, width, height)
+    internal fun updateRectNode() {
+        dScene?.let {
+            rectNode.rect = it.transform.map(bounds)
         }
-        set(value) {
-            x = value.minX + 0.5
-            y = value.minY + 0.5
-            width = value.width.toDouble()
-            height = value.height.toDouble()
-        }
+    }
 
     var isSelected: Boolean = false
         internal set(value) {
@@ -122,8 +145,8 @@ class StNode : Rectangle() {
 
     private fun updateStyle() {
         when {
-            isSelected -> stroke = Color.RED
-            else -> stroke = Color.LIGHTGRAY
+            isSelected -> rectNode.stroke = Color.ORANGE
+            else -> rectNode.stroke = Color.LIGHTGRAY
         }
     }
 }

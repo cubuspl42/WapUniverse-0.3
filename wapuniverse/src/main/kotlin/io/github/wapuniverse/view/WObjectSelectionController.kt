@@ -28,8 +28,13 @@ class WObjectSelectionController(
     private fun presentWObject(stPane: StPane, wObject: WObject) {
         val stNode = StNode()
         stPane.addNode(stNode)
-        stNode.bounds = wObjectBounds(wObject, CFG_LEVEL_INDEX, imageSetDatabase, imageMap)!!
         mvMap.put(wObject, stNode)
+
+        wObjectBounds(wObject, CFG_LEVEL_INDEX, imageSetDatabase, imageMap)?.let { stNode.bounds = it }
+
+        wObject.onWwdObjectChanged.connect {
+            stNode.bounds = wObjectBounds(wObject, CFG_LEVEL_INDEX, imageSetDatabase, imageMap)!!
+        }
 
         wObject.preRemoved.connect {
             stPane.removeNode(stNode)
