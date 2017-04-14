@@ -10,7 +10,7 @@ fun loadAllImagesRecursively(baseDirPath: String, imageExtension: String): Map<S
     val imagesDict = HashMap<String, Image>()
     val basePath = Paths.get(baseDirPath)
     File(baseDirPath).walk()
-            .filter { it.isFile && it.path.endsWith("." + imageExtension) }
+            .filter { it.isFile && it.path.endsWith("" + imageExtension) }
             .forEach { file ->
                 val relPath = basePath.relativize(Paths.get(file.path))
                 file.inputStream().use {
