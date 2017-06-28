@@ -10,7 +10,7 @@
 
     <repositories>
         <repository>
-            <id>central</id>
+            <id>jcenter</id>
             <url>http://jcenter.bintray.com</url>
         </repository>
     </repositories>
@@ -40,6 +40,11 @@
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-javafx</artifactId>
             <version>0.16</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>15.0-rc1</version>
         </dependency>
     </dependencies>
 
