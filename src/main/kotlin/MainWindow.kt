@@ -1,28 +1,50 @@
+import javafx.scene.Scene
+import javafx.scene.control.Menu
+import javafx.scene.control.MenuBar
+import javafx.scene.control.MenuItem
+import javafx.scene.layout.BorderPane
+import javafx.scene.layout.VBox
+import javafx.stage.FileChooser
 import javafx.stage.Stage
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.javafx.JavaFx
-import kotlinx.coroutines.experimental.launch
-import java.util.concurrent.TimeUnit.SECONDS
 
 
-private val WINDOW_TITLE_LOADING = "WapUniverse (loading...)"
 private val WINDOW_TITLE = "WapUniverse"
 
 class MainWindow(stage: Stage) {
+    private var editorController: EditorController? = null
+
+    private val contentPane = BorderPane()
+
     init {
-        val rootJob = Job()
-        val rootContext = rootJob + JavaFx
+        initView(stage)
 
-        stage.title = WINDOW_TITLE_LOADING
+        stage.title = WINDOW_TITLE
+    }
 
-        launch(rootContext) {
-            delay(2, SECONDS)
-            stage.title = WINDOW_TITLE
+    private fun initView(stage: Stage) {
+        val openItem = MenuItem("Open")
+
+        openItem.setOnAction {
+            val fileChooser = FileChooser()
+            fileChooser.title = "Open WWD File"
+            fileChooser.extensionFilters.add(FileChooser.ExtensionFilter("WWD", "*.wwd", "*.WWD"))
+            fileChooser.showOpenDialog(stage)?.let { file ->
+                openWwdFile(file.absolutePath)
+            }
         }
+
+        val fileMenu = Menu("File", null, openItem)
+        val menuBar = MenuBar(fileMenu)
+
+        stage.scene = Scene(VBox(menuBar, contentPane))
 
         stage.setOnCloseRequest {
-            rootJob.cancel()
+            editorController?.close()
         }
+    }
+
+    private fun openWwdFile(filePath: String) {
+        editorController?.close()
+        editorController = EditorController(filePath, contentPane)
     }
 }
