@@ -2,8 +2,8 @@ import javafx.scene.Scene
 import javafx.scene.control.Menu
 import javafx.scene.control.MenuBar
 import javafx.scene.control.MenuItem
-import javafx.scene.layout.BorderPane
-import javafx.scene.layout.VBox
+import javafx.scene.layout.*
+import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 
@@ -13,7 +13,7 @@ private val WINDOW_TITLE = "WapUniverse"
 class MainWindow(stage: Stage) {
     private var editorController: EditorController? = null
 
-    private val contentPane = BorderPane()
+    private val borderPane = BorderPane()
 
     init {
         initView(stage)
@@ -36,7 +36,9 @@ class MainWindow(stage: Stage) {
         val fileMenu = Menu("File", null, openItem)
         val menuBar = MenuBar(fileMenu)
 
-        stage.scene = Scene(VBox(menuBar, contentPane))
+        borderPane.top = menuBar
+
+        stage.scene = Scene(borderPane)
 
         stage.setOnCloseRequest {
             editorController?.close()
@@ -45,6 +47,6 @@ class MainWindow(stage: Stage) {
 
     private fun openWwdFile(filePath: String) {
         editorController?.close()
-        editorController = EditorController(filePath, contentPane)
+        editorController = EditorController(filePath, borderPane)
     }
 }

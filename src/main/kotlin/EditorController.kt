@@ -1,13 +1,14 @@
+import javafx.scene.Group
 import javafx.scene.layout.BorderPane
 import javafx.scene.text.Text
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.javafx.JavaFx as UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.run
 import wap32.Wwd
 import wap32.loadWwd
 import java.io.FileInputStream
+import kotlinx.coroutines.experimental.javafx.JavaFx as UI
 
 private suspend fun loadWwdFromPath(filePath: String): Wwd {
     return run(CommonPool) {
@@ -17,16 +18,19 @@ private suspend fun loadWwdFromPath(filePath: String): Wwd {
 
 class EditorController(
         filePath: String,
-        contentPane: BorderPane
+        borderPane: BorderPane
 ) {
     private val masterJob = Job()
 
     init {
-        contentPane.center = Text("...")
+        borderPane.center = Text("...")
 
         launch(masterJob + UI) {
             val wwd = loadWwdFromPath(filePath)
-            contentPane.center = Text(wwd.header.levelName)
+            val layerSpace = Group(Text("<${wwd.header.levelName}>"))
+            val viewport = Viewport(layerSpace)
+
+            borderPane.center = viewport
         }
     }
 
