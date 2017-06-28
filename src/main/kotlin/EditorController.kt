@@ -1,5 +1,6 @@
 import javafx.scene.Group
 import javafx.scene.layout.BorderPane
+import javafx.scene.shape.Circle
 import javafx.scene.text.Text
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
@@ -18,7 +19,7 @@ private suspend fun loadWwdFromPath(filePath: String): Wwd {
 
 class EditorController(
         filePath: String,
-        borderPane: BorderPane
+        private val borderPane: BorderPane
 ) {
     private val masterJob = Job()
 
@@ -27,14 +28,24 @@ class EditorController(
 
         launch(masterJob + UI) {
             val wwd = loadWwdFromPath(filePath)
-            val layerSpace = Group(Text("<${wwd.header.levelName}>"))
-            val viewport = Viewport(layerSpace)
-
-            borderPane.center = viewport
+            presentWwd(wwd)
         }
     }
 
     fun close() {
         masterJob.cancel()
+    }
+
+    private fun presentWwd(wwd: Wwd) {
+        val planeNode = Group()
+
+        val actionPlane = wwd.planes[1]
+        actionPlane.objects.forEach {
+            val point = Circle(it.x.toDouble(), it.y.toDouble(), 8.0)
+            planeNode.children.add(point)
+        }
+
+        val viewport = Viewport(planeNode)
+        borderPane.center = viewport
     }
 }
