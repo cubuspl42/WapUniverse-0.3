@@ -42,12 +42,23 @@ class EditorController(
     private suspend fun presentWwd(wwd: Wwd) {
         val planeNode = Group()
 
-        val rezImage = rezImageProvider.provideImage("GAME_IMAGES_BOSSWARP", -1)
-        planeNode.children.add(ImageView(rezImage!!.image))
-
         val actionPlane = wwd.planes[1]
-        actionPlane.objects.forEach {
-            val point = Circle(it.x.toDouble(), it.y.toDouble(), 8.0)
+        actionPlane.objects.forEach { wwdObject ->
+            val id = wwdObject.imageSet
+                    .replace("GAME_", "GAME_IMAGES_")
+                    .replace("LEVEL_", "LEVEL1_IMAGES_")
+            rezImageProvider.provideImage(id, -1)?.let { rezImage ->
+                val image = rezImage.image
+                val imageView = ImageView(image)
+                imageView.x = -(image.width / 2 + rezImage.offset.x.toDouble())
+                imageView.y = -(image.height / 2 + rezImage.offset.y.toDouble())
+
+                imageView.translateX = wwdObject.x.toDouble()
+                imageView.translateY = wwdObject.y.toDouble()
+
+                planeNode.children.add(imageView)
+            }
+            val point = Circle(wwdObject.x.toDouble(), wwdObject.y.toDouble(), 8.0)
             planeNode.children.add(point)
         }
 
