@@ -1,14 +1,14 @@
 import javafx.scene.Group
-import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
-import javafx.scene.shape.Circle
 import javafx.scene.text.Text
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.run
 import wap32.Wwd
+import wap32.WwdObject
+import wap32.WwdPlane
 import wap32.loadWwd
 import java.io.FileInputStream
 import kotlinx.coroutines.experimental.javafx.JavaFx as UI
@@ -40,29 +40,48 @@ class EditorController(
     }
 
     private suspend fun presentWwd(wwd: Wwd) {
+        val actionPlane = wwd.planes[1]
         val planeNode = Group()
 
-        val actionPlane = wwd.planes[1]
+        presentTiles(actionPlane, planeNode)
+
         actionPlane.objects.forEach { wwdObject ->
-            val id = wwdObject.imageSet
-                    .replace("GAME_", "GAME_IMAGES_")
-                    .replace("LEVEL_", "LEVEL1_IMAGES_")
-            rezImageProvider.provideImage(id, -1)?.let { rezImage ->
-                val image = rezImage.image
-                val imageView = ImageView(image)
-                imageView.x = -(image.width / 2 + rezImage.offset.x.toDouble())
-                imageView.y = -(image.height / 2 + rezImage.offset.y.toDouble())
-
-                imageView.translateX = wwdObject.x.toDouble()
-                imageView.translateY = wwdObject.y.toDouble()
-
-                planeNode.children.add(imageView)
-            }
-            val point = Circle(wwdObject.x.toDouble(), wwdObject.y.toDouble(), 8.0)
-            planeNode.children.add(point)
+            presentObject(wwdObject, planeNode)
         }
 
         val viewport = Viewport(planeNode)
         borderPane.center = viewport
+    }
+
+    private suspend fun presentTiles(actionPlane: WwdPlane, planeNode: Group) {
+        for (i in 0 until actionPlane.tilesHigh) {
+            for (j in 0 until actionPlane.tilesWide) {
+                val tileId = actionPlane.getTile(i, j)
+                if (tileId >= 0) {
+                    val tileRezImage = rezImageProvider.provideImage("LEVEL1_TILES_ACTION", tileId)!!
+                    val imageView = ImageView(tileRezImage.image)
+                    imageView.translateX = (j * 64).toDouble()
+                    imageView.translateY = (i * 64).toDouble()
+                    planeNode.children.add(imageView)
+                }
+            }
+        }
+    }
+
+    private suspend fun presentObject(wwdObject: WwdObject, planeNode: Group) {
+        val imageSetId = wwdObject.imageSet
+                .replace("GAME_", "GAME_IMAGES_")
+                .replace("LEVEL_", "LEVEL1_IMAGES_")
+        rezImageProvider.provideImage(imageSetId, -1)?.let { rezImage ->
+            val image = rezImage.image
+            val imageView = ImageView(image)
+            imageView.x = rezImage.offset.x.toDouble() - image.width / 2
+            imageView.y = rezImage.offset.y.toDouble() - image.height / 2
+
+            imageView.translateX = wwdObject.x.toDouble()
+            imageView.translateY = wwdObject.y.toDouble()
+
+            planeNode.children.add(imageView)
+        }
     }
 }
