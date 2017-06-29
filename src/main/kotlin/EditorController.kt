@@ -1,4 +1,6 @@
 import javafx.scene.Group
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.scene.shape.Circle
 import javafx.scene.text.Text
@@ -19,6 +21,7 @@ private suspend fun loadWwdFromPath(filePath: String): Wwd {
 
 class EditorController(
         filePath: String,
+        private val rezImageProvider: RezImageProvider,
         private val borderPane: BorderPane
 ) {
     private val masterJob = Job()
@@ -36,8 +39,11 @@ class EditorController(
         masterJob.cancel()
     }
 
-    private fun presentWwd(wwd: Wwd) {
+    private suspend fun presentWwd(wwd: Wwd) {
         val planeNode = Group()
+
+        val rezImage = rezImageProvider.provideImage("GAME_IMAGES_BOSSWARP", -1)
+        planeNode.children.add(ImageView(rezImage!!.image))
 
         val actionPlane = wwd.planes[1]
         actionPlane.objects.forEach {

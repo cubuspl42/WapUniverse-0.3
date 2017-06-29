@@ -3,14 +3,24 @@ import javafx.scene.control.Menu
 import javafx.scene.control.MenuBar
 import javafx.scene.control.MenuItem
 import javafx.scene.layout.*
-import javafx.scene.paint.Color
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 
 
 private val WINDOW_TITLE = "WapUniverse"
 
+private fun buildRezImageProvider(classLoader: ClassLoader): RezImageProvider {
+    val rezMetadataDao = YamlRezMetadataDao(classLoader.getResourceAsStream("rezMetadata.yaml"))
+    val rezImageLoader = ClassLoaderRezImageLoader("CLAW")
+    val rezImageProvider = CachingRezImageProvider(rezMetadataDao, rezImageLoader)
+    return rezImageProvider
+}
+
 class MainWindow(stage: Stage) {
+    private val classLoader = Thread.currentThread().contextClassLoader
+
+    private val rezImageProvider = buildRezImageProvider(classLoader)
+
     private var editorController: EditorController? = null
 
     private val borderPane = BorderPane()
@@ -47,6 +57,6 @@ class MainWindow(stage: Stage) {
 
     private fun openWwdFile(filePath: String) {
         editorController?.close()
-        editorController = EditorController(filePath, borderPane)
+        editorController = EditorController(filePath, rezImageProvider, borderPane)
     }
 }
