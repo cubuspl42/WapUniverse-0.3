@@ -1,0 +1,1 @@
+interface XList<out E> : XObservable<XListChange<E>>, List<E>

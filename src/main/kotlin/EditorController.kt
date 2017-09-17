@@ -7,8 +7,6 @@ import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.run
 import wap32.Wwd
-import wap32.WwdObject
-import wap32.WwdPlane
 import wap32.loadWwd
 import java.io.FileInputStream
 import kotlinx.coroutines.experimental.javafx.JavaFx as UI
@@ -31,7 +29,11 @@ class EditorController(
 
         launch(masterJob + UI) {
             val wwd = loadWwdFromPath(filePath)
-            presentWwd(wwd)
+            try {
+                presentWwd(wwd)
+            } catch (e: Exception) {
+                borderPane.center = Text(e.toString())
+            }
         }
     }
 
@@ -40,7 +42,9 @@ class EditorController(
     }
 
     private suspend fun presentWwd(wwd: Wwd) {
-        val actionPlane = wwd.planes[1]
+        val world = buildWorld(wwd)
+
+        val actionPlane = world.planes[1]
         val planeNode = Group()
 
         presentTiles(actionPlane, planeNode)
@@ -53,10 +57,13 @@ class EditorController(
         borderPane.center = viewport
     }
 
-    private suspend fun presentTiles(actionPlane: WwdPlane, planeNode: Group) {
-        for (i in 0 until actionPlane.tilesHigh) {
-            for (j in 0 until actionPlane.tilesWide) {
-                val tileId = actionPlane.getTile(i, j)
+    private suspend fun presentTiles(actionPlane: Plane, planeNode: Group) {
+        val tiles = actionPlane.tiles
+        val size = tiles.size
+        for (i in 0 until size.height) {
+            for (j in 0 until size.width) {
+                println("$i, $j")
+                val tileId = tiles[i, j]
                 if (tileId >= 0) {
                     val tileRezImage = rezImageProvider.provideImage("LEVEL1_TILES_ACTION", tileId)!!
                     val imageView = ImageView(tileRezImage.image)
@@ -66,9 +73,10 @@ class EditorController(
                 }
             }
         }
+        println()
     }
 
-    private suspend fun presentObject(wwdObject: WwdObject, planeNode: Group) {
+    private suspend fun presentObject(wwdObject: WObject, planeNode: Group) {
         val imageSetId = wwdObject.imageSet
                 .replace("GAME_", "GAME_IMAGES_")
                 .replace("LEVEL_", "LEVEL1_IMAGES_")

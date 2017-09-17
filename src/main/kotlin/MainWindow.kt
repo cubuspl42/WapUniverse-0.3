@@ -35,11 +35,13 @@ class MainWindow(stage: Stage) {
         val openItem = MenuItem("Open")
 
         openItem.setOnAction {
-            val fileChooser = FileChooser()
-            fileChooser.title = "Open WWD File"
-            fileChooser.extensionFilters.add(FileChooser.ExtensionFilter("WWD", "*.wwd", "*.WWD"))
-            fileChooser.showOpenDialog(stage)?.let { file ->
-                openWwdFile(file.absolutePath)
+            FileChooser().apply {
+                title = "Open WWD File"
+                extensionFilters.add(FileChooser.ExtensionFilter("WWD", "*.wwd", "*.WWD"))
+            }.let {
+                it.showOpenDialog(stage)?.let { file ->
+                    openWwdFile(file.absolutePath)
+                }
             }
         }
 
