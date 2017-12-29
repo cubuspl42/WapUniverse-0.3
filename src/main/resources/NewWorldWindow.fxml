@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane
+        xmlns="http://javafx.com/javafx/8.0.121"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="NewWorldWindowFxml"
+        hgap="8.0" vgap="8.0">
+
+    <columnConstraints>
+        <ColumnConstraints/>
+        <ColumnConstraints minWidth="200"/>
+    </columnConstraints>
+
+    <rowConstraints>
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints/>
+    </rowConstraints>
+
+    <padding>
+        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+    </padding>
+
+    <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <TextField GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+    <Label text="Author" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label text="Base level" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+    <ComboBox fx:id="baseLevelComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2" maxWidth="Infinity"/>
+
+</GridPane>

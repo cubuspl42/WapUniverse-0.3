@@ -1,13 +1,12 @@
 import javafx.application.Application
 import javafx.stage.Stage
 
-fun main(args: Array<String>) {
-    class MyApplication : Application() {
-        override fun start(primaryStage: Stage) {
-            MainWindow(primaryStage)
-            primaryStage.show()
-        }
+class MyApplication : Application() {
+    override fun start(primaryStage: Stage) {
+        MainWindowController(primaryStage)
     }
+}
 
+fun main(args: Array<String>) {
     Application.launch(MyApplication::class.java, *args)
 }
