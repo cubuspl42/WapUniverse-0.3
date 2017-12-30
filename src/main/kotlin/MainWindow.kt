@@ -1,13 +1,23 @@
+import javafx.event.ActionEvent
+import javafx.fxml.FXML
+import javafx.fxml.FXMLLoader
+import javafx.fxml.Initializable
+import javafx.scene.Parent
 import javafx.scene.Scene
-import javafx.scene.control.Menu
-import javafx.scene.control.MenuBar
-import javafx.scene.control.MenuItem
-import javafx.scene.layout.*
-import javafx.stage.FileChooser
+import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.run
+import wap32.Wwd
+import wap32.loadWwd
+import java.io.FileInputStream
+import java.net.URL
+import java.util.ResourceBundle
+import kotlinx.coroutines.experimental.javafx.JavaFx as UI
 
-
-private val WINDOW_TITLE = "WapUniverse"
+private val fxmlFilename = "MainWindow.fxml"
+private val stageTitle = "WapUniverse"
 
 private fun buildRezImageProvider(classLoader: ClassLoader): RezImageProvider {
     val rezMetadataDao = YamlRezMetadataDao(classLoader.getResourceAsStream("rezMetadata.yaml"))
@@ -16,49 +26,58 @@ private fun buildRezImageProvider(classLoader: ClassLoader): RezImageProvider {
     return rezImageProvider
 }
 
-class MainWindow(stage: Stage) {
+private suspend fun loadWwdFromPath(filePath: String): Wwd {
+    return run(CommonPool) {
+        FileInputStream(filePath).use { loadWwd(it) }
+    }
+}
+
+class MainWindowController(
+        private val mainWindow: MainWindow
+) : Initializable {
     private val classLoader = Thread.currentThread().contextClassLoader
 
     private val rezImageProvider = buildRezImageProvider(classLoader)
 
-    private var editorController: EditorController? = null
+    @FXML
+    lateinit var borderPane: BorderPane
 
-    private val borderPane = BorderPane()
+    @FXML
+    fun onFileNewPressed(actionEvent: ActionEvent) {
+        mainWindow.createNewWorld()
+    }
 
+    override fun initialize(location: URL?, resources: ResourceBundle?) {
+        launch(UI) {
+            val wwdPath = "D:\\WORLD.WWD"
+            val wwd = loadWwdFromPath(wwdPath)
+            borderPane.center = PlaneView(wwd, rezImageProvider)
+        }
+    }
+}
+
+class MainWindow {
     init {
-        initView(stage)
-
-        stage.title = WINDOW_TITLE
-    }
-
-    private fun initView(stage: Stage) {
-        val openItem = MenuItem("Open")
-
-        openItem.setOnAction {
-            FileChooser().apply {
-                title = "Open WWD File"
-                extensionFilters.add(FileChooser.ExtensionFilter("WWD", "*.wwd", "*.WWD"))
-            }.let {
-                it.showOpenDialog(stage)?.let { file ->
-                    openWwdFile(file.absolutePath)
-                }
-            }
+        val stage = Stage()
+        val fxmlLoader = FXMLLoader(MyApplication::class.java.getResource(fxmlFilename)).apply {
+            setControllerFactory { MainWindowController(this@MainWindow) }
         }
+        val root = fxmlLoader.load<Parent>()
 
-        val fileMenu = Menu("File", null, openItem)
-        val menuBar = MenuBar(fileMenu)
-
-        borderPane.top = menuBar
-
-        stage.scene = Scene(borderPane)
-
-        stage.setOnCloseRequest {
-            editorController?.close()
+        stage.apply {
+            title = stageTitle
+            scene = Scene(root)
+            show()
         }
     }
 
-    private fun openWwdFile(filePath: String) {
-        editorController?.close()
-        editorController = EditorController(filePath, rezImageProvider, borderPane)
+    internal fun createNewWorld() {
+//        save()
+        NewWorldWindow()
+    }
+
+    private fun save() {
+        // if no save path, get save path
+        // save to save path
     }
 }

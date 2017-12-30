@@ -5,15 +5,16 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane
+        fx:id="borderPane"
         xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
-        fx:controller="MainWindowFxml"
+        fx:controller="MainWindowController"
         prefWidth="640.0" prefHeight="480.0">
 
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem text="New…" onAction="#onFileNew"/>
+                <MenuItem text="New…" onAction="#onFileNewPressed"/>
             </Menu>
         </MenuBar>
     </top>
