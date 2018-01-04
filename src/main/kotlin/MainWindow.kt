@@ -1,7 +1,11 @@
+import javafx.beans.binding.Bindings
+import javafx.collections.FXCollections
+import javafx.collections.ObservableMap
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.fxml.Initializable
+import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.layout.BorderPane
@@ -52,6 +56,11 @@ class MainWindowController(
             val wwdPath = "D:\\WORLD.WWD"
             val wwd = loadWwdFromPath(wwdPath)
             borderPane.center = PlaneView(wwd, rezImageProvider)
+
+            val x = FXCollections.observableMap(mapOf(1 to 2))
+//            x.
+
+
         }
     }
 }
